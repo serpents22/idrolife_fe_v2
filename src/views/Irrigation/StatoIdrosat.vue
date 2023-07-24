@@ -275,9 +275,10 @@ import Counter from '@/components/counter/Counter.vue'
   }
   .main {
     @apply 
-      flex flex-col w-full justify-center items-center relative
-      h-[300px] sm:h-full
-      overflow-auto sm:overflow-visible
+      flex flex-col w-full  items-center relative
+      h-[300px] sm:h-full 
+      overflow-x-hidden overflow-y-auto
+      /* overflow-auto sm:overflow-visible */
   }
 
   .device-container {
