@@ -79,7 +79,7 @@
     fixed top-0 left-0 px-8 py-12
     overflow-x-hidden overflow-y-auto z-10
     justify-center items-center flex
-    mt-10 sm:mt-0
+    mt-10 sm:mt-2
 }
 
 .modal-inner {
