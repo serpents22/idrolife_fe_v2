@@ -1,0 +1,137 @@
+<template>
+  <sidebar 
+    :noSocial="true" 
+    :backOn="true" 
+    />
+  <div class="device-container">
+    <deviceCard 
+      :small=true
+      :content="newData"
+      :id="props.id" />
+    <img class="w-40" src="@/assets/webcam.png">
+  </div>
+  <div class="generali-container">
+    <IdroTitle :title="title"/>
+    <div class="content">
+      <div class="camera-wrap">
+        <div class="cameraview"></div>
+        <div class="camera-control">
+          <img src="@/assets/play.png">
+          <img src="@/assets/stop.png">
+          <img src="@/assets/pause.png">
+          <img src="@/assets/rec.png">
+          <img src="@/assets/zoomin.png">
+          <img src="@/assets/zoomout.png">
+        </div>
+      </div>
+    </div>
+    <div class="camera-nav">
+        <img src="@/assets/left.png">
+        <div class="up-down">
+          <img src="@/assets/up.png">
+          <img src="@/assets/down.png">
+        </div>
+        <img src="@/assets/right.png">
+      </div>
+  </div>
+</template>
+
+<script setup>
+  import { useDevicesStore } from '@/stores/DevicesStore'
+  import { storeToRefs } from 'pinia'
+  import { defineAsyncComponent,  computed,  onMounted,  ref, onBeforeMount } from '@vue/runtime-core'
+
+  //props
+  const props = defineProps({
+    id: String
+  })
+
+  //asynchronus component
+  const deviceCard = defineAsyncComponent(
+    () => import('@/components/cards/deviceCard.vue'),
+  )
+  //state
+  const devicesStore = useDevicesStore()
+  const { isLoading } = storeToRefs(useDevicesStore())
+  const newData = computed(() => {
+      return [devicesStore.deviceData]
+    })
+  const title = ref()
+
+  onBeforeMount( async () => {
+    await devicesStore.loadDevice(props.id)
+    title.value = 'Idrosat :' + devicesStore.deviceData.name
+  })
+</script>
+
+<style scoped>
+
+.generali-container {
+  @apply flex flex-col w-full justify-center items-center
+}
+
+.device-container {
+    @apply 
+      flex flex-col fixed items-center gap-2
+      bottom-0 left-4
+      pb-4 sm:pb-8
+}
+
+.device-container img {
+    @apply 
+      w-[80px] h-[50px] 
+      sm:w-[60px] sm:h-[60px]
+      md:w-[70px] md:h-[70px]
+      lg:w-[80px] lg:h-[80px]
+      xl:w-[100px] xl:h-[100px]
+      2xl:w-[130px] 2xl:h-[130px]
+      transition-all ease-in-out duration-300
+}
+
+.content {
+  @apply 
+    flex items-center gap-[20px]
+}
+
+.camera-wrap {
+  @apply
+    flex flex-col
+    gap-[20px]
+}
+
+.cameraview {
+  @apply
+    bg-white border-4 border-black
+    w-[200px] h-[200px]
+    2xl:w-[720px] 2xl:h-[433px]
+}
+
+.camera-control {
+  @apply
+    flex justify-between cursor-pointer
+    2xl:w-[720px]
+}
+
+.camera-control img {
+  @apply
+    w-[100px] h-[100px]
+}
+
+.camera-nav {
+  @apply
+    absolute
+    top-[280px]
+    right-[100px]
+    self-start
+    flex items-center justify-center gap-[10px]
+}
+.camera-nav img {
+  @apply
+    w-[100px] h-[100px]
+}
+.camera-nav .up-down {
+  @apply
+    flex flex-col gap-[100px]
+}
+
+</style>
