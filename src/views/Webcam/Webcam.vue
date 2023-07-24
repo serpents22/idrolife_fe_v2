@@ -10,29 +10,30 @@
       :id="props.id" />
     <img class="w-40" src="@/assets/webcam.png">
   </div>
+
   <div class="generali-container">
     <IdroTitle :title="title"/>
-    <div class="content">
-      <div class="camera-wrap">
-        <div class="cameraview"></div>
-        <div class="camera-control">
-          <img src="@/assets/play.png">
-          <img src="@/assets/stop.png">
-          <img src="@/assets/pause.png">
-          <img src="@/assets/rec.png">
-          <img src="@/assets/zoomin.png">
-          <img src="@/assets/zoomout.png">
+    <div class="camera-wrap">
+      <div class="cameraview"></div>
+        <div class="control-wrapper">
+          <div class="camera-control">
+            <img src="@/assets/play.png">
+            <img src="@/assets/stop.png">
+            <img src="@/assets/pause.png">
+            <img src="@/assets/rec.png">
+            <img src="@/assets/zoomin.png">
+            <img src="@/assets/zoomout.png">
+          </div>
+          <div class="camera-nav">
+            <img src="@/assets/left.png">
+            <div class="up-down">
+          <img src="@/assets/up.png">
+          <img src="@/assets/down.png">
+          </div>
+          <img src="@/assets/right.png">
         </div>
       </div>
     </div>
-    <div class="camera-nav">
-        <img src="@/assets/left.png">
-        <div class="up-down">
-          <img src="@/assets/up.png">
-          <img src="@/assets/down.png">
-        </div>
-        <img src="@/assets/right.png">
-      </div>
   </div>
 </template>
 
@@ -67,37 +68,43 @@
 <style scoped>
 
 .generali-container {
-  @apply flex flex-col w-full justify-center items-center
+  @apply flex flex-col w-full h-full  items-center justify-center
 }
+
 
 .device-container {
     @apply 
-      flex flex-col fixed items-center gap-2
+      flex sm:flex-col fixed items-end sm:items-center gap-2
       bottom-0 left-4
       pb-4 sm:pb-8
-}
-
-.device-container img {
+  }
+  
+  .device-container img {
     @apply 
-      w-[80px] h-[50px] 
+      w-[40px] h-[40px] 
       sm:w-[60px] sm:h-[60px]
       md:w-[70px] md:h-[70px]
       lg:w-[80px] lg:h-[80px]
       xl:w-[100px] xl:h-[100px]
       2xl:w-[130px] 2xl:h-[130px]
       transition-all ease-in-out duration-300
-}
+  }
 
-.content {
-  @apply 
-    flex items-center gap-[20px]
+.control-wrapper {
+  @apply flex flex-col 2xl:flex-row h-full justify-center items-center gap-4 sm:gap-10 w-full
 }
-
 .camera-wrap {
   @apply
-    flex flex-col
+    flex flex-col items-center w-full
     gap-[20px]
 }
+
+.camera-wrap img{
+  @apply
+    w-[40px] h-[40px]
+    sm:w-[80px] sm:h-[80px]
+}
+
 
 .cameraview {
   @apply
@@ -112,26 +119,15 @@
     2xl:w-[720px]
 }
 
-.camera-control img {
-  @apply
-    w-[100px] h-[100px]
-}
 
 .camera-nav {
   @apply
-    absolute
-    top-[280px]
-    right-[100px]
-    self-start
-    flex items-center justify-center gap-[10px]
+    flex items-center justify-center gap-0 sm:gap-[10px]
 }
-.camera-nav img {
-  @apply
-    w-[100px] h-[100px]
-}
+
 .camera-nav .up-down {
   @apply
-    flex flex-col gap-[100px]
+    flex flex-col gap-[40px] sm:gap-[100px]
 }
 
 </style>
