@@ -35,6 +35,24 @@ export const useDeviceManagement = defineStore('device-management', {
         return err
       }
     },
+    async unshareDevice(data) {
+      this.isLoading = true
+      try {
+        const res = await deviceAPI.unshareDevice(data)
+        console.log(res)
+        this.isLoading = false
+        this.status.message = 'Master Released'
+        this.status.code = res.data.status
+        this.status.isError = false
+      } catch (err) {
+        console.error(err)
+        this.isLoading = false
+        this.status.isError = true
+        this.status.message = err.response.data.error
+        this.status.code = err.response.data.status
+        return err
+      }
+    },
     async deviceMember(id) {
       this.isLoading = true
       try {

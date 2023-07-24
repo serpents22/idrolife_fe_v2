@@ -14,6 +14,7 @@
               <div class="select-option flex flex-col gap-1 text-left">
                 <label for="master" class="font-bold">Master</label>
                 <select name="master" v-model="selectedDevice" class="cursor-pointer bg-transparent">
+                  <option disabled value="">Select master</option>
                   <option v-for="item in supAdmindevices" :key="item.id" :value="item.code">{{ item.name }}</option>
                 </select> 
               </div>
@@ -33,7 +34,7 @@
                         <p>{{ member.role }}</p>
                       </td>
                       <td>
-                        <BaseButton type="submit" class="filled" :label="eliminaLabel" :loading="isLoading"   />
+                        <button @click="onSubmit(member.email)" class="filled_red">{{eliminaLabel}}</button>
                       </td>
                     </tr>
                   </tbody>
@@ -69,7 +70,6 @@ const props = defineProps({
   const deviceManagementStore = useDeviceManagement()
   const { members, status, isLoading } = storeToRefs(useDeviceManagement())
   const { supAdmindevices } = storeToRefs(useDeviceManagement())
-  const cancelLabel = ref('CANCELLA')
   const eliminaLabel = ref('Elimina')
   const regButtonClick = ref(0)
   const cancelButtonClick = ref(0)
@@ -84,27 +84,25 @@ const props = defineProps({
   } )
 
 
-  const onSubmit = async (values, { resetForm }) => {
-    let newValues = values
-    newValues.role = selectedRole.value
-    newValues.device_code = selectedDevice.value
-    console.log(newValues)
+  const onSubmit = async (email) => {
+    let value = {email: email, device_code: selectedDevice.value }
+    console.log(value)
     regButtonClick.value = ++regButtonClick.value
     if (regButtonClick.value == 1) {
-      registerLabel.value = 'the data entered is correct?'
+      eliminaLabel.value = 'confirm?'
     }
 
     if (regButtonClick.value == 2) {
-      await deviceManagementStore.shareDevice(newValues)
+      await deviceManagementStore.unshareDevice(value)
       modalActive.value = true
       if (status.value.isError == true ) {
         setTimeout(closeNotification, 3000)
       } else {
         setTimeout(closeNotification, 3000)
-        resetForm()
       }
-      registerLabel.value = 'SALVA'
+      eliminaLabel.value = 'Elimina'
       regButtonClick.value = 0
+      deviceManagementStore.deviceMember(selectedDevice.value)
     }
   }
 
@@ -119,25 +117,11 @@ const props = defineProps({
 
   onClickOutside(target, () => {
     if (props.isOpen) {
+      members.value = ''
+      selectedDevice.value = ''
       emits('close')
     }
   })
-
-  function cancelForm() {
-    cancelButtonClick.value = ++cancelButtonClick.value
-    switch (cancelButtonClick.value) {
-      case 1:
-      cancelLabel.value = 'The entered data will be lost!'
-        break;
-      case 2:
-      form.value.resetForm()
-      emits('close')
-      cancelButtonClick.value = 0
-      cancelLabel.value = 'CANCELLA'
-        break;
-    }
-  }
-
 
 
 </script>
@@ -215,5 +199,7 @@ const props = defineProps({
           text-[12px] sm:text-base
 } 
 
-  
+.filled_red {
+  @apply rounded-lg w-full bg-[#D71313] py-2 
+}
   </style>

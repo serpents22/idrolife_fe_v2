@@ -35,6 +35,10 @@ export default {
     return apiClient.post('device/invite', data)
   },
 
+  unshareDevice(data) {
+    return apiClient.post('device/release', data)
+  },
+
   deviceMember(id) {
     return apiClient.get(`user/member/${id}`)
   },
