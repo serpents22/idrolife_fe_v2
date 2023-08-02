@@ -25,14 +25,12 @@ export const useDevicesStore = defineStore('impianto', () => {
   const status = ref({
     message: null,
     code: null,
-    isError: null
   })
   const dataStore = useDataStore()
   const loadDevices = async () => {
     isLoading.value = true
     try {
       const res = await devicesApi.getDevices()
-      console.log('plant',res.data.data)
       devicesList.value = res.data.data.devices
       devicesList.value.forEach( async (device) => {
         const params = ref({
@@ -56,6 +54,20 @@ export const useDevicesStore = defineStore('impianto', () => {
         device.station = dataStore.satStat === undefined ? '-' : dataStore.satStat.S18
         device.portarta = dataStore.satStat === undefined ? '-' : dataStore.satStat.S4
       })
+      //MV Aggiungo lettura dei registri per i gruppi S6000...S6095 come per gli step. 
+      /*
+      devicesList.value.forEach( async (device) => {
+        const satParams = ref({
+          fields: 'S6000,S6001,S60002',
+          measurement: 'GROUPCONFIG',
+          device_code: device.code
+        }) 
+        await dataStore.getLastGroupCfg(satParams.value)
+        device.prog = dataStore.satStat === undefined ? '-' : dataStore.satStat.S16
+        device.station = dataStore.satStat === undefined ? '-' : dataStore.satStat.S18
+        device.portarta = dataStore.satStat === undefined ? '-' : dataStore.satStat.S4
+      }) **/
+      
       isLoading.value = false
     } catch (err) {
         console.error(err)
@@ -119,12 +131,10 @@ export const useDevicesStore = defineStore('impianto', () => {
       console.log(res)
       status.value.message = 'Device Created'
       status.value.code = res.data.status
-      status.value.isError = false
       createDeviceIsLoading.value = false
     } catch (err) {
       console.error(err)
       createDeviceIsLoading.value = false
-      status.value.isError = true
       status.value.message = err.response.data.error
       status.value.code = err.response.data.status
       return err

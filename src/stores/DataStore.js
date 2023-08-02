@@ -39,6 +39,10 @@ export const useDataStore = defineStore('data', () => {
   const evConfigIsLoading = ref(false)
   const evStationIsLoading = ref(false)
   const postControlIsLoading = ref(false)
+  //MV aggiunta gruppi
+  const groupData = ref([])
+  const groupDataIsLoading = ref(false)
+  const groupDataLength = ref()
   const status = ref({
     message: null,
     code: null,
@@ -242,7 +246,21 @@ export const useDataStore = defineStore('data', () => {
       return err
     } 
   }
-
+  
+  //MV aggiungo il caricamento e la scritura dei gruppi
+  const getLastGroupData = async (params) => {
+    groupDataIsLoading.value = true
+    try {
+      const res = await dataAPI.getLast(params)
+      groupData.value = res.data.data
+      groupDataLength.value = res.data.data === undefined ? 0 : Object.keys(res.data.data).length - 6
+      groupDataIsLoading.value = false
+  } catch (err) {
+      console.error(err)
+      groupDataIsLoading.value = false
+      return err
+    } 
+  }
 
 
   return {
@@ -257,6 +275,6 @@ export const useDataStore = defineStore('data', () => {
     satStarts, satStartsIsLoading, getLastSatStarts, satStartsLength,
     pumpConfig, pumpConfigIsLoading, getLastPumpConfig, pumpConfigLength,
     mvConfig, mvConfigIsLoading, getLastMvConfig, mvConfigLength,gropointStatIsLoading, gropointStatLength,
-    historicalData, historicalDataIsLoading, historicalDataLength, getHistoricalData
+    historicalData, historicalDataIsLoading, historicalDataLength, getHistoricalData, getLastGroupData, groupData, groupDataIsLoading
   }
 })

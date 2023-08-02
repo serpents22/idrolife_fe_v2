@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', {
       } catch (err) {
         console.error(err)
         this.isLoading = false
-        this.status.message = err.response.data.error
+        this.status.message = "Error on registration" //err.response.data.error
         if (err.response.data.error == 'E_ROW_NOT_FOUND: Row not found') {
           this.status.message = 'Email not Registered'
         } else if (err.response.data.error == 'E_INVALID_AUTH_PASSWORD: Password mis-match') {
@@ -83,7 +83,7 @@ export const useAuthStore = defineStore('auth', {
         this.status.message = 'Password reset email successfully sent'
       } catch (err) {
         this.isLoading = false
-        this.status.message = err.response.data.error.errors[0].message
+        this.status.message = "Password not resetting"//err.response.data.error.errors[0].message
         return err
       }
     },
