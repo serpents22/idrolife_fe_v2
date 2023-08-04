@@ -62,10 +62,11 @@
 
 .device-container {
   @apply 
-    flex flex-col fixed items-center gap-2
+    flex sm:flex-col fixed items-end sm:items-center gap-2
     bottom-0 left-4
     pb-4 sm:pb-8
 }
+
 
 .device-container img {
   @apply 

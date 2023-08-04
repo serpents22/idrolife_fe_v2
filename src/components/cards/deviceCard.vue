@@ -10,13 +10,13 @@
           </span>
               <img class="images" src="@/assets/device.png" id="logo">
           <div class="flex flex-col">
+            <span v-if="content.length === 1" class="flex flex-row justify-between mb-1">
+              <h2>Stato</h2>
+              <Indicator :status="stato" />
+            </span>
             <span class="flex flex-row justify-between">
               <h2>ID</h2>
               <p>{{ impianto.code }}</p>
-            </span>
-            <span v-if="content.length === 1" class="flex flex-row justify-between">
-              <h2>Stato</h2>
-              <Indicator :status="stato" />
             </span>
             <span class="flex flex-row justify-between">
               <h2>MAC Address</h2>

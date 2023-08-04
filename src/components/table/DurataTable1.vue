@@ -7,7 +7,7 @@
     <div class="program-bar">
       <div class="label-bar">
         <select 
-          class="cursor-pointer w-[200px] rounded-md px-2 py-1 sm:px-4 sm:py-2 self-center" 
+          class="cursor-pointer w-[100px] sm:w-[200px] rounded-md px-2 py-1 sm:px-4 sm:py-2 self-center" 
           @change="changeProgram($event)">
             <option 
               v-for="tab in tabs" :key="tab.value"
@@ -992,11 +992,11 @@ select {
 
 .program-bar{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
-  width: 70%;
   /*justify-content: flex-start;*/
   align-items: center;
+  gap: 10px;
 }
 
 .search-bar{
@@ -1021,6 +1021,7 @@ select {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  width: 100%;
   /*align-content: center;*/
   justify-content: flex-start;
   align-items: center;

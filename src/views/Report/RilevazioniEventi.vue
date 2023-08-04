@@ -33,34 +33,36 @@
         </div>
       </div>
       <div class="table-wrap">
-      <EasyDataTable
-        table-class-name="customize-table"
-        alternating
-        buttons-pagination
-        no-hover
-        :loading="historicalDataIsLoading"
-        :headers="headers"
-        :items="formatedhistoricalEventi"
-        :search-field="searchField"
-        :search-value="searchValue"
-        :rows-items="[5,10,20,30,40,50]"
-        :rows-per-page="5"
-        theme-color="#1363df">
-        <template #loading>
-          <img
-            src="@/assets/loader/loader.gif"
-            style="width: 100px; height: 80px;"
-          />
-        </template>
-      </EasyDataTable>
-      <download-csv
-      	class   = "btn btn-default mt-6 justify-end flex"
-      	:data   = "formatedhistoricalEventi"
-      	:name    = "fileName">
-        <div class="button-wrapper">
-            <IveButton label="Export CSV" />
-        </div>
-      </download-csv>
+        <EasyDataTable
+          table-class-name="customize-table"
+          alternating
+          buttons-pagination
+          no-hover
+          :loading="historicalDataIsLoading"
+          :headers="headers"
+          :items="formatedhistoricalEventi"
+          :search-field="searchField"
+          :search-value="searchValue"
+          :rows-items="[5,10,20,30,40,50]"
+          :rows-per-page="5"
+          theme-color="#1363df">
+          <template #loading>
+            <img
+              src="@/assets/loader/loader.gif"
+              style="width: 100px; height: 80px;"
+            />
+          </template>
+        </EasyDataTable>
+        <div id="chart" class="mt-6"></div>
+        <download-csv
+        :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}"
+          class   = "btn btn-default mt-6 justify-end flex"
+          :data   = "formatedhistoricalEventi"
+          :name    = "fileName">
+          <div class="button-wrapper">
+              <IveButton label="Export CSV" />
+          </div>
+        </download-csv>
       </div>
     </div>
   </div>
@@ -76,6 +78,7 @@ import SearchField from '@/components/input/searchField.vue'
 import DatePicker from '@/components/input/datePicker.vue'
 import IveButton from '@/components/input/iveButton.vue'
 import { toInteger } from 'lodash'
+import ApexCharts from "apexcharts";
 // import { Header, Item } from "vue3-easy-data-table";
 
   //props
@@ -83,7 +86,21 @@ import { toInteger } from 'lodash'
     id: String
   })
 
-  
+  var options = {
+    chart: {
+      type: 'line',
+      zoom: {
+        enabled: true
+      }
+    },
+    series: [],
+    xaxis: {
+      type: 'datetime',
+      categories: [],
+      tickPlacement: 'on'
+    }
+  }
+
   //asynchronus component
   const deviceCard = defineAsyncComponent(
     () => import('@/components/cards/deviceCard.vue'),
@@ -147,14 +164,18 @@ import { toInteger } from 'lodash'
     start: start,
     end: end
   })
-
   
   function fillTableData() {
     console.log(dataStore.historicalData)
     formatedhistoricalEventi.value = []
     let tmphistoricalEventi
+    var tmpTemperature = []
+    var tmpPioggia = []
+    var tmpRadiazioneSolare = []
+    var tmpUmidita = []
+    var tmpVelocitaVento = []
     if (dataStore.historicalData !== undefined) {
-      dataStore.historicalData.map((data) => {
+      dataStore.historicalData.map((data, index) => {
         tmphistoricalEventi = data.S86.split(',')
         let newObj = {
           date: new Date(toInteger(tmphistoricalEventi[0])*1000).toLocaleString(),
@@ -165,7 +186,35 @@ import { toInteger } from 'lodash'
           direzioneVento: tmphistoricalEventi[5],
           pioggia: (tmphistoricalEventi[6] + ' mm/m²')
         }
+        if (index > dataStore.historicalData.length - 100) {
+          tmpTemperature.push(toInteger(tmphistoricalEventi[1]))
+          tmpPioggia.push(toInteger(tmphistoricalEventi[6]))
+          tmpRadiazioneSolare.push(toInteger(tmphistoricalEventi[3]))
+          tmpUmidita.push(toInteger(tmphistoricalEventi[2]))
+          tmpVelocitaVento.push(toInteger(tmphistoricalEventi[4]))
+          options.xaxis.categories.push(toInteger(tmphistoricalEventi[0] * 1000));
+        }
         formatedhistoricalEventi.value.push(newObj)
+      })
+      options.series.push({
+        name: 'Temperatura',
+        data: tmpTemperature
+      })
+      options.series.push({
+        name: 'Pioggia',
+        data: tmpPioggia
+      })
+      options.series.push({
+        name: 'Radiazione Solare',
+        data: tmpRadiazioneSolare
+      })
+      options.series.push({
+        name: 'Umidita',
+        data: tmpUmidita
+      })
+      options.series.push({
+        name: 'Velocita Vento',
+        data: tmpVelocitaVento
       })
     }
     console.log(formatedhistoricalEventi.value)
@@ -188,6 +237,8 @@ import { toInteger } from 'lodash'
     historicalEventiParams.value.device_code = devicesStore.deviceData.code
     title.value = 'Idrosat:' + devicesStore.deviceData.name
     dateFiltering()
+    var chart = new ApexCharts(document.querySelector("#chart"), options)
+    chart.render()
   })
 
   const newData = computed(() => {
