@@ -1,9 +1,8 @@
 <template>
   <div class="email-confirmation-container">
-    <IdroTitle >
-      <h1 class="mt-6">We have sent an activation email to your email</h1>
-      <h2 class="mt-10">Please check your inbox or spam to activate your account, then login here 
-        <span class="font-bold mt-6">
+    <IdroTitle title="Abbiamo mandato un messaggio di attivazione alla tua email">
+      <h2>Controlla la tua casella di posta e conferma l'attivazione, poi esegui il login qui 
+        <span class="font-bold">
           <router-link :to="{name: 'LoginForm'}"> LOGIN </router-link>
         </span>
       </h2>

@@ -9,7 +9,6 @@
       <deviceCard 
         :small=true
         :content="newData" 
-        :id="props.id"
         />
       <img src="@/assets/EC_fertirrigazione.png">
     </div>
@@ -102,11 +101,11 @@
                   <span class="flex flex-col pl-4">
                     <span class="flex gap-2">
                       <input id="phacido" :disabled="fertData.F01 === undefined" type="radio" v-model="fertData.F01" value="0" name="F01">
-                      <label for="phacido">Ph acido</label>
+                      <label for="phacido">Ph basico</label>
                     </span>
                     <span class="flex gap-2">
                       <input id="phbasico" :disabled="fertData.F01 === undefined" type="radio" v-model="fertData.F01" value="1" name="F01">
-                      <label for="phbasico">Ph basico</label>
+                      <label for="phbasico">Ph acido</label> <!-- MV invertito 05.04.2023 richiesto da Giuseppe-->
                     </span>
                   </span>
                 </td>

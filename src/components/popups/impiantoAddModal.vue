@@ -77,6 +77,7 @@ export default {
 
     const onSubmit = async (values, { resetForm }) => {
       values.max_devices = '1'
+      values.coordinate = '0.0,0.0'
       await devicesStore.createDevices(values)
       console.log(values)
       modalActive.value = true

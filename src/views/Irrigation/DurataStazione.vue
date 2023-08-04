@@ -7,18 +7,19 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="id" />
+      :content="newData" />
       <img src="@/assets/durata_stazioni.png">
   </div>
   <div class="content">
-    <IdroTitle title="Programma" />
-    <div class="main">
+    <!-- <IdroTitle title="Programma" /> -->
+    <IdroTitle title="Durata Stazioni" />
+    <!--<div class="main">
       <Tab :tabs="tabs" @clicked= "changeNavigation" />
-      <!-- <keep-alive> -->
+      
         <component :is="comp" :id="deviceId"></component>
-      <!-- </keep-alive> -->
-    </div>
+      
+    </div>-->
+    <component :is="comp" :id="deviceId"></component>
   </div>
 </div>
 </template>
@@ -32,6 +33,7 @@ import { useDevicesStore } from '@/stores/DevicesStore';
 import { ref } from '@vue/reactivity';
 import { computed, defineAsyncComponent, onMounted } from '@vue/runtime-core';
 import { storeToRefs } from 'pinia';
+
 
 //asynchronus component
 const deviceCard = defineAsyncComponent(
@@ -84,8 +86,8 @@ export default {
     const title = ref()
 
     onMounted(async() => {
-      var element = document.getElementById("Minuti/Secondi");
-      element.classList.add("active");
+      /*var element = document.getElementById("Minuti/Secondi");
+      element.classList.add("active");*/
 
       await deviceStore.loadDevice(props.id)
       title.value = 'Idrosat:' + deviceStore.deviceData.name

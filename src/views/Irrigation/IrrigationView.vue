@@ -6,14 +6,13 @@
   <div class="device-container">
     <deviceCard 
       :small="true"
-      :content="newData"
-      :id="props.id" />
+      :content="newData" />
     <img class="w-40" src="@/assets/irrigation.png">
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
-      <div class="sensor" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
+      <div class="sensor">
         <router-link :to="{name: 'IrrigationConfiguration'}"><img src="@/assets/config_irrigazione.png"></router-link>
       </div>
       <div class="irrigation">

@@ -7,8 +7,7 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
+      :content="newData" />
     <img class="w-40" src="@/assets/report_allarmi.png">
   </div>
   <div class="dashboard-container">
@@ -16,18 +15,14 @@
     <div class="content">
       <div class="header">
         <div class="date-filter">
-          <DatePicker
-            @change="dateFiltering()"  
-            v-model="startDate"
-          />
+          <DatePicker v-model="startDate" @change="dateFiltering()">{{startDate}}</DatePicker>
           <label>AL</label>
-          <DatePicker  
-            @change="dateFiltering()"  
-            v-model="endDate"
-          />
+          <DatePicker @change="dateFiltering()" v-model="endDate">{{endDate}}</DatePicker>
+
           <!-- <div class="button-wrapper">
             <IveButton type="submit" label="Visualizza" />
           </div> -->
+
         </div>
         <div class="search-field">
           <SearchField v-model="searchValue" />
@@ -55,7 +50,6 @@
         </template>
       </EasyDataTable>
       <download-csv
-        :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}"
       	class   = "btn btn-default mt-6 justify-end flex"
       	:data   = "formatedhistoricalAlarmi"
       	:name    = "fileName">
@@ -70,15 +64,15 @@
 </template>
 
 <script setup>
-  import { useDataStore } from '@/stores/DataStore'
-  import { useDevicesStore } from '@/stores/DevicesStore'
-  import { storeToRefs } from 'pinia'
-  import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-core'
-  import SearchField from '@/components/input/searchField.vue'
-  import DatePicker from '@/components/input/datePicker.vue'
-  import IveButton from '@/components/input/iveButton.vue'
-  import { toInteger } from 'lodash'
-  import { Header, Item } from "vue3-easy-data-table";
+import { useDataStore } from '@/stores/DataStore'
+import { useDevicesStore } from '@/stores/DevicesStore'
+import { storeToRefs } from 'pinia'
+import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-core'
+import SearchField from '@/components/input/searchField.vue'
+import DatePicker from '@/components/input/datePicker.vue'
+import IveButton from '@/components/input/iveButton.vue'
+import { toInteger } from 'lodash'
+// import { Header, Item } from "vue3-easy-data-table";
 
   //props
   const props = defineProps({
@@ -106,39 +100,50 @@
   let tmpFirstYear = String(firstDay.getFullYear())
   let tmpFirstMonth = String((firstDay.getMonth()+1))
   let tmpFirstDay = String(firstDay.getDate())
-  while (tmpFirstDay.length < MINIMUM_DIGIT) {
+  /*while (tmpFirstDay.length < MINIMUM_DIGIT) {
     tmpFirstDay = '0' + tmpFirstDay
-  }
-  const startDate = ref(String(tmpFirstYear + '-' + tmpFirstMonth + '-' + tmpFirstDay))
+  }*/
+  tmpFirstDay = tmpFirstDay.padStart(MINIMUM_DIGIT,"0")
+  tmpFirstMonth = tmpFirstMonth.padStart(MINIMUM_DIGIT,"0")
 
-  let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0)
-  let tmpLastYear = String(lastDay.getFullYear())
-  let tmpLastMonth = String((lastDay.getMonth()+1))
-  let tmpLastDay = String(lastDay.getDate())
-  while (tmpLastDay.length < MINIMUM_DIGIT) {
+  const startDate = ref(String(tmpFirstYear + '-' + tmpFirstMonth + '-' + tmpFirstDay))
+  
+  let lastDay = date.getDay()
+  let tmpLastYear = String(date.getFullYear())
+  let tmpLastMonth = String((date.getMonth()+1))
+  let tmpLastDay = String(date.getDate())
+  /*while (tmpLastDay.length < MINIMUM_DIGIT) {
     tmpLastDay = '0' + tmpLastDay
-  }
+  }*/
+  tmpLastDay = tmpLastDay.padStart(MINIMUM_DIGIT,"0")
+  tmpLastMonth = tmpLastMonth.padStart(MINIMUM_DIGIT,"0")
 
   const endDate = ref(String(tmpLastYear + '-' + tmpLastMonth + '-' + tmpLastDay))
-  const fileName = ref(String(startDate.value + '_' + endDate.value) + '_Alarmi.csv')
+  const fileName = ref(String(startDate.value + '_' + endDate.value) + '_Allarmi.csv')
+
+  let rangeEpochStart = 0
+  let rangeEpochEnd = 0
 
   const start = computed(() => {
     let tmpStart = startDate.value.split('-')
     let tmpYear = tmpStart[0]
     let tmpMonth = tmpStart[1]
     let tmpDay = tmpStart[2]
-    console.log(tmpStart)
+    
+    rangeEpochStart = new Date(tmpYear, tmpMonth-1, tmpDay, '00', '00', '00').getTime()
+    //console.log("Epoch Start: "+rangeEpochStart)
     return new Date(tmpYear, tmpMonth-1, tmpDay, '00', '00', '00').toISOString()
-    // return new Date(Date.UTC(tmpYear, tmpMonth-1, tmpDay, '00', '00', '00')).toISOString()
   })
   const end = computed(() => {
     let tmpEnd = endDate.value.split('-')
     let tmpYear = tmpEnd[0]
     let tmpMonth = tmpEnd[1]
     let tmpDay = tmpEnd[2]
-    console.log(tmpEnd)
+    
+    rangeEpochEnd = new Date(tmpYear, tmpMonth-1, tmpDay, '24', '00', '00').getTime()
+    //console.log("Epoch End: "+rangeEpochEnd)
     return new Date(tmpYear, tmpMonth-1, tmpDay, '24', '00', '00').toISOString()
-    // return new Date(Date.UTC(tmpYear, tmpMonth-1, tmpDay, '24', '00', '00')).toISOString()
+    
   })
 
   const historicalAlarmiParams = ref({
@@ -150,7 +155,7 @@
   })
   
   function fillTableData() {
-    console.log(dataStore.historicalData)
+    //console.log(dataStore.historicalData)
     formatedhistoricalAlarmi.value = []
     let tmphistoricalAlarmi
     tmphistoricalAlarmi = dataStore.historicalData.map((data) => {
@@ -167,25 +172,37 @@
         S254 : data.S254
       }
     })
-    console.log(tmphistoricalAlarmi)
-    
+    //console.log(tmphistoricalAlarmi)
+    let tmpUnique=[]
     tmphistoricalAlarmi.map((data) => {
       for (const prop in data) {
-        if(data[prop] !== "" ){
+        if(data[prop] !== "0,0,0,0,0"){
           let tmpData = data[prop].split(',')
-          tmpData[1] = describeErrorCode(tmpData[1])
-          tmpData[4] = describeActionCode(tmpData[4])
-          let newObj = {
-            date: new Date(toInteger(tmpData[0])*1000).toLocaleString(),
-            tipoAlarme: tmpData[1],
-            programmaNumero: tmpData[2],
-            stazioneNumero: tmpData[3],
-            anzioneIntrepresa: tmpData[4]
-          }
-          formatedhistoricalAlarmi.value.push(newObj)
+          var alarmEpoch = Number(tmpData[0])*1000
+          if(alarmEpoch >= rangeEpochStart && alarmEpoch <= rangeEpochEnd){
+            tmpData[1] = describeErrorCode(tmpData[1])
+            tmpData[4] = describeActionCode(tmpData[4])
+            let newObj = {
+              date: new Date(alarmEpoch).toLocaleString(),
+              tipoAllarme: tmpData[1],
+              programmaNumero: tmpData[2],
+              stazioneNumero: tmpData[3],
+              azioneIntrapresa: tmpData[4]
+            }
+            tmpUnique.push(newObj)
+          } 
         }
       }
     })
+    
+    let reducedArray = tmpUnique.reduce((prev, el) =>{
+      if(prev.some(o => o.date == el.date && o.tipoAllarme == el.tipoAllarme && o.programmaNumero == el.programmaNumero && o.stazioneNumero == el.stazioneNumero  && o.azioneIntrapresa == el.azioneIntrapresa))
+           return prev;
+      return [...prev, {date:el.date, tipoAllarme:el.tipoAllarme, programmaNumero:el.programmaNumero, stazioneNumero:el.stazioneNumero, azioneIntrapresa:el.azioneIntrapresa}]
+    }, []);
+
+    tmpUnique = sortArrayOfObjects(reducedArray, 'date', 'descending') //[...new Map(tmpUnique.map((item) => [item["date"], item])).values(),]
+    formatedhistoricalAlarmi.value = tmpUnique
     console.log(formatedhistoricalAlarmi.value)
   }      
   
@@ -197,7 +214,7 @@
   function dateFiltering() {
     historicalAlarmiParams.value.start = start
     historicalAlarmiParams.value.end = end
-    fileName.value = String(startDate.value + '_' + endDate.value) + '_Alarmi.csv'
+    fileName.value = String(startDate.value + '_' + endDate.value) + '_Allarmi.csv'
     getHistoryData()
   }
 
@@ -214,13 +231,31 @@
 
   //table headers
   const headers = [
-    { text: "Tipo Alarme", value: "tipoAlarme",sortable: true, width: 160},
+    { text: "Tipo Allarme", value: "tipoAllarme",sortable: true, width: 160},
     { text: "Programma Numero", value: "programmaNumero",sortable: true, width: 180},
     { text: "Stazione Numero", value: "stazioneNumero",sortable: true, width: 160},
-    { text: "Anzione Intrapresa", value: "anzioneIntrepresa",sortable: true, width: 160},
+    { text: "Azione Intrapresa", value: "azioneIntrapresa",sortable: true, width: 160},
     { text: "Date", value: "date",sortable: true, width: 160},
   ] 
 
+
+  function sortArrayOfObjects(arr, propertyName, order = 'ascending')  {
+    const sortedArr = arr.sort((a, b) => {
+      if (a[propertyName] < b[propertyName]) {
+        return -1;
+      }
+      if (a[propertyName] > b[propertyName]) {
+        return 1;
+      }
+      return 0;
+    });
+
+    if (order === 'descending') {
+      return sortedArr.reverse();
+    }
+
+    return sortedArr;
+}
   //other function
   function describeErrorCode(value) {
     switch (value) {

@@ -34,7 +34,7 @@
                         <p>{{ member.role }}</p>
                       </td>
                       <td>
-                        <button @click="onSubmit(member.email)" class="filled_red">{{eliminaLabel}}</button>
+                        <button @click="onSubmit(member.email)" class="filled_red">Elimina</button>
                       </td>
                     </tr>
                   </tbody>
@@ -70,9 +70,6 @@ const props = defineProps({
   const deviceManagementStore = useDeviceManagement()
   const { members, status, isLoading } = storeToRefs(useDeviceManagement())
   const { supAdmindevices } = storeToRefs(useDeviceManagement())
-  const eliminaLabel = ref('Elimina')
-  const regButtonClick = ref(0)
-  const cancelButtonClick = ref(0)
   const selectedDevice = ref('')
 
   
@@ -87,23 +84,14 @@ const props = defineProps({
   const onSubmit = async (email) => {
     let value = {email: email, device_code: selectedDevice.value }
     console.log(value)
-    regButtonClick.value = ++regButtonClick.value
-    if (regButtonClick.value == 1) {
-      eliminaLabel.value = 'confirm?'
+    await deviceManagementStore.unshareDevice(value)
+    modalActive.value = true
+    if (status.value.isError == true ) {
+      setTimeout(closeNotification, 3000)
+    } else {
+      setTimeout(closeNotification, 3000)
     }
-
-    if (regButtonClick.value == 2) {
-      await deviceManagementStore.unshareDevice(value)
-      modalActive.value = true
-      if (status.value.isError == true ) {
-        setTimeout(closeNotification, 3000)
-      } else {
-        setTimeout(closeNotification, 3000)
-      }
-      eliminaLabel.value = 'Elimina'
-      regButtonClick.value = 0
-      deviceManagementStore.deviceMember(selectedDevice.value)
-    }
+    deviceManagementStore.deviceMember(selectedDevice.value)
   }
 
   const closeNotification = () => {

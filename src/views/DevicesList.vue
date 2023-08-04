@@ -1,13 +1,8 @@
 <template>
   <div class="slider"></div>
   <loading :loading="isLoading" />
-  <!-- <impiantoAddModal 
+  <impiantoAddModal 
     v-if="isShowAddModal" 
-    @close="toggleAddModal" 
-    title="AGGIUNGI IMPIANTO" 
-    /> -->
-  <NewDevice 
-    :isOpen="isShowAddModal" 
     @close="toggleAddModal" 
     title="AGGIUNGI IMPIANTO" 
     />
@@ -45,17 +40,11 @@
 <script setup>
   import { useDevicesStore } from '@/stores/DevicesStore'
   import { storeToRefs } from 'pinia'
-  import { defineAsyncComponent,  onBeforeMount,onMounted,  ref } from '@vue/runtime-core'
+  import { defineAsyncComponent,  onBeforeMount,  ref } from '@vue/runtime-core'
   import { useAuthStore } from '@/stores/AuthStore'
   import router from '@/router'
-  import NewDevice from '@/components/modal/devices/NewDevice'
-  import { useDeviceManagement } from '@/stores/DeviceManagementStore'
 
-  const deviceManagementStore = useDeviceManagement()
 
-  onMounted(() => {
-    deviceManagementStore.superAdminDevices()
-  })
   //asynchronus component
   const deviceCard = defineAsyncComponent(
     () => import('@/components/cards/deviceCard.vue'),
@@ -122,12 +111,12 @@ span p {
   @apply text-base font-normal
 }
 
-/* .impiantos {
+.impiantos {
   @apply  flex flex-wrap justify-between gap-8
           w-[1000px] mx-auto
 }
 
 .impiantos modal {
   @apply w-72 transition ease-in-out delay-150 hover:-translate-y-2
-} */
+}
 </style>

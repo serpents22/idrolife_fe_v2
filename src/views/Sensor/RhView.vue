@@ -7,8 +7,7 @@
     <div class="device-container">
       <deviceCard 
         :small=true
-        :content="newData"
-        :id="props.id" />
+        :content="newData" />
       <img src="@/assets/umiditterreno.png">
     </div>
     <div class="content">

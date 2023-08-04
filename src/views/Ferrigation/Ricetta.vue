@@ -7,8 +7,7 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="id" />
+      :content="newData" />
     <img class="w-40" src="@/assets/ricette_fertirrigazione.png">
   </div>
   <div class="main">

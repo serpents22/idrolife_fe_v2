@@ -1,5 +1,5 @@
 <template>
-  <div class="rilevazioni-container">
+  <div class="alarmi-container">
   <sidebar 
     :noSocial="true" 
     :backOn="true" 
@@ -8,15 +8,15 @@
     <deviceCard 
       :small=true
       :content="newData" />
-    <img class="w-40" src="@/assets/report_eventi_sensori_umidita.png">
+    <img class="w-40" src="@/assets/report_allarmi.png">
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
       <div class="header">
         <div class="date-filter">
-          <DatePicker  
-            @change="dateFiltering()"
+          <DatePicker
+            @change="dateFiltering()"  
             v-model="startDate"
           />
           <label>AL</label>
@@ -40,7 +40,7 @@
         no-hover
         :loading="historicalDataIsLoading"
         :headers="headers"
-        :items="formatedhistoricalEventi"
+        :items="formatedhistoricalAlarmi"
         :search-field="searchField"
         :search-value="searchValue"
         :rows-items="[5,10,20,30,40,50]"
@@ -55,7 +55,7 @@
       </EasyDataTable>
       <download-csv
       	class   = "btn btn-default mt-6 justify-end flex"
-      	:data   = "formatedhistoricalEventi"
+      	:data   = "formatedhistoricalAlarmi"
       	:name    = "fileName">
         <div class="button-wrapper">
             <IveButton label="Export CSV" />
@@ -93,12 +93,11 @@ import { toInteger } from 'lodash'
   const dataStore = useDataStore()
   const { isLoading } = storeToRefs(useDevicesStore())
   const { historicalDataIsLoading } = storeToRefs(useDataStore())
-  const formatedhistoricalEventi = ref([])
+  const formatedhistoricalAlarmi = ref([])
   const searchValue = ref()
   const searchField = 'tipoAlarme'
   const title = ref()
 
-  //date filter init
   let MINIMUM_DIGIT = 2
   let date = new Date()
   let firstDay = new Date(date.getFullYear(), date.getMonth(), 1)
@@ -117,10 +116,10 @@ import { toInteger } from 'lodash'
   while (tmpLastDay.length < MINIMUM_DIGIT) {
     tmpLastDay = '0' + tmpLastDay
   }
-  const endDate = ref(String(tmpLastYear + '-' + tmpLastMonth + '-' + tmpLastDay))
-  const fileName = ref(String(startDate.value + '_' + endDate.value) + '_Umidita_Eventi.csv')
 
-  //change date format to ISOString
+  const endDate = ref(String(tmpLastYear + '-' + tmpLastMonth + '-' + tmpLastDay))
+  const fileName = ref(String(startDate.value + '_' + endDate.value) + '_Alarmi.csv')
+
   const start = computed(() => {
     let tmpStart = startDate.value.split('-')
     let tmpYear = tmpStart[0]
@@ -140,64 +139,70 @@ import { toInteger } from 'lodash'
     // return new Date(Date.UTC(tmpYear, tmpMonth-1, tmpDay, '24', '00', '00')).toISOString()
   })
 
-  const historicalEventiParams = ref({
-    fields: 'S87',
-    measurement: 'SATEVENTSTAT',
+  const historicalAlarmiParams = ref({
+    fields: 'S200,S206,S212,S218,S224,S230,S236,S242,S248,S254',
+    measurement: 'SATALARMSTAT',
     device_code: null,
     start: start,
     end: end
   })
-
   
   function fillTableData() {
     console.log(dataStore.historicalData)
-    formatedhistoricalEventi.value = []
-    let tmphistoricalEventi
-
-    if (dataStore.historicalData !== undefined) {
-      dataStore.historicalData.map((data) => {
-        tmphistoricalEventi = data.S87.split(',')
-        let newObj = {
-          date: new Date(toInteger(tmphistoricalEventi[0])*1000).toLocaleString(),
-          numeroSensori: tmphistoricalEventi[1],
-          rh1: String(tmphistoricalEventi[2] + ' %'),
-          rh2: String(tmphistoricalEventi[3] + ' %'),
-          rh3: String(tmphistoricalEventi[4] + ' %'),
-          rh4: String(tmphistoricalEventi[5] + ' %')
-        }
-        formatedhistoricalEventi.value.push(newObj)
-      })
-    }
-    console.log(formatedhistoricalEventi.value)
-  }
-
-  //table headers
-  const headers = [
-    { text: "Date", value: "date",sortable: true, width: 100},
-    { text: "Numero Sensori", value: "numeroSensori",sortable: true, width: 80},
-    { text: "Livello Sensore Umidita 1 ", value: "rh1",sortable: true, width: 100},
-    { text: "Livello Sensore Umidita 2 ", value: "rh2",sortable: true, width: 100},
-    { text: "Livello Sensore Umidita 3 ", value: "rh3",sortable: true, width: 100},
-    { text: "Livello Sensore Umidita 4 ", value: "rh4",sortable: true, width: 100},
-  ]
+    formatedhistoricalAlarmi.value = []
+    let tmphistoricalAlarmi
+    tmphistoricalAlarmi = dataStore.historicalData.map((data) => {
+      return {
+        S200 : data.S200,
+        S206 : data.S206,
+        S212 : data.S212,
+        S218 : data.S218,
+        S224 : data.S224,
+        S230 : data.S230,
+        S236 : data.S236,
+        S242 : data.S242,
+        S248 : data.S248,
+        S254 : data.S254
+      }
+    })
+    console.log(tmphistoricalAlarmi)
     
+    tmphistoricalAlarmi.map((data) => {
+      for (const prop in data) {
+        if(data[prop] !== "" ){
+          let tmpData = data[prop].split(',')
+          tmpData[1] = describeErrorCode(tmpData[1])
+          tmpData[4] = describeActionCode(tmpData[4])
+          let newObj = {
+            date: new Date(toInteger(tmpData[0])*1000).toLocaleString(),
+            tipoAlarme: tmpData[1],
+            programmaNumero: tmpData[2],
+            stazioneNumero: tmpData[3],
+            anzioneIntrepresa: tmpData[4]
+          }
+          formatedhistoricalAlarmi.value.push(newObj)
+        }
+      }
+    })
+    console.log(formatedhistoricalAlarmi.value)
+  }      
+  
   async function getHistoryData() {
-    await dataStore.getHistoricalData(historicalEventiParams.value)
+    await dataStore.getHistoricalData(historicalAlarmiParams.value)
     fillTableData()
   }
 
   function dateFiltering() {
-    historicalEventiParams.value.start = start
-    historicalEventiParams.value.end = end
-    fileName.value = String(startDate.value + '_' + endDate.value) + '_Umidita_Eventi.csv'
+    historicalAlarmiParams.value.start = start
+    historicalAlarmiParams.value.end = end
+    fileName.value = String(startDate.value + '_' + endDate.value) + '_Alarmi.csv'
     getHistoryData()
   }
 
-
   onMounted( async () => {
     await devicesStore.loadDevice(props.id)
+    historicalAlarmiParams.value.device_code = devicesStore.deviceData.code
     title.value = 'Idrosat:' + devicesStore.deviceData.name
-    historicalEventiParams.value.device_code = devicesStore.deviceData.code
     dateFiltering()
   })
 
@@ -205,11 +210,131 @@ import { toInteger } from 'lodash'
       return [devicesStore.deviceData]
   })
 
+  //table headers
+  const headers = [
+    { text: "Tipo Alarme", value: "tipoAlarme",sortable: true, width: 160},
+    { text: "Programma Numero", value: "programmaNumero",sortable: true, width: 180},
+    { text: "Stazione Numero", value: "stazioneNumero",sortable: true, width: 160},
+    { text: "Anzione Intrapresa", value: "anzioneIntrepresa",sortable: true, width: 160},
+    { text: "Date", value: "date",sortable: true, width: 160},
+  ] 
+
+  //other function
+  function describeErrorCode(value) {
+    switch (value) {
+            case '0':
+              value = 'No Alarm'
+              break;
+            case '1':
+              value = 'Short cicruit'
+              break;
+            case '2':
+              value = 'First Entrance'
+              break;
+            case '3':
+              value = 'Second entrance'
+              break;
+            case '4':
+              value = 'Wind'
+              break;
+            case '5':
+              value = 'Water leak'
+              break;
+            case '6':
+              value = 'High temperature'
+              break;
+            case '7':
+              value = 'Low temperature'
+              break;
+            case '8':
+              value = 'High humidity'
+              break;
+            case '9':
+              value = 'Low humidity'
+              break;
+            case '10':
+              value = 'High brightness'
+              break;
+            case '11':
+              value = 'Excessive flow'
+              break;
+            case '12':
+              value = 'Open / closed input (on EV via radio)'
+              break;
+            case '13':
+              value = 'Excessive flow on Minifert'
+              break;
+            case '14':
+              value = 'Minifert'
+              break;
+            case '15':
+              value = 'The program (or the station) cannot start'
+              break;
+            case '16':
+              value = 'Lack of network'
+              break;
+            case '17':
+              value = 'Low battery'
+              break;
+            case '18':
+              value = 'Low fertilizer level on minifert'
+              break;
+            case '19':
+              value = 'Circuit paerto (on ICOD)'
+              break;
+            case '20':
+              value = 'Third entrance'
+              break;
+            case '21':
+              value = 'Fourth entrance'
+              break;
+            case '22':
+              value = 'Low pressure'
+              break;
+            case '23':
+              value = 'High pressure'
+              break;
+            case '24':
+              value = 'No EV connection via radio'
+              break;
+            case '25':
+              value = 'No repeater connection'
+              break;
+            case '26':
+              value = 'Emergency button'
+              break;
+            default:
+              break;
+          }
+    return value
+  }
+  function describeActionCode(value) {
+    switch (value) {
+            case '0':
+              value = 'No action'
+              break;
+            case '1':
+              value = 'End of program / station deactivation'
+              break;
+            case '2':
+              value = 'Skip station'
+              break;
+            case '3':
+              value = 'Program start'
+              break;
+            case '4':
+              value = 'Program suspension'
+              break;
+            default:
+              break;
+          }
+    return value
+  }
 
 </script>
 
 <style scoped>
-.rilevazioni-container {
+.alarmi-container {
   @apply 
     relative flex flex-col 
     px-[16px] md:px-[200px] lg:px-[260px] xl:px-[320px] 2xl:px-[360px]

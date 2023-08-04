@@ -3,12 +3,11 @@
   <sidebar 
     :noSocial="true" 
     :backOn="true" 
-  />
+    />
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
+      :content="newData" />
     <img src="@/assets/imposta_orario.png">
   </div>
   <div class="content">
@@ -116,7 +115,10 @@ import { toInteger } from 'lodash';
     title.value = 'Idrosat:' + devicesStore.deviceData.name
     await dataStore.getLastSatStat(satStatParams.value)
     console.log(dataStore.satStat.S8)
-  })  
+    console.log(new Date(toInteger(dataStore.satStat.S8)*1000))
+  })
+
+  
 
   const satData = computed(() => {
     let now = new Date();

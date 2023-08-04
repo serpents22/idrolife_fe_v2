@@ -6,8 +6,7 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
+      :content="newData" />
     <img class="w-40" src="@/assets/config_irrigazione.png">
   </div>
   <div class="dashboard-container">

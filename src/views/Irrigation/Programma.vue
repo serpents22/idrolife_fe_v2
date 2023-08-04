@@ -7,8 +7,7 @@
     <div class="device-container">
       <deviceCard 
         :small=true
-        :content="newData"
-        :id="props.id" />
+        :content="newData" />
       <img src="@/assets/programma_partenze.png">
     </div>
     <div class="content">
@@ -26,174 +25,174 @@
       </div>
       <div class="main">
         <form @submit.prevent="onSubmit" class="table-container">
-          <table>
+          <table style="margin-bottom:1rem">
             <thead>
-              <tr>
-                <th>
-                  <span>Attiva</span>
-                </th>
-                <th>
-                  <span>Orario di inizio</span>
-                </th>
-                <th>
-                  <span>Cicli</span>
-                </th>
-              </tr>
+                <tr>
+                  <th class="w-10">
+                    <label>Attiva</label>
+                  </th>
+                  <th class="w-40">
+                    <label>Orario di inizio</label>
+                  </th>
+                  <th class="w-40">
+                    <label v-if="endProgramMode==1">Cicli</label>
+                    <label v-if="endProgramMode==0">Orario di fine</label>
+                  </th>
+                </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>
+              <tr name="Riga1" class="w-full">
+                <td name="Attivo">
                   <div class="flex gap-2 items-center">
-                    <p>1</p>
-                    <input 
-                      v-model="satData.isAuto1"
-                      type="checkbox" name="auto-1">
+                    <label>1</label>
+                    <input v-model="satData.isAuto1" type="checkbox" name="auto-1">
                   </div>
                 </td>
-                <td class="flex gap-4 items-center">
-                  <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.ore0"
-                      :disabled="satData.isAuto1 === false"
-                      type="number"
-                      name="ore0">
-                    <span>ore</span>
-                  </div>
-                  <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.min0"
-                      :disabled="satData.isAuto1 === false"
-                      type="number"
-                      name="min0">
-                    <span>min</span>
+                <td name="Orario Inizio">
+                  <div class="mp-flex">
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.ore0" class="w-30" :disabled="satData.isAuto1 === false" type="number" name="ore0">
+                      <label>ore</label>
+                    </div>
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.min0" class="w-30" :disabled="satData.isAuto1 === false" type="number" name="min0">
+                      <label>min</label>
+                    </div>
                   </div>
                 </td>
-                <td>
+                <td v-if="endProgramMode==1">
                   <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.S1"
-                      :disabled="satData.isAuto1 === false"
-                      type="number"
-                      name="cicli0">
-                    <span>cicli</span>
+                    <input v-model="satData.S1" class="w-30"  :disabled="satData.isAuto1 === false" type="number" name="cicli0">
+                    <label>cicli</label>
+                  </div>
+                </td>
+                <td name="OrarioFine1" v-if="endProgramMode==0" :disabled="satData.isAuto1 === false">
+                  <div class="mp-flex">
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.Time1H" class="w-30" :disabled="satData.isAuto1 === false" type="number" name="ore2">
+                      <label>ore</label>
+                    </div>
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.Time1M" class="w-30" :disabled="satData.isAuto1 === false" type="number" name="min2">
+                      <label>min</label>
+                    </div>
                   </div>
                 </td>
               </tr>
-              <tr>
+              <tr name="riga2" class="w-full">
                 <td>
                   <div class="flex gap-2 items-center">
                     <p>2</p>
-                    <input 
-                      v-model="satData.isAuto2"
-                      type="checkbox" name="auto-2">
-                  </div>
-                </td>
-                <td class="flex gap-4 items-center">
-                  <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.ore2"
-                      :disabled="satData.isAuto2 === false"
-                      type="number"
-                      name="ore2">
-                    <span>ore</span>
-                  </div>
-                  <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.min2"
-                      :disabled="satData.isAuto2 === false"
-                      type="number"
-                      name="min2">
-                    <span>min</span>
+                    <input v-model="satData.isAuto2" type="checkbox" name="auto-2">
                   </div>
                 </td>
                 <td>
+                  <div class="mp-flex">
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.ore2" class="w-30" :disabled="satData.isAuto2 === false" type="number" name="ore2">
+                      <label>ore</label>
+                    </div>
+                    <div class="flex gap-2 items-center td-gap">
+                      <input 
+                        v-model="satData.min2" class="w-30" :disabled="satData.isAuto2 === false" type="number" name="min2">
+                      <label>min</label>
+                    </div>
+                  </div>
+                </td>
+                <td v-if="endProgramMode==1">
                   <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.S3"
-                      :disabled="satData.isAuto2 === false"
-                      type="number"
-                      name="cicli3">
-                    <span>cicli</span>
+                    <input v-model="satData.S3" class="w-30" :disabled="satData.isAuto2 === false" type="number" name="cicli3">
+                    <label>cicli</label>
+                  </div>
+                </td>
+                <td name="OrarioFine3" v-if="endProgramMode==0">
+                  <div class="mp-flex">
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.Time3H" class="w-30" :disabled="satData.isAuto2 === false" type="number" name="ore2">
+                      <label>ore</label>
+                    </div>
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.Time3M" class="w-30" :disabled="satData.isAuto2 === false" type="number" name="min2">
+                      <label>min</label>
+                    </div>
                   </div>
                 </td>
               </tr>
-              <tr>
+              <tr name="riga3" class="w-full">
                 <td>
                   <div class="flex gap-2 items-center">
                     <p>3</p>
-                    <input 
-                      v-model="satData.isAuto3"
-                      type="checkbox" name="auto-3">
-                  </div>
-                </td>
-                <td class="flex gap-4 items-center">
-                  <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.ore4"
-                      :disabled="satData.isAuto3 === false"
-                      type="number"
-                      name="ore4">
-                    <span>ore</span>
-                  </div>
-                  <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.min4"
-                      :disabled="satData.isAuto3 === false"
-                      type="number"
-                      name="min4">
-                    <span>min</span>
+                    <input v-model="satData.isAuto3" type="checkbox" name="auto-3">
                   </div>
                 </td>
                 <td>
+                  <div class="mp-flex">
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.ore4" class="w-30" :disabled="satData.isAuto3 === false" type="number" name="ore4">
+                      <label>ore</label>
+                    </div>
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.min4" class="w-30" :disabled="satData.isAuto3 === false" type="number" name="min4">
+                      <label>min</label>
+                    </div>
+                  </div>
+                </td>
+                <td v-if="endProgramMode==1">
                   <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.S5"
-                      :disabled="satData.isAuto3 === false"
-                      type="number"
-                      name="cicli5">
-                    <span>cicli</span>
+                    <input v-model="satData.S5" class="w-30" :disabled="satData.isAuto3 === false" type="number" name="cicli5">
+                    <label>cicli</label>
+                  </div>
+                </td>
+                <td name="OrarioFine5" v-if="endProgramMode==0">
+                  <div class="mp-flex">
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.Time5H" class="w-30" :disabled="satData.isAuto3 === false" type="number" name="ore2">
+                      <label>ore</label>
+                    </div>
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.Time5M" class="w-30" :disabled="satData.isAuto3 === false" type="number" name="min2">
+                      <label>min</label>
+                    </div>
                   </div>
                 </td>
               </tr>
-              <tr>
+              <tr name="riga4" class="w-full">
                 <td>
                   <div class="flex gap-2 items-center">
                     <p>4</p>
-                    <input 
-                      v-model="satData.isAuto4"
-                      type="checkbox" name="auto-4">
-                  </div>
-                </td>
-                <td class="flex gap-4 items-center">
-                  <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.ore6"
-                      :disabled="satData.isAuto4 === false"
-                      type="number"
-                      name="ore6">
-                    <span>ore</span>
-                  </div>
-                  <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.min6"
-                      :disabled="satData.isAuto4 === false"
-                      type="number"
-                      name="min6">
-                    <span>min</span>
+                    <input v-model="satData.isAuto4" type="checkbox" name="auto-4">
                   </div>
                 </td>
                 <td>
+                  <div class="mp-flex">
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.ore6" class="w-30" :disabled="satData.isAuto4 === false" type="number" name="ore6">
+                      <label>ore</label>
+                    </div>
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.min6" class="w-30" :disabled="satData.isAuto4 === false" type="number" name="min6">
+                      <label>min</label>
+                    </div>
+                  </div>
+                </td>
+                <td v-if="endProgramMode==1">
                   <div class="flex gap-2 items-center">
-                    <input 
-                      v-model="satData.S7"
-                      :disabled="satData.isAuto4 === false"
-                      type="number"
-                      name="cicli7">
-                    <span>cicli</span>
+                    <input v-model="satData.S7" class="w-30" :disabled="satData.isAuto4 === false" type="number" name="cicli7">
+                    <label>cicli</label>
+                  </div>
+                </td>
+                <td name="OrarioFine7" v-if="endProgramMode==0">
+                  <div class="mp-flex">
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.Time7H" class="w-30" :disabled="satData.isAuto4 === false" type="number" name="ore2">
+                      <label>ore</label>
+                    </div>
+                    <div class="flex gap-2 items-center td-gap">
+                      <input v-model="satData.Time7M" class="w-30" :disabled="satData.isAuto4 === false" type="number" name="min2">
+                      <label>min</label>
+                    </div>
                   </div>
                 </td>
               </tr>
-            </tbody>
           </table>
           <div class="button-wrapper">
             <MyButton type="submit" class="filled" label="Salva" :loading="postControlIsLoading" />
@@ -236,60 +235,89 @@ import MyButton from '@/components/button/BaseButton.vue'
     measurement: 'SATPRGSTARTS1',
     device_code: null
   })
-  const satData = ref({})
-  function fillSatData() {
 
-    let tmpOreMin0 = dataStore.satConfig === undefined ? undefined : dataStore.satConfig['S' + (((optionValue.value - 1) * 1000) + 10050)].split('.')
-    let tmpOreMin2 = dataStore.satConfig === undefined ? undefined : dataStore.satConfig['S' + (((optionValue.value - 1) * 1000) + 10052)].split('.')
-    let tmpOreMin4 = dataStore.satConfig === undefined ? undefined : dataStore.satConfig['S' + (((optionValue.value - 1) * 1000) + 10054)].split('.')
-    let tmpOreMin6 = dataStore.satConfig === undefined ? undefined : dataStore.satConfig['S' + (((optionValue.value - 1) * 1000) + 10056)].split('.')
+  const programConfigParams = ref({
+    fields: 'S10002,S10003',
+    measurement: 'SATPRGCONFIG1',
+    device_code: null
+  })
+
+  const satData = ref({})
+
+  let programNumber=0;
+  let base_reg=(10000+(programNumber * 1000))
+  let endProgramRegister="S"+Number(base_reg+3)
+  let endProgramMode=0
+
+  function fillSatData() {
+    
+    let programRegister="S"+(base_reg + 50);
+    let tmpOreMin0 = dataStore.satConfig === undefined ? undefined : dataStore.satConfig[programRegister].split('.')
+
+    programRegister="S"+(base_reg + 52);
+    let tmpOreMin2 = dataStore.satConfig === undefined ? undefined : dataStore.satConfig[programRegister].split('.')
+
+    programRegister="S"+(base_reg + 54);
+    let tmpOreMin4 = dataStore.satConfig === undefined ? undefined : dataStore.satConfig[programRegister].split('.')
+
+    programRegister="S"+(base_reg + 56);
+    let tmpOreMin6 = dataStore.satConfig === undefined ? undefined : dataStore.satConfig[programRegister].split('.')
+
     satData.value.ore0 = tmpOreMin0 === undefined ? 0 : tmpOreMin0[0]
     satData.value.min0 = tmpOreMin0 === undefined ? 0 : tmpOreMin0[1]
+    satData.value.isAuto1 = tmpOreMin0 === undefined ? false : Boolean(Number(tmpOreMin0[2]))
+
     satData.value.ore2 = tmpOreMin2 === undefined ? 0 : tmpOreMin2[0]
     satData.value.min2 = tmpOreMin2 === undefined ? 0 : tmpOreMin2[1]
+    satData.value.isAuto2 = tmpOreMin2 === undefined ? false : Boolean(Number(tmpOreMin2[2]))
+
     satData.value.ore4 = tmpOreMin4 === undefined ? 0 : tmpOreMin4[0]
     satData.value.min4 = tmpOreMin4 === undefined ? 0 : tmpOreMin4[1]
+    satData.value.isAuto3 = tmpOreMin4 === undefined ? false : Boolean(Number(tmpOreMin4[2]))
+
     satData.value.ore6 = tmpOreMin6 === undefined ? 0 : tmpOreMin6[0]
     satData.value.min6 = tmpOreMin6 === undefined ? 0 : tmpOreMin6[1]
+    satData.value.isAuto4 = tmpOreMin6 === undefined ? false : Boolean(Number(tmpOreMin6[2]))
 
-    satData.value.S1 = dataStore.satConfig === undefined ? 0 : dataStore.satConfig['S' + (((optionValue.value - 1) * 1000) + 10051)]
-    satData.value.S3 = dataStore.satConfig === undefined ? 0 : dataStore.satConfig['S' + (((optionValue.value - 1) * 1000) + 10053)]
-    satData.value.S5 = dataStore.satConfig === undefined ? 0 : dataStore.satConfig['S' + (((optionValue.value - 1) * 1000) + 10055)]
-    satData.value.S7 = dataStore.satConfig === undefined ? 0 : dataStore.satConfig['S' + (((optionValue.value - 1) * 1000) + 10057)]
-    
-    if (satData.value.ore0 != 24 && satData.value.ore0 > 0 || satData.value.min0 > 0 || satData.value.S1 > 0 ) {
-      satData.value.isAuto1 = true
-    } else if (satData.value.ore0 == 24 && satData.value.min0 == 0 && satData.value.S1 == 0) {
-      satData.value.isAuto1 = false
-    } else {
-      satData.value.isAuto1 = true
+    endProgramMode=tmpStore[endProgramRegister]
+
+    if(endProgramMode == 0){
+      
+      programRegister="S"+(base_reg + 51);
+      var timeValue = dataStore.satConfig === undefined ? '0.00' : String(dataStore.satConfig[programRegister]).split('.')
+      satData.value.Time1H=timeValue[0]
+      satData.value.Time1M=timeValue[1]
+
+      programRegister="S"+(base_reg + 53);
+      timeValue = dataStore.satConfig === undefined ? '0.00' : dataStore.satConfig[programRegister].split('.')
+      satData.value.Time3H=timeValue[0]
+      satData.value.Time3M=timeValue[1]
+      
+      programRegister="S"+(base_reg + 55);
+      timeValue = dataStore.satConfig === undefined ? '0.00' : dataStore.satConfig[programRegister].split('.')
+      satData.value.Time5H=timeValue[0]
+      satData.value.Time5M=timeValue[1]
+
+      programRegister="S"+(base_reg + 57);
+      timeValue = dataStore.satConfig === undefined ? '0.00' : dataStore.satConfig[programRegister].split('.')
+      satData.value.Time7H=timeValue[0]
+      satData.value.Time7M=timeValue[1]
+
+    }else{
+      //Lavora a cicli
+      programRegister="S"+(base_reg + 51);
+      satData.value.S1 = dataStore.satConfig === undefined ? 0 : dataStore.satConfig[programRegister]
+
+      programRegister="S"+(base_reg + 53);
+      satData.value.S3 = dataStore.satConfig === undefined ? 0 : dataStore.satConfig[programRegister]
+
+      programRegister="S"+(base_reg + 55);
+      satData.value.S5 = dataStore.satConfig === undefined ? 0 : dataStore.satConfig[programRegister]
+
+      programRegister="S"+(base_reg + 57);
+      satData.value.S7 = dataStore.satConfig === undefined ? 0 : dataStore.satConfig[programRegister]
     }
-     
-    if (satData.value.ore2 != 24 && satData.value.ore2 > 0 || satData.value.min2 > 0 || satData.value.S3 > 0 ) {
-      satData.value.isAuto2 = true
-    } else if (satData.value.ore2 == 24 && satData.value.min2 == 0 && satData.value.S3 == 0) {
-      satData.value.isAuto2 = false
-    } else {
-      satData.value.isAuto2 = true
-    }  
-
-    if (satData.value.ore4 != 24 && satData.value.ore4 > 0 || satData.value.min4 > 0 || satData.value.S5 > 0 ) {
-      satData.value.isAuto3 = true
-    } else if (satData.value.ore4 == 24 && satData.value.min4 == 0 && satData.value.S5 == 0) {
-      satData.value.isAuto3 = false
-    } else {
-      satData.value.isAuto3 = true
-    } 
-
-    if (satData.value.ore6 != 24 && satData.value.ore6 > 0 || satData.value.min6 > 0 || satData.value.S7 > 0 ) {
-      satData.value.isAuto4 = true
-    } else if (satData.value.ore6 == 24 && satData.value.min6 == 0 && satData.value.S7 == 0) {
-      satData.value.isAuto4 = false
-    } else {
-      satData.value.isAuto4 = true
-    } 
-
-    console.log(satData.value)
+    
   }
   const postSatConData = ref({
     command: 'SATPRGSTARTS1',
@@ -300,29 +328,39 @@ import MyButton from '@/components/button/BaseButton.vue'
   onMounted( async () => {
     await deviceStore.loadDevice(props.id)
     satConfigParams.value.device_code = deviceStore.deviceData.code
+    programConfigParams.value.device_code = deviceStore.deviceData.code
     title.value = 'Idrosat:' + deviceStore.deviceData.name
     fetchSatData()
   })
 
   async function changeOption(e) {
     optionValue.value = e.target.value
+    programNumber = e.target.value - 1
     console.log(optionValue.value)
+    
+    base_reg=(10000+(programNumber * 1000))
+    var startReg=50;
+    //let programRegister="S"+(base_reg + 50);
+
     satConfigParams.value.fields = String(
-      'S' + (((e.target.value - 1) * 1000) + 10050) + ',' + 
-      'S' + (((e.target.value - 1) * 1000) + 10051) + ',' + 
-      'S' + (((e.target.value - 1) * 1000) + 10052) + ',' + 
-      'S' + (((e.target.value - 1) * 1000) + 10053) + ',' + 
-      'S' + (((e.target.value - 1) * 1000) + 10054) + ',' + 
-      'S' + (((e.target.value - 1) * 1000) + 10055) + ',' + 
-      'S' + (((e.target.value - 1) * 1000) + 10056) + ',' + 
-      'S' + (((e.target.value - 1) * 1000) + 10057))
+      'S' + (base_reg + startReg++) + ',' + 
+      'S' + (base_reg + startReg++) + ',' + 
+      'S' + (base_reg + startReg++) + ',' + 
+      'S' + (base_reg + startReg++) + ',' + 
+      'S' + (base_reg + startReg++) + ',' + 
+      'S' + (base_reg + startReg++) + ',' + 
+      'S' + (base_reg + startReg++) + ',' + 
+      'S' + (base_reg + startReg++))
 
     satConfigParams.value.measurement = String('SATPRGSTARTS' + e.target.value)
     fetchSatData()
     console.log(satData.value)
   }
 
+  let tmpStore=null;
   async function fetchSatData() {
+    await dataStore.getLastSatConfig(programConfigParams.value)
+    tmpStore=dataStore.satConfig;
     await dataStore.getLastSatConfig(satConfigParams.value)
     fillSatData()
   }
@@ -331,6 +369,55 @@ import MyButton from '@/components/button/BaseButton.vue'
     postSatConData.value.payload = {}
     postSatConData.value.command = String('SATPRGSTARTS' + optionValue.value)
 
+    if(endProgramMode == 0){
+      satData.value.S1 = String(satData.value.Time1H)+"."+String(satData.value.Time1M)
+      satData.value.S3 = String(satData.value.Time3H)+"."+String(satData.value.Time3M)
+      satData.value.S5 = String(satData.value.Time5H)+"."+String(satData.value.Time5M)
+      satData.value.S7 = String(satData.value.Time7H)+"."+String(satData.value.Time7M)
+    }
+
+    postSatConData.value.payload['S' + ((programNumber * 1000) + 10050)] = String(satData.value.ore0 + '.' + satData.value.min0 + "." + Number(satData.value.isAuto1))
+    postSatConData.value.payload['S' + ((programNumber * 1000) + 10051)] = String(satData.value.S1)
+
+    postSatConData.value.payload['S' + ((programNumber * 1000) + 10052)] = String(satData.value.ore2 + '.' + satData.value.min2 + "." + Number(satData.value.isAuto2))
+    postSatConData.value.payload['S' + ((programNumber * 1000) + 10053)] = String(satData.value.S3)
+
+    postSatConData.value.payload['S' + ((programNumber * 1000) + 10054)] = String(satData.value.ore4 + '.' + satData.value.min4 + "." + Number(satData.value.isAuto3))
+    postSatConData.value.payload['S' + ((programNumber * 1000) + 10055)] = String(satData.value.S5)
+
+    postSatConData.value.payload['S' + ((programNumber * 1000) + 10056)] = String(satData.value.ore6 + '.' + satData.value.min6 + "." + Number(satData.value.isAuto4))
+    postSatConData.value.payload['S' + ((programNumber * 1000) + 10057)] = String(satData.value.S7)
+
+    dataStore.postControl(satConfigParams.value.device_code,postSatConData.value)
+
+
+   /* if(satData.value.isAuto1){
+      satData.value.isAuto1=1;
+    }else{
+      satData.value.isAuto1=0;
+    }
+    
+    if(satData.value.isAuto2){
+      satData.value.isAuto2=1;
+    }else{
+      satData.value.isAuto2=0;
+    }
+    
+    if(satData.value.isAuto3){
+      satData.value.isAuto3=1;
+    }else{
+      satData.value.isAuto3=0;
+    }
+
+    if(satData.value.isAuto4){
+      satData.value.isAuto4=1;
+    }else{
+      satData.value.isAuto4=0;
+    }*/
+   
+    
+
+    /*
     postSatConData.value.payload['S' + (((optionValue.value - 1) * 1000) + 10050)] = satData.value.isAuto1 === false ? "24.00" : String(satData.value.ore0 + '.' + satData.value.min0)
     postSatConData.value.payload['S' + (((optionValue.value - 1) * 1000) + 10051)] = satData.value.isAuto1 === false ? "0" : String(satData.value.S1)
 
@@ -342,9 +429,9 @@ import MyButton from '@/components/button/BaseButton.vue'
 
     postSatConData.value.payload['S' + (((optionValue.value - 1) * 1000) + 10056)] = satData.value.isAuto4 === false ? "24.00" : String(satData.value.ore6 + '.' + satData.value.min6) 
     postSatConData.value.payload['S' + (((optionValue.value - 1) * 1000) + 10057)] = satData.value.isAuto4 === false ? "0" : String(satData.value.S7)
+    */
 
-    console.log(postSatConData.value.payload)
-    dataStore.postControl(satConfigParams.value.device_code,postSatConData.value)
+    
   }
 
 </script>
@@ -438,4 +525,33 @@ import MyButton from '@/components/button/BaseButton.vue'
   .table-container tr {
     @apply text-left 
   } 
+
+  .w-50{
+    width: 50%;
+  }
+
+  .w-10{
+    width: 10%;
+  }
+
+  .w-30{
+    width: 30%;
+    min-width: 40px;
+  }
+
+  .w-40{
+    width: 40%;
+    min-width: 100px;
+  }
+
+  .mp-flex{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .td-gap{
+    margin-right: 1rem;
+  }
   </style>

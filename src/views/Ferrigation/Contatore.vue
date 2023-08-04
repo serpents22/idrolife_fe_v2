@@ -9,8 +9,7 @@
       <deviceCard 
         :small=true
         :content="newData" 
-        :id="props.id"
-      />
+        />
       <img src="@/assets/contatore_fertirrigazione.png">
     </div>
     <div class="content">

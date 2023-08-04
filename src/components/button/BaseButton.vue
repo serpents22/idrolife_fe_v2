@@ -94,9 +94,6 @@ button {
           transition-colors duration-300 box-border
 }
 
-.button__text {
-  @apply text-xs sm:text-base
-}
 
 .button--loading .button__text {
   visibility: hidden;

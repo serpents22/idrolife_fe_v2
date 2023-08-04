@@ -6,8 +6,7 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
+      :content="newData" />
     <img class="w-40" src="@/assets/programma_irrigazione.png">
   </div>
   <div class="dashboard-container">
@@ -15,22 +14,22 @@
     <div class="content">
       <div class="row">
         <div id="programma-partenze">
-          <router-link :to="{name: 'Programma'}"><img src="@/assets/programma_partenze.png" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}"></router-link>
+          <router-link :to="{name: 'Programma'}"><img src="@/assets/programma_partenze.png"></router-link>
         </div>
         <div id="avvio-manuale">
           <router-link :to="{name: 'Avvio'}"><img src="@/assets/avvio_manuale.png"></router-link>
         </div>
       </div>
       <div class="row">
-        <div id="parametri-generali" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
+        <div id="parametri-generali">
           <router-link :to="{name: 'Parametri'}"><img src="@/assets/parametri_generali.png"></router-link>
         </div>
       </div>
       <div class="row">
-        <div id="durata-stazioni" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
+        <div id="durata-stazioni">
           <router-link :to="{name: 'DurataStazione'}"><img src="@/assets/durata_stazioni.png"></router-link>
         </div>
-        <div id="programma-stazioni" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
+        <div id="programma-stazioni">
           <router-link :to="{name: 'GestisciSensori'}"><img src="@/assets/gestisci_sensori.png"></router-link>
         </div>
       </div>

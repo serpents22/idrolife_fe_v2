@@ -9,7 +9,6 @@
     <deviceCard 
       :small=true
       :content="newData" 
-      :id="props.id"
       />
     <img src="@/assets/impostazioni_generali.png">
   </div>

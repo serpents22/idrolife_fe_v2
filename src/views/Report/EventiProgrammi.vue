@@ -7,8 +7,7 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
+      :content="newData" />
     <img class="w-40" src="@/assets/report_eventi_programmi.png">
   </div>
   <div class="dashboard-container">
@@ -137,7 +136,6 @@
         </template>
       </EasyDataTable>
       <download-csv
-        :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}"
       	class   = "btn btn-default mt-6 justify-end flex"
       	:data   = "formatedhistoricalEventi"
       	:name    = "fileName">

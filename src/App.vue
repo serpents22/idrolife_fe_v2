@@ -21,9 +21,6 @@ export default {
   background: #ADCBF6;
 }
 
-.restrictedAccess {
-  @apply opacity-40 pointer-events-none
-}
 
 #app {
   position:relative;

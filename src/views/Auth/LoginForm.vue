@@ -7,8 +7,8 @@
      @close="closeNotification" />
   <div class="login-container">
     <IdroTitle title="Benvenuti nel nuovo portale di Idrobit" />
-    <div class="modal">
-      <div class="modal-inner">
+    <div class="menu">
+      <Modal>
         <VeeForm :validation-schema="schema" v-slot="{ handleSubmit }" as="div" >
           <form  @submit="handleSubmit($event, onSubmit)" class="form-wrapper" >
             <div class="field-wrapper">
@@ -26,7 +26,7 @@
           <router-link :to="{name: 'ResetPassword'}"> Recupera password </router-link>
           <router-link :to="{name: 'RegisterForm'}"> Crea un account </router-link>
         </div>
-      </div>
+      </Modal>
     </div>
   </div>
 </template>
@@ -73,21 +73,7 @@
 .login-container {
   @apply flex flex-col
 }
-.modal {
-  @apply 
-    w-full h-full
-    fixed top-0 left-0 px-8 py-12
-    overflow-x-hidden overflow-y-auto z-10
-    justify-center items-center flex
-    mt-10 sm:mt-2
-}
 
-.modal-inner {
-  background: linear-gradient(45.06deg, #010AD1 -8.2%, #1BF728 108.15%);
-  @apply 
-  rounded-[40px] border-2 border-[#FFEE58] max-w-[500px] w-full h-fit px-10 py-20
-  text-left text-white
-}
 .menu {
   @apply flex flex-col w-full items-center justify-center
 }

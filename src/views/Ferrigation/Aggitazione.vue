@@ -7,8 +7,7 @@
     <div class="device-container">
       <deviceCard 
         :small=true
-        :content="newData"
-        :id="id" />
+        :content="newData" />
         <img src="@/assets/contatore_agitatore_fertirrigazione.png">
     </div>
     <div class="content">

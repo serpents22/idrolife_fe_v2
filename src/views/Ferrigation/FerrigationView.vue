@@ -6,17 +6,16 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData" 
-      :id="props.id"/>
+      :content="newData" />
     <img class="w-40" src="@/assets/ferrigation.png">
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
-      <div class="sensor" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
+      <div class="sensor">
         <router-link :to="{name: 'FerrigationConfiguration'}"><img src="@/assets/configurazione_fertirrigazione.png"></router-link>
       </div>
-      <div class="irrigation" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
+      <div class="irrigation">
         <router-link :to="{name: 'FerrigationProgram'}"><img src="@/assets/programma_fertirrigaz.png"></router-link>
       </div>
       <div class="ferrigation">

@@ -7,8 +7,7 @@
     <div class="device-container">
       <deviceCard 
         :small=true
-        :content="newData"
-        :id="props.id" />
+        :content="newData" />
       <img src="@/assets/stato_stazioni.png">
     </div>
     <div class="content">

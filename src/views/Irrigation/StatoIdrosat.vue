@@ -7,8 +7,7 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
+      :content="newData" />
     <img class="w-40" src="@/assets/stato_idrosat.png">
   </div>
   <div class="content">
@@ -97,7 +96,7 @@
             </span>
           </div>
         </div>
-        <h2 class="font-semibold text-[24px] mt-20">Consumo totale M3/H</h2>
+        <h2 class="font-semibold text-[24px] mt-20">Consumo totale M3</h2>
         <div class="pompa">
           <div class="flex flex-col gap-4 items-center" v-for="(pompa,index) in totale" :key="pompa">
             <span class="text-[24px] font-semibold">Pompa {{index+1}}</span>
@@ -275,10 +274,9 @@ import Counter from '@/components/counter/Counter.vue'
   }
   .main {
     @apply 
-      flex flex-col w-full  items-center relative
-      h-[300px] sm:h-full 
-      overflow-x-hidden overflow-y-auto
-      /* overflow-auto sm:overflow-visible */
+      flex flex-col w-full justify-center items-center relative
+      /*h-[300px] sm:h-full*//**Rimosso per permettere la visualizzazione su dispositivo mobile in verticale */
+      overflow-auto sm:overflow-visible
   }
 
   .device-container {
@@ -305,7 +303,7 @@ import Counter from '@/components/counter/Counter.vue'
       gap-2
       w-full
       sm:gap-4
-      sm:my-[20px] 
+      sm:my-[20px]
   }
   
 .button-wrapper {
@@ -336,5 +334,6 @@ import Counter from '@/components/counter/Counter.vue'
     py-10
     border-2 border-[#153462] rounded-[60px]
 }
+
 
 </style>

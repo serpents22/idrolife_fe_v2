@@ -7,8 +7,7 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
+      :content="newData" />
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title" />
@@ -22,13 +21,13 @@
       <div class="ferrigation">
         <router-link :to="{name: 'FerrigationView'}"><img src="@/assets/ferrigation.png"></router-link>
       </div>
-      <div class="webcam" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
+      <div class="webcam">
         <router-link :to="{name: 'Webcam'}"><img src="@/assets/webcam.png"></router-link>
       </div>
-      <div class="map" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
+      <div class="map">
         <router-link :to="{name: 'MapView'}"><img src="@/assets/map.png"></router-link>
       </div>
-      <div class="report" >
+      <div class="report">
         <router-link :to="{name: 'ReportView'}"><img src="@/assets/report.png"></router-link>
       </div>
     </div>
@@ -39,7 +38,7 @@
   import { useDevicesStore } from '@/stores/DevicesStore'
   import { storeToRefs } from 'pinia'
   import { defineAsyncComponent,  computed,  onBeforeMount,  ref } from '@vue/runtime-core'
-  
+
   //props
   const props = defineProps({
     id: String
@@ -55,7 +54,7 @@
   const newData = computed(() => {
       return [devicesStore.deviceData]
     })
-  console.log(devicesStore.deviceData.role)
+  
   const title = ref()
 
   onBeforeMount( async () => {
@@ -121,5 +120,4 @@ span p {
   lg:w-60 lg:h-60
   transition-all ease-in-out delay-150
 } */
-
 </style>
