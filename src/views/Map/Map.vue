@@ -11,7 +11,8 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData" />
+      :content="newData"
+      :id="props.id" />
     <img class="w-40" src="@/assets/map.png">
   </div>
   <div class="content">
@@ -69,6 +70,12 @@ import sideBarVue from '@/components/navigation/sideBar.vue'
     device_code: null
   })
 
+  const satStatParams = ref({
+    fields: 'S18,S40100,S40101,S40102,S40103,S40104,S40105,S40106,S40107,S40108,S40109,S40110,S40111,S40112,S40113,S40114,S40115,S40116,S40117,S40118,S40119,S40120,S40121,S40122,S40123,S40124,S40125,S40126,S40127,S40128,S40129,S40130,S40131,S40132,S40133,S40134,S40135,S40136,S40137,S40138,S40139,S401S40,S40141,S40142,S40143,S40144,S40145,S40146,S40147,S40148,S40149,S40150,S40151,S40152,S40153,S40154,S40155,S40156,S40157,S40158,S40159,S40160,S40161,S40162,S40163,S40164,S40165,S40166,S40167,S40168,S40169,S40170,S40171,S40172,S40173,S40174,S40175,S40176,S40177,S40178,S40179,S40180,S40181,S40182,S40183,S40184,S40185,S40186,S40187,S40188,S40189,S40190,S40191,S40192,S40193,S40194,S40195',
+    measurement: 'SATSTAT',
+    device_code: null
+  })
+
   async function fillTableData() {
     let evIndex = 2000
     evList.value = []
@@ -103,9 +110,19 @@ import sideBarVue from '@/components/navigation/sideBar.vue'
     // shadowSize: [68, 95],
     // shadowAnchor: [22, 94]
   });
-  let evIcon = leaflet.icon({
+  let evIconOn = leaflet.icon({
     //iconUrl: '/img/map-ev.d602f09d.png',
-    iconUrl: '/img/map-ev.64fee030.png',
+    iconUrl: require('../../assets/map/map-ev.gif'),
+    iconSize: [30, 30],
+    // iconAnchor: [22, 94],
+    // popupAnchor: [-3, -76],
+    // shadowUrl: 'my-icon-shadow.png',
+    // shadowSize: [68, 95],
+    // shadowAnchor: [22, 94]
+  });
+  let evIconOff = leaflet.icon({
+    //iconUrl: '/img/map-ev.d602f09d.png',
+    iconUrl: require('../../assets/map/map-evOFF.jpeg'),
     iconSize: [30, 30],
     // iconAnchor: [22, 94],
     // popupAnchor: [-3, -76],
@@ -117,11 +134,20 @@ import sideBarVue from '@/components/navigation/sideBar.vue'
   function onClick(e) {alert(this.getLatLng());}
 
   async function getEvGeo() {
+    await dataStore.getLastEvConfig(evConfigParams.value)
+    await dataStore.getLastSatStat(satStatParams.value)   
     await devicesStore.loadDeviceGeo(devicesStore.deviceData.code)
-    console.log(devicesStore.deviceGeo)
+    let azioneStartAddress = 40100
     devicesStore.deviceGeo.map((valve) => {
-      leaflet.marker([valve.latitude, valve.longitude], {icon:evIcon}).addTo(mymap)
-        .bindPopup(`EV : ${valve.ev_serial}`)
+      let index = Math.floor(Object.values(dataStore.evConfig).slice(6).indexOf(valve.ev_serial)/5)
+      let tmpAzioneTempo = dataStore.satStat['S' + (azioneStartAddress + index)] === undefined ? undefined : dataStore.satStat['S' + (azioneStartAddress + index)].split(',')
+      if (tmpAzioneTempo !== undefined && tmpAzioneTempo[0] == '1') {
+        leaflet.marker([valve.latitude, valve.longitude], {icon:evIconOn}).addTo(mymap)
+          .bindPopup(`EV : ${valve.ev_serial}`)
+      } else {
+        leaflet.marker([valve.latitude, valve.longitude], {icon:evIconOff}).addTo(mymap)
+          .bindPopup(`EV : ${valve.ev_serial}`)
+      }
       let newObj = {
         lat : valve.latitude,
         long : valve.longitude
@@ -175,6 +201,8 @@ import sideBarVue from '@/components/navigation/sideBar.vue'
 
   onBeforeMount( async () => {
     await devicesStore.loadDevice(props.id)
+    evConfigParams.value.device_code = devicesStore.deviceData.code
+    satStatParams.value.device_code = devicesStore.deviceData.code
   })
 
   
@@ -195,13 +223,12 @@ import sideBarVue from '@/components/navigation/sideBar.vue'
 #mapid {
   @apply 
   h-[280px]
-  sm:h-[355px]
-  md:h-[437px]
-  lg:h-[427px]
-  xl:h-[505px]
-  2xl:h-[560px]
-  w-full
-  z-40
+  sm:h-[455px]
+  md:h-[537px]
+  lg:h-[527px]
+  xl:h-[605px]
+  2xl:h-[660px]
+  w-[100%]
   /* w-[320px] 
   sm:w-[400px] 
   lg:w-[471px] 
