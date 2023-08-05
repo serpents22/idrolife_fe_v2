@@ -110,7 +110,6 @@ export default {
   @apply 
     relative flex flex-col 
     px-[16px] md:px-[200px] lg:px-[260px] xl:px-[320px] 2xl:px-[360px]
-    
 }
 .main {
   @apply flex flex-col w-full justify-center items-center relative gap-8

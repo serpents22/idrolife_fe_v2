@@ -539,10 +539,10 @@ import MyButton from '@/components/button/BaseButton.vue'
     min-width: 40px;
   }
 
-  .w-40{
+  /* .w-40{
     width: 40%;
     min-width: 100px;
-  }
+  } */
 
   .mp-flex{
     display: flex;

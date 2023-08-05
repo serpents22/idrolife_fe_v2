@@ -1026,10 +1026,10 @@ select {
   width: 30%;
 }
 
-.w-40{
+/* .w-40{
   width: 40%;
   min-width: 100px;
-}
+} */
 
 .w-15{
   width: 20%;

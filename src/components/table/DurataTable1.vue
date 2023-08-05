@@ -964,7 +964,7 @@ select {
     w-full
     relative
     h-[300px] sm:h-full
-    overflow-auto sm:overflow-visible
+    overflow-scroll sm:overflow-visible
 }
 .table-container table {
   @apply 
@@ -1035,10 +1035,10 @@ select {
   width: 30%;
 }
 
-.w-40{
+/* .w-40{
   width: 40%;
   min-width: 100px;
-}
+} */
 
 .w-15{
   width: 20%;
@@ -1115,7 +1115,6 @@ select {
   }
 
   .container-mp{
-    width: 90%;
     margin:auto;
   }
 
