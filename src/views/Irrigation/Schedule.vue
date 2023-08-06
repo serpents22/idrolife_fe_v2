@@ -14,22 +14,22 @@
     <div class="content">
       <div class="row">
         <div id="programma-partenze">
-          <router-link :to="{name: 'Programma'}"><img src="@/assets/programma_partenze.png"></router-link>
+          <router-link :to="{name: 'Programma'}"><img src="@/assets/programma_partenze.png" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}"></router-link>
         </div>
         <div id="avvio-manuale">
           <router-link :to="{name: 'Avvio'}"><img src="@/assets/avvio_manuale.png"></router-link>
         </div>
       </div>
       <div class="row">
-        <div id="parametri-generali">
+        <div id="parametri-generali" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
           <router-link :to="{name: 'Parametri'}"><img src="@/assets/parametri_generali.png"></router-link>
         </div>
       </div>
       <div class="row">
-        <div id="durata-stazioni">
+        <div id="durata-stazioni" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
           <router-link :to="{name: 'DurataStazione'}"><img src="@/assets/durata_stazioni.png"></router-link>
         </div>
-        <div id="programma-stazioni">
+        <div id="programma-stazioni" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
           <router-link :to="{name: 'GestisciSensori'}"><img src="@/assets/gestisci_sensori.png"></router-link>
         </div>
       </div>

@@ -12,10 +12,10 @@
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
-      <div class="sensor">
+      <div class="sensor" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
         <router-link :to="{name: 'FerrigationConfiguration'}"><img src="@/assets/configurazione_fertirrigazione.png"></router-link>
       </div>
-      <div class="irrigation">
+      <div class="irrigation" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
         <router-link :to="{name: 'FerrigationProgram'}"><img src="@/assets/programma_fertirrigaz.png"></router-link>
       </div>
       <div class="ferrigation">

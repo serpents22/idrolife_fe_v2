@@ -21,10 +21,10 @@
       <div class="ferrigation">
         <router-link :to="{name: 'FerrigationView'}"><img src="@/assets/ferrigation.png"></router-link>
       </div>
-      <div class="webcam">
+      <div class="webcam" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
         <router-link :to="{name: 'Webcam'}"><img src="@/assets/webcam.png"></router-link>
       </div>
-      <div class="map">
+      <div class="map" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
         <router-link :to="{name: 'MapView'}"><img src="@/assets/map.png"></router-link>
       </div>
       <div class="report">

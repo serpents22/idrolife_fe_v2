@@ -50,6 +50,7 @@
         </template>
       </EasyDataTable>
       <download-csv
+      :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}"
       	class   = "btn btn-default mt-6 justify-end flex"
       	:data   = "formatedhistoricalAlarmi"
       	:name    = "fileName">

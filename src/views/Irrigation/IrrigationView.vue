@@ -12,7 +12,7 @@
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
-      <div class="sensor">
+      <div class="sensor" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
         <router-link :to="{name: 'IrrigationConfiguration'}"><img src="@/assets/config_irrigazione.png"></router-link>
       </div>
       <div class="irrigation">
