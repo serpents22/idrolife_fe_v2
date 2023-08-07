@@ -12,11 +12,17 @@
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
-      <div class="sensor" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
-        <router-link :to="{name: 'FerrigationConfiguration'}"><img src="@/assets/configurazione_fertirrigazione.png"></router-link>
+      <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'FerrigationConfiguration' }" >
+        <img src="@/assets/configurazione_fertirrigazione.png">
+      </router-link>
+      <div v-else>
+        <img src="@/assets/configurazione_fertirrigazione.png" class="opacity-40">
       </div>
-      <div class="irrigation" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
-        <router-link :to="{name: 'FerrigationProgram'}"><img src="@/assets/programma_fertirrigaz.png"></router-link>
+      <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'FerrigationProgram' }" >
+        <img src="@/assets/programma_fertirrigaz.png">
+      </router-link>
+      <div v-else>
+        <img src="@/assets/programma_fertirrigaz.png" class="opacity-40">
       </div>
       <div class="ferrigation">
         <router-link :to="{name: 'FerrigationStatus'}"><img src="@/assets/stato_fertirrigazione.png"></router-link>

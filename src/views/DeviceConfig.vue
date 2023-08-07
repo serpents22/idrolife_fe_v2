@@ -21,11 +21,17 @@
       <div class="ferrigation">
         <router-link :to="{name: 'FerrigationView'}"><img src="@/assets/ferrigation.png"></router-link>
       </div>
-      <div class="webcam" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
-        <router-link :to="{name: 'Webcam'}"><img src="@/assets/webcam.png"></router-link>
+      <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'Webcam' }" >
+        <img src="@/assets/webcam.png">
+      </router-link>
+      <div v-else>
+        <img src="@/assets/webcam.png" class="opacity-40">
       </div>
-      <div class="map" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
-        <router-link :to="{name: 'MapView'}"><img src="@/assets/map.png"></router-link>
+      <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'MapView' }" >
+        <img src="@/assets/map.png">
+      </router-link>
+      <div v-else>
+        <img src="@/assets/map.png" class="opacity-40">
       </div>
       <div class="report">
         <router-link :to="{name: 'ReportView'}"><img src="@/assets/report.png"></router-link>
@@ -100,7 +106,7 @@ span p {
   @apply text-base font-normal
 }
 
-.content div {
+.content img {
   @apply p-2 rounded   
   w-28 h-28
   sm:w-36 sm:h-36 
@@ -108,7 +114,7 @@ span p {
   lg:w-48 lg:h-48
   transition-all ease-in-out duration-300
 }
-.content div:hover {
+.content img:hover {
   box-shadow: 0px 0px 8px 6px rgba(255, 255, 255, 0.48);
   @apply transition-all ease-in-out duration-300 rounded-3xl
 }

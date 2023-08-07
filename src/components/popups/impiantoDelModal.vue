@@ -2,7 +2,7 @@
   <div 
     @click="close"
     id="modal-backdrop"></div>
-    <div class="modal">
+    <div class="modal" ref="target">
      <div class="modal-header">
         <div class="title">
           <h1>{{title}}</h1>
@@ -11,81 +11,115 @@
      <div class="modal-content">
       <div class="flex flex-col">
         <label for="large" class="block mb-2 text-sm font-medium text-white self-start">Select a Plant to delete</label>
-          <select id="large" class="appearance-none cursor-pointer" v-model="selected">
+          <select id="large" class="appearance-none cursor-pointer" v-model="selectedDevice">
             <option disabled value="">Please select one</option>
-            <option v-for="option in devicesList" v-bind:value="option.id" :key="option.id">
+            <option v-for="option in supAdmindevices" v-bind:value="option.id" :key="option.id">
              {{ option.name }}
             </option>
           </select>
       </div>
       <div class="w-[372px] flex justify-between mt-6">
         <div class="w-[170px]">
-          <iveButton class="grey" label="Annulla" @click="close" />
+          <iveButton class="grey" @click="emits('close')" :label="cancelLabel" />
         </div>
         <div class="w-[170px]">
-          <iveButton class="red" :disable="disable" :label="label" @click="onSubmit" />
+          <iveButton class="red" :disable="disable" :label="eliminaLabel" @click="onSubmit" />
         </div>
       </div> 
     </div>
     </div>
 </template>
 
-<script>
-import iveText from '@/components/input/inputBase.vue'
-import iveButton from '@/components/button/BaseButton.vue'
-import { useDevicesStore } from '@/stores/DevicesStore'
-import { storeToRefs } from 'pinia'
-import { ref, watch } from 'vue'
+<script setup>
+  import iveButton from '@/components/button/BaseButton.vue'
+  import { storeToRefs } from 'pinia'
+  import { watch, ref } from 'vue'
+  import { useDeviceManagement } from '@/stores/DeviceManagementStore'
+  import { useDevicesStore } from '@/stores/DevicesStore'
+  import { onClickOutside } from '@vueuse/core'
 
-export default {
-  components: {
-    iveText, iveButton
-  },
-  props:[
-    'title'
-  ],
-  setup(props, {emit}) {
-    const close = () => {
-      emit('close')
-    }
+  const props = defineProps({
+    isOpen: Boolean,
+    title: String
+  })
 
-    const deviceStore = useDevicesStore()
-    const { devicesList } = storeToRefs(useDevicesStore())
-    const selected = ref("")
+  const devicesStore = useDevicesStore()
+  const { status } = storeToRefs(useDevicesStore())
+  const { supAdmindevices } = storeToRefs(useDeviceManagement())
+  const cancelLabel = ref('CANCELLA')
+  const eliminaLabel = ref('ELIMINA')
+  const buttonClick = ref(0)
+  const selectedDevice = ref('')
+  const disable = ref(true)
+  const modalActive = ref(false)
 
-    const label = ref('Salva')
-    const buttonClick = ref(0)
-    const disable = ref(true)
-
-    watch (selected, () => {
-      if (selected.value != '') {
+  watch(selectedDevice, async (newValue, oldValue) => {
+    if (newValue !== oldValue) {
         disable.value = false
       } else {
         disable.value = true
-      }
-    })
+    }
+  })
 
-    const onSubmit = async () => {
-      buttonClick.value = ++buttonClick.value
 
-      if (buttonClick.value == 1) {
-        label.value = 'Click again to delete'
-      }
-
-      if (buttonClick.value == 2) {
-        await deviceStore.deleteDevice(selected.value)
-        devicesList.value = deviceStore.loadDevices()
-        label.value = 'Salva'
-        buttonClick.value = 0
-      }
+  const onSubmit = async (values) => {
+    console.log(values)
+    buttonClick.value = ++buttonClick.value
+    if (buttonClick.value == 1) {
+      eliminaLabel.value = 'the data entered is correct?'
     }
 
-    return {
-      close, onSubmit, devicesList, selected, label, disable
+    if (buttonClick.value == 2) {
+      await devicesStore.deleteDevice(selectedDevice.value)
+      modalActive.value = true
+      if (status.value.isError == true ) {
+        setTimeout(closeNotification, 3000)
+      } else {
+        setTimeout(closeNotification, 3000)
+      }
+      eliminaLabel.value = 'ELIMINA'
+      buttonClick.value = 0
+      devicesStore.loadDevices()
     }
-  } 
+  }
 
-}
+  const closeNotification = () => {
+    modalActive.value = false
+  }
+  // Define custom events
+  const emits = defineEmits(['close'])
+  
+  const target = ref(null)
+
+  onClickOutside(target, () => {
+    emits('close')
+  })
+
+//     
+
+
+
+
+//   
+
+//     const onSubmit = async () => {
+//       buttonClick.value = ++buttonClick.value
+
+//       if (buttonClick.value == 1) {
+//         label.value = 'Click again to delete'
+//       }
+
+//       if (buttonClick.value == 2) {
+//         await deviceStore.deleteDevice(selected.value)
+//         devicesList.value = deviceStore.loadDevices()
+//         label.value = 'Salva'
+//         buttonClick.value = 0
+//       }
+//     }
+
+//   } 
+
+// }
 </script>
 
 <style scoped>

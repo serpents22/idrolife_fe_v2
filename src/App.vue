@@ -22,8 +22,10 @@ export default {
 }
 
 .restrictedAccess {
-  @apply opacity-40 pointer-events-none 
+  @apply invisible
 }
+
+
 #app {
   position:relative;
   font-family: 'Poppins', sans-serif;

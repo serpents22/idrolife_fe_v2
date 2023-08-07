@@ -25,6 +25,7 @@ export const useDevicesStore = defineStore('impianto', () => {
   const status = ref({
     message: null,
     code: null,
+    isError: null 
   })
   const dataStore = useDataStore()
   const loadDevices = async () => {
@@ -131,11 +132,13 @@ export const useDevicesStore = defineStore('impianto', () => {
       console.log(res)
       status.value.message = 'Device Created'
       status.value.code = res.data.status
+      status.value.isError = false
       createDeviceIsLoading.value = false
     } catch (err) {
       console.error(err)
       createDeviceIsLoading.value = false
       status.value.message = err.response.data.error
+      status.value.isError = true
       status.value.code = err.response.data.status
       return err
     } 

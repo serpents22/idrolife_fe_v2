@@ -12,8 +12,11 @@
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
-      <div class="sensor" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
-        <router-link :to="{name: 'IrrigationConfiguration'}"><img src="@/assets/config_irrigazione.png"></router-link>
+      <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'IrrigationConfiguration' }" >
+        <img src="@/assets/config_irrigazione.png">
+      </router-link>
+      <div v-else>
+        <img src="@/assets/config_irrigazione.png" class="opacity-40">
       </div>
       <div class="irrigation">
         <router-link :to="{name: 'IrrigationSchedule'}"><img src="@/assets/programma_irrigazione.png"></router-link>

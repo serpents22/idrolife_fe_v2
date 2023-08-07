@@ -10,7 +10,7 @@
           </span>
               <img class="images" src="@/assets/device.png" id="logo">
           <div class="flex flex-col">
-            <span v-if="content.length === 1" class="flex flex-row justify-between mb-1">
+            <span class="flex flex-row justify-between mb-1">
               <h2>Stato</h2>
               <Indicator :status="stato" />
             </span>

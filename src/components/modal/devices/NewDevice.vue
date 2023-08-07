@@ -17,7 +17,7 @@
                 <BaseInput name="name" type="text" placeholder="Nome" class="white" label="Nome"/>
                 <BaseInput name="password" type="password" placeholder="Password" class="white" label="Password"/>
                 <BaseInput name="type" type="text" placeholder="Type" class="white" label="Type"/>
-                <BaseInput name="max_devices" type="number" placeholder="Max devices" class="white" label="Max Devices"/>
+                <!-- <BaseInput name="max_devices" type="number" placeholder="Max devices" class="white" label="Max Devices"/> -->
                 <BaseInput name="coordinate" type="text" placeholder="GPS Location" class="white" label="GPS Location"/>
                 <div class="sm:flex-row flex-col flex justify-between gap-6 sm:gap-10"> 
                   <BaseButton type="button" class="outlined" :label="cancelLabel" @click="cancelForm"/>

@@ -10,7 +10,7 @@
        <router-link :to="{name: 'Dashboard'}"><img src="@/assets/android.png"></router-link>
       </div>
       <div class="back" v-show="backOn" @click="goBack">
-          <img src="@/assets/Indietro.png">
+          <img src="@/assets/Indietro.png" class="cursor-pointer">
       </div>
       <div class="logout" v-show="logout" @click="signOut">
         <router-link :to="{name: 'Dashboard'}"><img src="@/assets/logout.png"></router-link>
