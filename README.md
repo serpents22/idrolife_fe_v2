@@ -48,11 +48,11 @@ docker rmi idrolife_fe:latest
 ### Create new Images and Run a Container
 execute this command inside code directory
 ```
-docker build -t idrolife_fe .
+docker build -t idrolife-fe .
 ```
 
 ```
-docker run -p 8080:80 -d --name idrolife_fe idrolife_fe
+docker run -p 8080:80 -d --name idrolife-fe idrolife-fe
 ```
 
 
