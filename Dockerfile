@@ -1,4 +1,4 @@
-ARG NODE_IMAGE=node:16.15.1-alpine
+ARG NODE_IMAGE=node:18.14.0-alpine
 
 FROM $NODE_IMAGE as build-stage
 WORKDIR /app
