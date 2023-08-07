@@ -32,17 +32,17 @@ npm run serve
 
 
 ## VPS Setup
-- Go to code directory ```cd dev/idrolife_fe```
+- Go to code directory ```cd dev/idrolife_fe_v2```
 - ``` git pull ```
 
 ### Remove Existing Container and Images
 this command below can be executed in any directory
 ```
-docker rm -f idrolife_fe
+docker rm -f idrolife-fe
 ```
 
 ```
-docker rmi idrolife_fe:latest
+docker rmi idrolife-fe:latest
 ```
 
 ### Create new Images and Run a Container
