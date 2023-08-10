@@ -58,7 +58,7 @@ jobs:
             sudo docker stop idrolife_fe
             sudo docker rm idrolife_fe
 
-            sudo docker rmi serpents/idrolife_fe:main
-            sudo docker pull serpents/idrolife_fe:main
+            sudo docker rmi serpents/idrolife_fe:integrated
+            sudo docker pull serpents/idrolife_fe:integrated
 
-            sudo docker run -t -d -p 8080:80 --name idrolife_fe serpents/idrolife_fe:main
+            sudo docker run -t -d -p 8080:80 --name idrolife_fe serpents/idrolife_fe:integrated
