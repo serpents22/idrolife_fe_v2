@@ -13,7 +13,7 @@
     <div class="content">
       <div class="header">
         <IdroTitle title="Programma" />
-        <div class="flex items-center gap-4 mb-4">
+        <div class="flex items-center gap-4 mb-4 bg-white rounded-md px-4">
           <select 
           class="dropdown"
           @change="changeOption($event)">
@@ -22,7 +22,7 @@
           class="nav"
           :id="tab">{{tab}}</option>
         </select>
-        <h2 class="font-semibold text-lg">{{ satData.programName }}</h2>
+        <h2 class="font-semibold text-lg cursor-default">{{ satData.programName }}</h2>
       </div>
         <h2 class="font-bold text-xl">{{title}}</h2>
       </div>
@@ -500,7 +500,7 @@ import MyButton from '@/components/button/BaseButton.vue'
   flex flex-col justify-center items-center
 }
 .dropdown {
-  @apply pl-2 rounded w-20 sm:w-60 py-2 sm:py-3 cursor-pointer
+  @apply pl-2 rounded w-fit py-2 sm:py-3 cursor-pointer outline-none
 }
 
   
