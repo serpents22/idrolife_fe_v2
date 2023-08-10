@@ -5,7 +5,7 @@ name: Idrolife FE Fronted CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "integrated" ]
 
 jobs:
   push_to_registry:
