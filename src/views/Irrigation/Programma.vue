@@ -13,14 +13,17 @@
     <div class="content">
       <div class="header">
         <IdroTitle title="Programma" />
-        <select 
-         class="dropdown"
-         @change="changeOption($event)">
-         <option 
-           v-for="tab in tabs" :key="tab.value"
-           class="nav"
-           :id="tab">{{tab}}</option>
+        <div class="flex items-center gap-4 mb-4">
+          <select 
+          class="dropdown"
+          @change="changeOption($event)">
+          <option 
+          v-for="tab in tabs" :key="tab.value"
+          class="nav"
+          :id="tab">{{tab}}</option>
         </select>
+        <h2 class="font-semibold text-lg">{{ satData.programName }}</h2>
+      </div>
         <h2 class="font-bold text-xl">{{title}}</h2>
       </div>
       <div class="main">
@@ -205,6 +208,7 @@
   
 <script setup>
 import { useDevicesStore } from '@/stores/DevicesStore'
+import { useProgramConfigStore } from '@/stores/program/ProgramConfigStore'
 import { useDataStore } from '@/stores/DataStore'
 import { storeToRefs } from 'pinia'
 import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-core'
@@ -222,6 +226,7 @@ import MyButton from '@/components/button/BaseButton.vue'
   //state
   const deviceStore = useDevicesStore()
   const dataStore = useDataStore()
+  const programConfigStore = useProgramConfigStore()
   const { postControlIsLoading } = storeToRefs(useDataStore())
   const { isLoading } = storeToRefs(useDevicesStore())
   const newData = computed(() => {
@@ -242,16 +247,21 @@ import MyButton from '@/components/button/BaseButton.vue'
     device_code: null
   })
 
+  const progConfigParams = ref({
+    fields: 'S10004',
+    measurement: 'SATPRGCONFIG1',
+    device_code: null
+  })
+
   const satData = ref({})
 
   let programNumber=0;
   let base_reg=(10000+(programNumber * 1000))
   let endProgramRegister="S"+Number(base_reg+3)
   let endProgramMode=0
-
+  let nameRegister = "S" + (base_reg + 4);
   function fillSatData() {
-    
-    let programRegister="S"+(base_reg + 50);
+    let programRegister="S"+(base_reg + 50)
     let tmpOreMin0 = dataStore.satConfig === undefined ? undefined : dataStore.satConfig[programRegister].split('.')
 
     programRegister="S"+(base_reg + 52);
@@ -262,6 +272,9 @@ import MyButton from '@/components/button/BaseButton.vue'
 
     programRegister="S"+(base_reg + 56);
     let tmpOreMin6 = dataStore.satConfig === undefined ? undefined : dataStore.satConfig[programRegister].split('.')
+    
+    nameRegister = "S" + (base_reg + 4)
+    satData.value.programName = programConfigStore.programConfig[nameRegister]
 
     satData.value.ore0 = tmpOreMin0 === undefined ? 0 : tmpOreMin0[0]
     satData.value.min0 = tmpOreMin0 === undefined ? 0 : tmpOreMin0[1]
@@ -278,6 +291,7 @@ import MyButton from '@/components/button/BaseButton.vue'
     satData.value.ore6 = tmpOreMin6 === undefined ? 0 : tmpOreMin6[0]
     satData.value.min6 = tmpOreMin6 === undefined ? 0 : tmpOreMin6[1]
     satData.value.isAuto4 = tmpOreMin6 === undefined ? false : Boolean(Number(tmpOreMin6[2]))
+    console.log(satData.value)
 
     endProgramMode=tmpStore[endProgramRegister]
 
@@ -329,6 +343,7 @@ import MyButton from '@/components/button/BaseButton.vue'
     await deviceStore.loadDevice(props.id)
     satConfigParams.value.device_code = deviceStore.deviceData.code
     programConfigParams.value.device_code = deviceStore.deviceData.code
+    progConfigParams.value.device_code = deviceStore.deviceData.code
     title.value = 'Idrosat:' + deviceStore.deviceData.name
     fetchSatData()
   })
@@ -352,7 +367,11 @@ import MyButton from '@/components/button/BaseButton.vue'
       'S' + (base_reg + startReg++) + ',' + 
       'S' + (base_reg + startReg++))
 
+      progConfigParams.value.fields = String(
+      'S' + (base_reg + 4))
+
     satConfigParams.value.measurement = String('SATPRGSTARTS' + e.target.value)
+    progConfigParams.value.measurement = String('SATPRGCONFIG' + e.target.value)
     fetchSatData()
     console.log(satData.value)
   }
@@ -361,6 +380,7 @@ import MyButton from '@/components/button/BaseButton.vue'
   async function fetchSatData() {
     await dataStore.getLastSatConfig(programConfigParams.value)
     tmpStore=dataStore.satConfig;
+    await programConfigStore.getProgramConfig(progConfigParams.value)
     await dataStore.getLastSatConfig(satConfigParams.value)
     fillSatData()
   }
