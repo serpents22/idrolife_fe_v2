@@ -62,6 +62,7 @@
             <IveButton label="Export CSV" />
         </div>
       </download-csv>
+      <div id="chart" class="mt-20"></div>
       </div>
     </div>
   </div>
@@ -76,6 +77,7 @@ import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-
 import SearchField from '@/components/input/searchField.vue'
 import DatePicker from '@/components/input/datePicker.vue'
 import IveButton from '@/components/input/iveButton.vue'
+import ApexCharts from "apexcharts";
 import { toInteger } from 'lodash'
 // import { Header, Item } from "vue3-easy-data-table";
 
@@ -83,7 +85,20 @@ import { toInteger } from 'lodash'
   const props = defineProps({
     id: String
   })
-
+  var options = {
+    chart: {
+      type: 'line',
+      zoom: {
+        enabled: true
+      }
+    },
+    series: [],
+    xaxis: {
+      type: 'datetime',
+      categories: [],
+      tickPlacement: 'on'
+    }
+  }
   
   //asynchronus component
   const deviceCard = defineAsyncComponent(
@@ -154,6 +169,7 @@ import { toInteger } from 'lodash'
     console.log(dataStore.historicalData)
     formatedhistoricalEventi.value = []
     let tmphistoricalEventi
+    let chartData = []
 
     if (dataStore.historicalData !== undefined) {
       dataStore.historicalData.map((data) => {
@@ -166,10 +182,38 @@ import { toInteger } from 'lodash'
           rh3: String(tmphistoricalEventi[4] + ' %'),
           rh4: String(tmphistoricalEventi[5] + ' %')
         }
+        let newObj2 = {
+          date: new Date(toInteger(tmphistoricalEventi[0])*1000).toLocaleString(),
+          numeroSensori: toInteger(tmphistoricalEventi[1]),
+          rh1: toInteger(tmphistoricalEventi[2]),
+          rh2: toInteger(tmphistoricalEventi[3]),
+          rh3: toInteger(tmphistoricalEventi[4]),
+          rh4: toInteger(tmphistoricalEventi[5])
+        }
+        options.xaxis.categories.push(toInteger(tmphistoricalEventi[0] * 1000));
+        chartData.push(newObj2)
         formatedhistoricalEventi.value.push(newObj)
       })
+      
+      options.series.push({
+        name: 'RH1',
+        data: chartData.map(obj => obj.rh1)
+      })
+      options.series.push({
+        name: 'RH2',
+        data: chartData.map(obj => obj.rh2)
+      })
+      options.series.push({
+        name: 'RH3',
+        data: chartData.map(obj => obj.rh3)
+      })
+      options.series.push({
+        name: 'RH4',
+        data: chartData.map(obj => obj.rh4)
+      })
     }
-    console.log(formatedhistoricalEventi.value)
+    console.log('table-data', formatedhistoricalEventi.value)
+    console.log('chart-data', options.series)
   }
 
   //table headers
@@ -200,6 +244,8 @@ import { toInteger } from 'lodash'
     title.value = 'Idrosat:' + devicesStore.deviceData.name
     historicalEventiParams.value.device_code = devicesStore.deviceData.code
     dateFiltering()
+    var chart = new ApexCharts(document.querySelector("#chart"), options)
+    chart.render()
   })
 
   const newData = computed(() => {
