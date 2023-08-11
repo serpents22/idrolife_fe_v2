@@ -92,10 +92,17 @@ import { toInteger } from 'lodash'
         enabled: true
       }
     },
+    // series: [
+    //     {
+    //       name: 'Series 1',
+    //       data: [
+    //       [1691028000000, 0],[1691031600000, 0],[1691035200000, 0],[1691038800000, 0]
+    //       ],
+    //     },],
     series: [],
     xaxis: {
       type: 'datetime',
-      categories: [],
+      // categories: [],
       tickPlacement: 'on'
     }
   }
@@ -183,35 +190,35 @@ import { toInteger } from 'lodash'
           rh4: String(tmphistoricalEventi[5] + ' %')
         }
         let newObj2 = {
-          date: new Date(toInteger(tmphistoricalEventi[0])*1000).toLocaleString(),
+          date: toInteger(tmphistoricalEventi[0])*1000,
           numeroSensori: toInteger(tmphistoricalEventi[1]),
           rh1: toInteger(tmphistoricalEventi[2]),
           rh2: toInteger(tmphistoricalEventi[3]),
           rh3: toInteger(tmphistoricalEventi[4]),
           rh4: toInteger(tmphistoricalEventi[5])
         }
-        options.xaxis.categories.push(toInteger(tmphistoricalEventi[0] * 1000));
         chartData.push(newObj2)
         formatedhistoricalEventi.value.push(newObj)
       })
-      
+      options.series = []
       options.series.push({
         name: 'RH1',
-        data: chartData.map(obj => obj.rh1)
+        data: chartData.map(obj => [obj.date,obj.rh1])
       })
       options.series.push({
         name: 'RH2',
-        data: chartData.map(obj => obj.rh2)
+        data: chartData.map(obj => [obj.date,obj.rh2])
       })
       options.series.push({
         name: 'RH3',
-        data: chartData.map(obj => obj.rh3)
+        data: chartData.map(obj => [obj.date,obj.rh3])
       })
       options.series.push({
         name: 'RH4',
-        data: chartData.map(obj => obj.rh4)
+        data: chartData.map(obj => [obj.date,obj.rh4])
       })
     }
+    chart.updateSeries(options.series)
     console.log('table-data', formatedhistoricalEventi.value)
     console.log('chart-data', options.series)
   }
@@ -238,13 +245,13 @@ import { toInteger } from 'lodash'
     getHistoryData()
   }
 
-
+  let chart
   onMounted( async () => {
     await devicesStore.loadDevice(props.id)
     title.value = 'Idrosat:' + devicesStore.deviceData.name
     historicalEventiParams.value.device_code = devicesStore.deviceData.code
     dateFiltering()
-    var chart = new ApexCharts(document.querySelector("#chart"), options)
+    chart = new ApexCharts(document.querySelector("#chart"), options)
     chart.render()
   })
 
