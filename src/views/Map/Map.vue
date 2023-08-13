@@ -18,7 +18,7 @@
   <div class="content">
     <IdroTitle :title="title"/>
     <div class="main">
-      <div id="mapid" :class="{'invisible' : isExpand}"></div>
+      <div id="mapid" :class="{'hide-map' : isExpand}"></div>
       <div class="button-wrapper">
         <IveButton type="button" class="filled__blue mt-6" label="Add new dispenser" @click="toggleMenu"/>
       </div>
@@ -272,6 +272,10 @@ input[type=text], input[type=password], input[type=number] {
 
 .button-wrapper {
   @apply mt-2 flex
+}
+
+.hide-map {
+  @apply invisible sm:visible
 }
 
 </style>
