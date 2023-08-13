@@ -60,6 +60,8 @@ import { storeToRefs } from 'pinia';
     formData:Object
   })
 
+  const emits = defineEmits(['close'])
+
   const deviceStore = useDevicesStore()
   const { postDeviceGeoIsLoading, postDeviceGeoStatus } = storeToRefs(useDevicesStore())
   const isExpanded = ref(false)
@@ -76,7 +78,7 @@ import { storeToRefs } from 'pinia';
   })
   
   watch(() => props.isExpand, () => {
-    isExpanded.value = !isExpanded.value
+    isExpanded.value = props.isExpand
     formData.value.device_code = props.deviceData.code
     evList.value = props.evList
     arrayFormData.value = props.formData
@@ -109,7 +111,9 @@ import { storeToRefs } from 'pinia';
     })
   }
   const toggleMenu = () => {
-    isExpanded.value = !isExpanded.value
+    isExpanded.value = false
+    emits('close')
+    // isExpanded.value = !isExpanded.value
   }
   
   const closeNotification = () => {

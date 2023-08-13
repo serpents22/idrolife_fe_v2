@@ -18,14 +18,14 @@
   <div class="content">
     <IdroTitle :title="title"/>
     <div class="main">
-      <div id="mapid"></div>
+      <div id="mapid" :class="{'invisible' : isExpand}"></div>
       <div class="button-wrapper">
         <IveButton type="button" class="filled__blue mt-6" label="Add new dispenser" @click="toggleMenu"/>
       </div>
     </div>
   </div>
 </div>
-<sideBarVue :isExpand="isExpand" :evList="evList" :deviceData="devicesStore.deviceData" :formData="devicesStore.deviceGeo" />
+<sideBarVue :isExpand="isExpand" :evList="evList" :deviceData="devicesStore.deviceData" :formData="devicesStore.deviceGeo" @close="toggleMenu"/>
 </template>
 
 <script setup>
