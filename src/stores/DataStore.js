@@ -3,6 +3,7 @@ import dataAPI from '@/services/dataAPI'
 import { ref } from 'vue'
 
 export const useDataStore = defineStore('data', () => {
+  const alarmState = ref(false)
   const fertConfig = ref([])
   const fertConfigIsLoading = ref(false)
   const pumpConfig = ref([])
@@ -78,6 +79,17 @@ export const useDataStore = defineStore('data', () => {
     satStatIsLoading.value = true
     try {
       const res = await dataAPI.getLast(params)
+      if (res.data.data.hasOwnProperty('S15')) {
+        console.log(res.data.data.S15)
+        if (res.data.data.S15 != 0) {
+          alarmState.value = true
+        } else {
+          alarmState.value = false
+        }
+      } else {
+        alarmState.value = false
+      }
+      console.log(alarmState.value)
       satStat.value = res.data.data
       satStatIsLoading.value = false
   } catch (err) {
@@ -264,6 +276,7 @@ export const useDataStore = defineStore('data', () => {
 
 
   return {
+    alarmState,
     meteoStat, satStat, isLoading, getLastMeteoStat, getLastSatStat, status, getLastGropointStat, gropointStat,
     satStatIsLoading,
     getLastEvConfig, evConfig, evConfigIsLoading, evConfigLength, 

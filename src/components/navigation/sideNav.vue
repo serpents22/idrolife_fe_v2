@@ -1,5 +1,8 @@
 <template>
     <div class="nav-wrapper">
+      <div class="cursor-pointer" v-show="isAlarm" >
+        <img src="@/assets/icon/warning-button.png" @click="emits('alarmList')">
+      </div>
       <div class="whatsapp" v-show="noSocial">
         <router-link :to="{name: 'Dashboard'}"><img src="@/assets/whatsapp.png"></router-link>
       </div>
@@ -21,30 +24,26 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import router from '@/router'
 import { useAuthStore } from '@/stores/AuthStore'
 
-export default {
-  props: [
-    'backOn', 'noSocial','logout'
-  ],
-  setup(){
-    const authStore = useAuthStore()
+  //props
+  const props = defineProps([
+  'backOn','noSocial','logout','isAlarm'
+  ])
+  // Define custom events
+  const emits = defineEmits(['alarmList'])
 
-    async function signOut() {
-      await authStore.signOut()
-    }
-    const goBack = () => {
-      router.go(-1)
-    }
+  const authStore = useAuthStore()
 
-    return {
-      goBack, signOut
-    }
+  async function signOut() {
+    await authStore.signOut()
   }
-  
-}
+  const goBack = () => {
+    router.go(-1)
+  }
+
 </script>
 
 <style scoped>

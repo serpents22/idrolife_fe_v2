@@ -1,8 +1,16 @@
 <template>
+  <DeviceAlarm
+    :isOpen="isShowAlarmModal" 
+    @close="deviceAlarmToggle"
+    :id="device_code"
+    title="Alarm List" 
+  />
   <loading :loading="isLoading" />
   <sidebar 
     :backOn="true" 
     :noSocial="true" 
+    :isAlarm="alarmState"
+    @alarmList="deviceAlarmToggle"
     />
   <div class="device-container">
     <deviceCard 
@@ -43,7 +51,9 @@
 <script setup>
   import { useDevicesStore } from '@/stores/DevicesStore'
   import { storeToRefs } from 'pinia'
-  import { defineAsyncComponent,  computed,  onBeforeMount,  ref } from '@vue/runtime-core'
+  import { defineAsyncComponent,  computed,  onBeforeMount, onUnmounted,  ref } from '@vue/runtime-core'
+  import { useAlarmStore } from '@/stores/alarm/AlarmStore'
+  import { useDataStore } from '@/stores/DataStore'
 
   //props
   const props = defineProps({
@@ -54,20 +64,40 @@
   const deviceCard = defineAsyncComponent(
     () => import('@/components/cards/deviceCard.vue'),
   )
+
+  const DeviceAlarm = defineAsyncComponent(
+    () => import('@/components/modal/devices/DeviceAlarm.vue'),
+  )
   //state
   const devicesStore = useDevicesStore()
+  const alarmStore = useAlarmStore()
+  const dataStore = useDataStore()
+  const { alarmState } = storeToRefs(useDataStore())
   const { isLoading } = storeToRefs(useDevicesStore())
   const newData = computed(() => {
       return [devicesStore.deviceData]
     })
   
   const title = ref()
-
+  const device_code = ref()
+  let satStatParams = {
+      fields: 'S15',
+      measurement: 'SATSTAT',
+      device_code: null
+    }
   onBeforeMount( async () => {
     await devicesStore.loadDevice(props.id)
+    satStatParams.device_code = devicesStore.deviceData.code
     title.value = 'Idrosat:' + devicesStore.deviceData.name
+    device_code.value = devicesStore.deviceData.code
   })
 
+  const isShowAlarmModal = ref(false)
+
+  async function deviceAlarmToggle() {
+    await alarmStore.getAlarmList(device_code.value)
+    isShowAlarmModal.value = !isShowAlarmModal.value
+  }
 
 </script>
 
