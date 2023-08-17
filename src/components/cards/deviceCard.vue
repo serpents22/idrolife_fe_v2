@@ -25,7 +25,7 @@
               <p>{{ impianto.code }}</p>
             </span>
             <span class="flex flex-row justify-between">
-              <h2>Stato</h2>
+              <h2>Last Heard</h2>
               <p>{{ impianto.device_time }}</p>
             </span>
             <span class="flex flex-row justify-between">
