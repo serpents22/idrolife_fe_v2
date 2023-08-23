@@ -30,7 +30,7 @@
           <router-link :to="{name: 'ReportUmidita'}"><img src="@/assets/report_eventi_sensori_umidita.png"></router-link>
         </div>
         <div id="report_planning">
-          <router-link :to="{name: 'ReportView'}"><img src="@/assets/report_planning.png"></router-link>
+          <router-link :to="{name: 'Planning'}"><img src="@/assets/report_planning.png"></router-link>
         </div>
       </div>
     </div>

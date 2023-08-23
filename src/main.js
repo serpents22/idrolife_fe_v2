@@ -12,24 +12,22 @@ import toolBar from '@/components/navigation/toolBar.vue'
 import modal from './components/modal/Modal.vue'
 import IdroTitle from './components/title.vue'
 import { defineAsyncComponent } from 'vue'
-import VueGoodTablePlugin from 'vue-good-table-next'
+// import VueGoodTablePlugin from 'vue-good-table-next'
 import 'vue-good-table-next/dist/vue-good-table-next.css'
 import Vue3EasyDataTable from 'vue3-easy-data-table'
 import 'vue3-easy-data-table/dist/style.css'
 import JsonCSV from 'vue-json-csv'
-
+import i18n from './locales/i18n'
 
 const pinia = createPinia()
 const app = createApp(App)
 
-
 app.use(router)
 app.use(pinia)
-app.use(VueGoodTablePlugin);
-
+app.use(i18n)
+// app.use(VueGoodTablePlugin)
 
 app.mount('#app')
-
 app
 .component('modal', modal)
 .component('lottie', lottie)

@@ -46,6 +46,7 @@ import FerrigationStatus from '@/views/Ferrigation/Stato.vue'
 import ReportView from '@/views/Report/ReportView.vue'
 import ReportAlarm from '@/views/Report/Allarmi.vue'
 import ReportEventi from '@/views/Report/EventiProgrammi.vue'
+import Planning from '@/views/Report/Planning.vue'
 import ReportRilevazioni from '@/views/Report/RilevazioniEventi.vue'
 import ReportUmidita from '@/views/Report/SensoriUmiditaEventi.vue'
 import MapView from '@/views/Map/Map.vue'
@@ -74,6 +75,7 @@ const routes = [
   { path: '/dashboard/device-detail/:id/report/eventi-programmi', name: 'ReportEventi', component: ReportEventi, props: true, meta: { requiresAuth:true } },
   { path: '/dashboard/device-detail/:id/report/rilevzioni-eventi', name: 'ReportRilevazioni', component: ReportRilevazioni, props: true, meta: { requiresAuth:true } },
   { path: '/dashboard/device-detail/:id/report/sensori-umidita', name: 'ReportUmidita', component: ReportUmidita, props: true, meta: { requiresAuth:true } },
+  { path: '/dashboard/device-detail/:id/report/planning', name: 'Planning', component: Planning, props: true, meta: { requiresAuth:true } },
   { path: '/dashboard/device-detail/:id/irrigation', name: 'IrrigationView', component: IrrigationView, props: true, meta: { requiresAuth:true } },
   { path: '/dashboard/device-detail/:id/irrigation/configuration', name: 'IrrigationConfiguration', component: IrrigationConfiguration, props: true, meta: { requiresAuth:true } },
   { path: '/dashboard/device-detail/:id/irrigation/configuration/flussi', name: 'Flussi', component: Flussi, props: true, meta: { requiresAuth:true } },

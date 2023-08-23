@@ -23,8 +23,10 @@
           </form>
         </VeeForm>
         <div class="create-account">
-          <router-link :to="{name: 'ResetPassword'}"> Recupera password </router-link>
+          <router-link :to="{name: 'ResetPassword'}"> {{$t('resetPassword')}} </router-link>
           <router-link :to="{name: 'RegisterForm'}"> Crea un account </router-link>
+          <button @click="changeLocale('en')">English</button>
+          <button @click="changeLocale('it')">Italy</button>
         </div>
       </Modal>
     </div>
@@ -41,10 +43,13 @@
   import { storeToRefs } from 'pinia'
   import { loginSchema } from '@/composable/validationSchemas'
 
+
   const schema = loginSchema
 
+  console.log(useI18n)
+  const { t } = useI18n()
   // auth with pinia
-  const authStore = useAuthStore();
+  const authStore = useAuthStore()
   const { status, isLoading } = storeToRefs(useAuthStore())
   const modalActive = ref(false)
   const isError = ref(false)
