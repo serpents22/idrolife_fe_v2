@@ -47,7 +47,6 @@
   const schema = loginSchema
 
   console.log(useI18n)
-  const { t } = useI18n()
   // auth with pinia
   const authStore = useAuthStore()
   const { status, isLoading } = storeToRefs(useAuthStore())
