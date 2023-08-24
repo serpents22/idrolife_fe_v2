@@ -10,6 +10,6 @@ const i18n = createI18n({
       it: it
     },
   })
-  
+
 
 export default i18n

@@ -3,13 +3,28 @@
 </template>
 
  <script>
+
+import { useLocaleStore } from './stores/localization/LocaleStore'
+
 export default {
   name: 'App',
 	watch: {
 		'$route' (to, from) {
 			document.title = to.meta.title || 'Idrolife'
 		}
-	}
+	},
+  setup() {
+    const localStore = useLocaleStore()
+    return {
+      localStore
+    }
+  },
+  methods: {
+    mounted() {
+      console.log(this.localStore.locale)
+      this.$i18n.locale = this.localStore.locale
+    }
+  },
 }
 </script>
 

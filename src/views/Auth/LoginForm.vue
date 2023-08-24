@@ -25,8 +25,6 @@
         <div class="create-account">
           <router-link :to="{name: 'ResetPassword'}"> {{$t('resetPassword')}} </router-link>
           <router-link :to="{name: 'RegisterForm'}"> Crea un account </router-link>
-          <button @click="changeLocale('en')">English</button>
-          <button @click="changeLocale('it')">Italy</button>
         </div>
       </Modal>
     </div>
@@ -42,11 +40,9 @@
   import { ref } from 'vue'
   import { storeToRefs } from 'pinia'
   import { loginSchema } from '@/composable/validationSchemas'
-
+  import { useI18n } from 'vue-i18n'
 
   const schema = loginSchema
-
-  console.log(useI18n)
   // auth with pinia
   const authStore = useAuthStore()
   const { status, isLoading } = storeToRefs(useAuthStore())
