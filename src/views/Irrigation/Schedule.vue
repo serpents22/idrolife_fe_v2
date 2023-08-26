@@ -7,42 +7,64 @@
     <deviceCard 
       :small=true
       :content="newData" />
-    <img class="w-40" src="@/assets/programma_irrigazione.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/programma_irrigazione.png">
+      <p>{{ $t('irrigationSetting') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
       <div class="row">
-        <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'Programma' }" >
-          <img src="@/assets/programma_partenze.png">
-        </router-link>
-        <div v-else>
-          <img src="@/assets/programma_partenze.png" class="opacity-40">
+        <div class="sm-icon-card" v-if="devicesStore.deviceData.role !== 'user'">
+          <router-link  :to="{ name: 'Programma' }" >
+            <img src="@/assets/programma_partenze.png">
+          </router-link>
+          <p>{{ $t('scheduleStart') }}</p>
         </div>
-        <router-link :to="{ name: 'Avvio' }">
-          <img src="@/assets/avvio_manuale.png">
-        </router-link>
+        <div class="sm-icon-card opacity-40" v-else>
+          <img src="@/assets/programma_partenze.png" >
+          <p>{{ $t('scheduleStart') }}</p>
+        </div>
+        <div class="sm-icon-card">
+          <router-link :to="{ name: 'Avvio' }">
+            <img src="@/assets/avvio_manuale.png">
+          </router-link>
+          <p>{{ $t('manualStart') }}</p>
+        </div>
       </div>
       <div class="row">
-        <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'Parametri' }" >
+        <div class="sm-icon-card" v-if="devicesStore.deviceData.role !== 'user'">
+          <router-link  :to="{ name: 'Parametri' }" >
+            <img src="@/assets/parametri_generali.png">
+          </router-link>
+          <p>{{ $t('generalParameter') }}</p>
+        </div>
+        <div class="sm-icon-card opacity-40" v-else>
           <img src="@/assets/parametri_generali.png">
-        </router-link>
-        <div v-else>
-          <img src="@/assets/parametri_generali.png" class="opacity-40">
+          <p>{{ $t('generalParameter') }}</p>
         </div>
       </div>
       <div class="row">
-        <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'DurataStazione' }" >
-          <img src="@/assets/durata_stazioni.png">
-        </router-link>
-        <div v-else>
-          <img src="@/assets/durata_stazioni.png" class="opacity-40">
+        <div class="sm-icon-card" v-if="devicesStore.deviceData.role !== 'user'">
+          <router-link  :to="{ name: 'DurataStazione' }" >
+            <img src="@/assets/durata_stazioni.png">
+          </router-link>
+          <p>{{ $t('stationTime') }}</p>
         </div>
-        <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'GestisciSensori' }" >
-          <img src="@/assets/gestisci_sensori.png">
-        </router-link>
-        <div v-else>
-          <img src="@/assets/gestisci_sensori.png" class="opacity-40">
+        <div class="sm-icon-card opacity-40" v-else>
+          <img src="@/assets/durata_stazioni.png" >
+          <p>{{ $t('stationTime') }}</p>
+        </div>
+        <div class="sm-icon-card" v-if="devicesStore.deviceData.role !== 'user'">
+          <router-link  :to="{ name: 'GestisciSensori' }" >
+            <img src="@/assets/gestisci_sensori.png">
+          </router-link>
+          <p>{{ $t('sensorsManagement') }}</p>
+        </div>
+        <div class="sm-icon-card opacity-40" v-else>
+          <img src="@/assets/gestisci_sensori.png" >
+          <p>{{ $t('sensorsManagement') }}</p>
         </div>
       </div>
     </div>
@@ -92,16 +114,6 @@
     pb-4 sm:pb-8
 }
 
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
 .content {
   @apply 
     flex justify-center items-center
@@ -123,16 +135,6 @@
     transition-all ease-in-out duration-300
 }
 
-.content img {
-  @apply
-    relative
-    w-[80px] h-[80px]
-    md:w-[120px] md:h-[120px]
-    lg:w-[140px] lg:h-[140px]
-    xl:w-[180px] xl:h-[180px]
-    2xl:w-[200px] 2xl:h-[200px]
-    transition-all ease-in-out duration-300
-}
 
 span h1 {
   @apply sm:text-3xl text-xl text-[#353535] font-medium

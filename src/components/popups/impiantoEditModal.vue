@@ -27,7 +27,7 @@
             <iveText placeholder="Nome" name="name" type="text" class="text-field"/>
           </div>
           <div class="w-[300px]">
-            <iveButton type="submit" class="filled" label="Salva"/>
+            <iveButton type="submit" class="filled" label="SAVE"/>
           </div>
         </div>
       </form>

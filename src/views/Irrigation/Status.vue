@@ -7,19 +7,25 @@
     <deviceCard 
       :small=true
       :content="newData" />
-    <img class="w-40" src="@/assets/stato_irrigazione.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/stato_irrigazione.png">
+      <p>{{ $t('irrigationStatus') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
-      <div class="stato-programmi">
+      <div class="sm-icon-card">
         <router-link :to="{name: 'StatoProgrammi'}"><img src="@/assets/stato_programmi.png"></router-link>
+        <p>{{ $t('programStatus') }}</p>
       </div>
-      <div class="stato-stazioni">
+      <div class="sm-icon-card">
         <router-link :to="{name: 'StatoStazione'}"><img src="@/assets/stato_stazioni.png"></router-link>
+        <p>{{ $t('stationStatus') }}</p>
       </div>
-      <div class="stato-idrosat">
+      <div class="sm-icon-card">
         <router-link :to="{name: 'StatoIdrosat'}"><img src="@/assets/stato_idrosat.png"></router-link>
+        <p>{{ $t('idrosatStatus') }}</p>
       </div>
     </div>
   </div>
@@ -68,17 +74,6 @@
     pb-4 sm:pb-8
 }
 
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
-
 .content {
   @apply 
     flex flex-wrap justify-center
@@ -91,17 +86,6 @@
     transition-all ease-in-out duration-300
 
 }    
-
-.content img {
-  @apply 
-    w-[80px] h-[80px]
-    sm:w-[100px] sm:h-[100px]
-    md:w-[120px] md:h-[120px]
-    lg:w-[140px] lg:h-[140px]
-    xl:w-[180px] xl:h-[180px]
-    2xl:w-[200px] 2xl:h-[200px]
-    transition-all ease-in-out duration-300
-}
 
 span h1 {
   @apply sm:text-3xl text-xl text-[#353535] font-medium

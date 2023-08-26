@@ -8,7 +8,10 @@
     <deviceCard 
       :small=true
       :content="newData" />
-    <img src="@/assets/flussi_nominali.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/flussi_nominali.png">
+      <p>{{ $t('nominalFlow') }}</p>
+    </div>
   </div>
   <div class="content">
     <IdroTitle :title="title"/>
@@ -366,17 +369,6 @@ import { toInteger } from 'lodash';
     flex sm:flex-col fixed items-end sm:items-center gap-2
     bottom-0 left-4
     pb-4 sm:pb-8
-}
-
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
 }
 
 .content {

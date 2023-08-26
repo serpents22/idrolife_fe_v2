@@ -1,25 +1,31 @@
 <template>
     <div class="nav-wrapper">
-      <div class="cursor-pointer" v-show="isAlarm" >
-        <img src="@/assets/icon/warning-button.png" @click="emits('alarmList')">
+      <div class="xs-icon-card" v-show="isAlarm" >
+        <img src="@/assets/icon/warning-icon.png" class="cursor-pointer" @click="emits('alarmList')">
       </div>
-      <div class="whatsapp" v-show="noSocial">
+      <div class="xs-icon-card" v-show="noSocial">
         <router-link :to="{name: 'Dashboard'}"><img src="@/assets/whatsapp.png"></router-link>
+        <p>{{ $t('supportChat') }}</p>
       </div>
-      <div class="apple" v-show="!noSocial">
+      <div class="xs-icon-card" v-show="!noSocial">
        <router-link :to="{name: 'Dashboard'}"><img src="@/assets/apple.png"></router-link>
+        <p>{{ $t('downloadIosApp') }}</p>
       </div>
-      <div class="android" v-show="!noSocial">
+      <div class="xs-icon-card" v-show="!noSocial">
        <router-link :to="{name: 'Dashboard'}"><img src="@/assets/android.png"></router-link>
+        <p>{{ $t('downloadAndroidApp') }}</p>
       </div>
-      <div class="back" v-show="backOn" @click="goBack">
-          <img src="@/assets/Indietro.png" class="cursor-pointer">
+      <div class="xs-icon-card" v-show="backOn" @click="goBack">
+        <img src="@/assets/Indietro.png" class="cursor-pointer">
+        <p>{{ $t('backwards') }}</p>
       </div>
-      <div class="logout" v-show="logout" @click="signOut">
+      <div class="xs-icon-card" v-show="logout" @click="signOut">
         <router-link :to="{name: 'Dashboard'}"><img src="@/assets/logout.png"></router-link>
+        <p>{{ $t('logout') }}</p>
       </div>
-      <div class="home">
+      <div class="xs-icon-card">
         <router-link :to="{name: 'Dashboard'}"><img src="@/assets/home.png"></router-link>
+        <p>{{ $t('home') }}</p>
       </div>
     </div>
 </template>
@@ -61,7 +67,7 @@ import { useAuthStore } from '@/stores/AuthStore'
           
 }
 
-.nav-wrapper img {
+/* .nav-wrapper img {
   @apply 
     w-[40px] h-[40px] 
     sm:w-[60px] sm:h-[60px] 
@@ -70,5 +76,8 @@ import { useAuthStore } from '@/stores/AuthStore'
     xl:w-[100px] xl:h-[100px]
     2xl:w-[130px] 2xl:h-[130px]
     transition-all ease-in-out duration-200 hover:scale-110
-}
+} */
+
+
+
 </style>

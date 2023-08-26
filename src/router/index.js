@@ -54,7 +54,7 @@ import Webcam from '@/views/Webcam/Webcam.vue'
 
 
 const routes = [
-  { path: '/:lang/', name: 'Home', component: Home, meta: { requiresAuth:false, title: 'Idrolife - Home' } },
+  { path: '/:lang', name: 'Home', component: Home, meta: { requiresAuth:false, title: 'Idrolife - Home' } },
   { path: '/:lang/password-reset', name: 'ResetPassword', component: ResetPassword, meta: { requiresAuth:false } },
   { path: '/:lang/login', name: 'LoginForm', component: LoginForm, meta: { requiresAuth:false } },
   { path: '/:lang/register', name: 'RegisterForm', component: RegisterForm, meta: { freeAccess:true } },
@@ -62,8 +62,8 @@ const routes = [
   { path: '/:lang/password-reset/change/:email', name: 'NewPassword', component: NewPassword, meta: { freeAccess:true } },
   { path: '/:lang/password-reset/success', name: 'ResetPasswordConfirmation', component: ResetPasswordConfirmation, meta: { freeAccess:true } },
   { path: '/:lang/dashboard', name: 'Dashboard', component: Dashboard, meta: { requiresAuth:true } },
-  { path: '/devices', name: 'DevicesList', component: DevicesList, meta: { requiresAuth:true } },
-  { path: '/manage-account', name: 'ManageAccount', component: ManageAccount, meta: { requiresAuth:true } },
+  { path: '/:lang/devices', name: 'DevicesList', component: DevicesList, meta: { requiresAuth:true } },
+  { path: '/:lang/manage-account', name: 'ManageAccount', component: ManageAccount, meta: { requiresAuth:true } },
   { path: '/:lang/devices/add', name: 'AddDevice', component: AddDevice, meta: { requiresAuth:true } },
   { path: '/:lang/dashboard/device-detail/:id', name: 'DeviceConfig', component: DeviceConfig, props: true, meta: { requiresAuth:true } },
   { path: '/:lang/dashboard/device-detail/:id/map', name: 'MapView', component: MapView, props: true, meta: { requiresAuth:true } },
@@ -106,7 +106,7 @@ const routes = [
   ,
   {
     path: '/:catchAll(.*)', // Redirect for URLs without a language prefix
-    redirect: '/it/', // Redirect to the default language
+    redirect: '/it', // Redirect to the default language
   },
 ]
 
@@ -116,6 +116,11 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from,  next) => {
+  if (to.path === '/') {
+    next({name: 'Dashboard'})
+  } else {
+    next();
+  }
   if (to.meta.requiresAuth && !localStorage.getItem('auth.token')){
     next({ name: 'LoginForm'})
   } else if (to.meta.requiresAuth && localStorage.getItem('auth.token') || to.meta.freeAccess){

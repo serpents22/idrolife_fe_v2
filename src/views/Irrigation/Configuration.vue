@@ -7,30 +7,38 @@
     <deviceCard 
       :small=true
       :content="newData" />
-    <img class="w-40" src="@/assets/config_irrigazione.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/config_irrigazione.png">
+      <p>{{ $t('irrigationConfig') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
       <div class="row">
-        <div id="flussi-nominal">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'Flussi'}"><img src="@/assets/flussi_nominali.png"></router-link>
+          <p>{{ $t('nominalFlow') }}</p>
         </div>
-        <div id="imposta-orario">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'Orario'}"><img src="@/assets/imposta_orario.png"></router-link>
+          <p>{{ $t('setTimeData') }}</p>
         </div>
       </div>
       <div class="row">
-        <div id="impostazioni-generali">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'Generali'}"><img src="@/assets/impostazioni_generali.png"></router-link>
+          <p>{{ $t('generalSetting') }}</p>
         </div>
       </div>
       <div class="row">
-        <div id="configurazione-avanza">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'Avanzata'}"><img src="@/assets/configurazione_avanza.png"></router-link>
+          <p>{{ $t('advancedConfig') }}</p>
         </div>
-        <div id="programma-stazioni">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'Stazioni'}"><img src="@/assets/programma_stazioni.png"></router-link>
+          <p>{{ $t('stationManagement') }}</p>
         </div>
       </div>
     </div>
@@ -81,17 +89,6 @@
     pb-4 sm:pb-8
 }
 
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
-
 .content {
   @apply 
     flex justify-center items-center
@@ -113,16 +110,6 @@
     transition-all ease-in-out duration-300
 }
 
-.content img {
-  @apply
-    relative
-    w-[80px] h-[80px]
-    md:w-[120px] md:h-[120px]
-    lg:w-[140px] lg:h-[140px]
-    xl:w-[180px] xl:h-[180px]
-    2xl:w-[200px] 2xl:h-[200px]
-    transition-all ease-in-out duration-300
-}
 
 span h1 {
   @apply sm:text-3xl text-xl text-[#353535] font-medium

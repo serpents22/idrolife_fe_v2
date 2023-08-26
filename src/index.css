@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer my-custom-styles {
+
       .custom-mobile{
         display:initial;
       }

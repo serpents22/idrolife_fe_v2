@@ -9,59 +9,93 @@
       :small=true
       :content="newData"
       :id="props.id" />
-    <img class="w-40" src="@/assets/sensor.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/sensor.png">
+      <p>{{ $t('sensor') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
       <div class="row">
-        <div class="radiazione_solare">
-          <img src="@/assets/radiazione_solare.png">
+        <div>
+          <div class="sm-icon-card">
+            <img src="@/assets/radiazione_solare.png">
+            <p>{{ $t('solarIntensity') }}</p>
+          </div>
           <span class="value-text">{{sensorData.radiazione}} <span class="text-[8px] sm:text-sm md:text-base lg:text-[20px] font-medium pl-2">W/m<sup>2</sup></span></span>
         </div>
-        <div class="Temperatura">
-          <img src="@/assets/Temperatura.png">
+        <div>
+          <div class="sm-icon-card">
+            <img src="@/assets/Temperatura.png">
+            <p>{{ $t('temperature') }}</p>
+          </div>
           <span class="value-text">{{sensorData.temperatura}}</span>
         </div>
-        <div class="sensore_pioggia">
-          <img src="@/assets/sensore_pioggia.png">
+        <div>
+          <div class="sm-icon-card">
+            <img src="@/assets/sensore_pioggia.png">
+            <p>{{ $t('rainSensor') }}</p>
+          </div>
           <span class="value-text">{{sensorData.pioggia}}<span class="text-[8px] sm:text-sm md:text-base lg:text-[20px] font-medium pl-2">mm/m<sup>2</sup></span></span>
         </div>
-        <div class="direzionee_intensitve">
-          <img src="@/assets/direzionee_intensitve.png">
+        <div>
+          <div class="sm-icon-card">
+            <img src="@/assets/direzionee_intensitve.png">
+            <p>{{ $t('windDirection') }}</p>
+          </div>
           <span class="value-text">{{sensorData.direzione}} - {{sensorData.direzione2}}<span class="text-[8px] sm:text-sm md:text-base lg:text-[20px] font-medium px-2">Km/h</span></span>
         </div>
       </div>
 
       <div class="row">
-        <div class="segnalesim">
-          <img src="@/assets/segnalesim.png">
+        <div>
+          <div class="sm-icon-card">
+            <img src="@/assets/segnalesim.png">
+            <p>{{ $t('networkSignal') }}</p>
+          </div>
           <span class="value-text">{{sensorData.segnalesim}}</span>
         </div>
-        <div class="portarta">
-          <img src="@/assets/portarta.png">
+        <div>
+          <div class="sm-icon-card">
+            <img src="@/assets/portarta.png">
+            <p>{{ $t('flowCounter') }}</p>
+          </div>
           <span class="value-text">{{sensorData.portarta}}<span class="text-[8px] sm:text-sm md:text-base lg:text-[20px] font-medium pl-2">m<sup>3</sup></span></span>
         </div>
-        <div class="lavaggio">
-          <img src="@/assets/lavaggio.png">
+        <div>
+          <div class="sm-icon-card">
+            <img src="@/assets/lavaggio.png">
+            <p>{{ $t('systemPressure') }}</p>
+          </div>
           <span class="value-text">{{sensorData.lavaggio}}<span class="text-[8px] sm:text-sm md:text-base lg:text-[20px] font-medium pl-2">Bar</span></span>
         </div>
       </div>
 
       <div class="row">
-        <div class="umiditaria">
-          <img src="@/assets/umiditaria.png">
-          <span class="value-text">{{sensorData.umiditaria}}</span>
+        <div>
+          <div class="sm-icon-card">
+            <img src="@/assets/umiditaria.png">
+            <p>{{ $t('airHumidity') }}</p>
+          </div>
+          <span class="value-text">{{sensorData.umiditaria}}<span class="text-[8px] sm:text-sm md:text-base lg:text-[20px] font-medium pl-2">%</span></span>
         </div>
-        <div class="umiditterreno">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'RhView'}"><img src="@/assets/umiditterreno.png"></router-link>
+          <p>{{ $t('soilMoisture') }}</p>
         </div>
-        <div class="Conducibilit">
-          <img src="@/assets/Conducibilit.png">
+        <div>
+          <div class="sm-icon-card">
+            <img src="@/assets/Conducibilit.png">
+            <p>{{ $t('conductivity') }}</p>
+          </div>
           <span class="value-text">{{sensorData.conducibility}}<span class="text-[8px] sm:text-sm md:text-base lg:text-[20px] font-medium pl-2">&#181;S</span></span>
         </div>
-        <div class="ph">
-          <img src="@/assets/ph.png">
+        <div>
+          <div class="sm-icon-card">
+            <img src="@/assets/ph.png">
+            <p>{{ $t('ph') }}</p>
+          </div>
           <span class="value-text">{{sensorData.ph}}</span>
         </div>
       </div>
@@ -182,30 +216,10 @@
     pb-4 sm:pb-8
 }
 
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
-
 .content {
   @apply 
     flex flex-col justify-center 
     gap-[10px] sm:gap-[30px] md:gap-[40px] lg:gap-[40px] xl:gap-[40px]
-    transition-all ease-in-out duration-300
-}
-.content img {
-  @apply 
-    w-[60px] h-[60px]
-    md:w-[80px] md:h-[80px]
-    lg:w-[100px] lg:h-[100px]
-    xl:w-[120px] xl:h-[120px]
-    2xl:w-[160px] 2xl:h-[160px]
     transition-all ease-in-out duration-300
 }
 .content .value-text {

@@ -4,13 +4,12 @@
       <img src="@/assets/logo.png" id="logo">
       <span>
         <h1>Benvenuti nel nuovo portale IdroLife di Idrobit</h1>
-        {{ $t('login') }}
-        <!-- <button @click="languageChange(langUnselected)">TEST</button> -->
       </span>
     </div>
-    <div class="menu">
-      <router-link :to="{name: 'LoginForm'}"><img src="../assets/Accedi.png"></router-link>
-    </div>
+    <router-link class="menu" :to="{name: 'LoginForm'}">
+      <img src="../assets/Accedi.png">
+      <p>Accedi</p>
+    </router-link>
       <footer class="grid grid-cols-4 items-end justify-between mb-2">
         <div class="w-fit">
           <Tab :tabs="tabs" @clicked= "chageLanguage" />
@@ -104,8 +103,13 @@ span h2 {
   @apply sm:text-2xl text-xl text-[#353535] font-medium
 
 }
+
 .menu {
-  @apply flex items-start justify-center
+  background: linear-gradient(45.06deg, #010AD1 -8.2%, #1BF728 108.15%);
+  border: 2px solid #FFEE58;
+  @apply flex flex-col justify-between p-2
+  m-auto box-border text-white rounded-[60px]
+  
 }
 
 .menu img {

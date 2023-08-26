@@ -9,17 +9,17 @@
   <NewDevice 
     :isOpen="isShowAddModal" 
     @close="toggleAddModal" 
-    title="AGGIUNGI IMPIANTO" 
+    :title="$t('createPlant')" 
     />
   <impiantoEditModal 
     v-if="isShowEditModal" 
     @close="toggleEditModal" 
-    title="MODIFICA IMPIANTO" 
+    :title="$t('editPlant')" 
     />
   <impiantoDelModal 
     v-if="isShowDelModal" 
     @close="toggleDelModal" 
-    title="ELIMINA IMPIANTO" 
+    :title="$t('deletePlant')" 
     />
   <toolBar
     :noAdd=false

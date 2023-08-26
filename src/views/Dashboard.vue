@@ -5,13 +5,15 @@
       :logout="true" 
     />
     <div class="dashboard-container">
-      <IdroTitle title='Benvenuti nel nuovo portale IdroLife di Idrobit'/>
+      <IdroTitle :title="$t('welcomeText')"/>
       <div class="menu">
-        <div class="account">
+        <div class="icon-card">
           <router-link :to="{name: 'ManageAccount'}"><img src="../assets/account.png"></router-link>
+          <p>{{ $t('accountManagement') }}</p>
         </div>
-        <div class="impianto">
+        <div class="icon-card">
           <router-link :to="{name: 'DevicesList'}"><img src="../assets/impianto.png"></router-link>
+          <p>{{ $t('plantManagement') }}</p>
         </div>
       </div>
     </div>
@@ -52,11 +54,5 @@ span h1 {
           justify-between mx-auto
 }
 
-.menu .account, .impianto {
-  @apply w-52 h-52 md:w-60 md:h-60 lg:w-72 lg:h-72 transition-all ease-in-out delay-150 hover:-translate-y-2
-}
 
-.account, .impianto {
-  @apply transition-all ease-in-out delay-150 
-}
 </style>

@@ -64,8 +64,8 @@ import { onClickOutside } from '@vueuse/core'
   const deviceManagementStore = useDeviceManagement()
   const { status, isLoading } = storeToRefs(useDeviceManagement())
   const { supAdmindevices } = storeToRefs(useDeviceManagement())
-  const cancelLabel = ref('CANCELLA')
-  const registerLabel = ref('SALVA')
+  const cancelLabel = ref('CANCEL')
+  const registerLabel = ref('SAVE')
   const regButtonClick = ref(0)
   const cancelButtonClick = ref(0)
 
@@ -88,7 +88,7 @@ import { onClickOutside } from '@vueuse/core'
         setTimeout(closeNotification, 3000)
         resetForm()
       }
-      registerLabel.value = 'SALVA'
+      registerLabel.value = 'SAVE'
       regButtonClick.value = 0
     }
   }
@@ -118,7 +118,7 @@ import { onClickOutside } from '@vueuse/core'
       form.value.resetForm()
       emits('close')
       cancelButtonClick.value = 0
-      cancelLabel.value = 'CANCELLA'
+      cancelLabel.value = 'CANCEL'
         break;
     }
   }

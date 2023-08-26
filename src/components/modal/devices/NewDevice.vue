@@ -53,13 +53,14 @@ import { useDevicesStore } from '@/stores/DevicesStore'
   const modalActive = ref(false)
   const devicesStore = useDevicesStore()
   const {  status, createDeviceIsLoading } = storeToRefs(useDevicesStore())
-  const cancelLabel = ref('CANCELLA')
-  const registerLabel = ref('SALVA')
+  const cancelLabel = ref('CANCEL')
+  const registerLabel = ref('SAVE')
   const regButtonClick = ref(0)
   const cancelButtonClick = ref(0)
 
   onMounted(() => {
     devicesStore.loadDevices()
+    console.log()
   })
 
   const onSubmit = async (values, { resetForm }) => {
@@ -78,7 +79,7 @@ import { useDevicesStore } from '@/stores/DevicesStore'
         setTimeout(closeNotification, 3000)
         resetForm()
       }
-      registerLabel.value = 'SALVA'
+      registerLabel.value = 'SAVE'
       regButtonClick.value = 0
       devicesStore.loadDevices()
     }
@@ -109,7 +110,7 @@ import { useDevicesStore } from '@/stores/DevicesStore'
       form.value.resetForm()
       emits('close')
       cancelButtonClick.value = 0
-      cancelLabel.value = 'CANCELLA'
+      cancelLabel.value = 'CANCEL'
         break;
     }
   }

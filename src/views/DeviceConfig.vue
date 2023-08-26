@@ -20,29 +20,41 @@
   <div class="dashboard-container">
     <IdroTitle :title="title" />
     <div class="content">
-      <div class="sensor">
+      <div class="md-icon-card">
         <router-link :to="{name: 'SensorView'}"><img src="@/assets/sensor.png"></router-link>
+        <p>{{ $t('sensor') }}</p>
       </div>
-      <div class="irrigation">
+      <div class="md-icon-card">
         <router-link :to="{name: 'IrrigationView'}"><img src="@/assets/irrigation.png"></router-link>
+        <p>{{ $t('irrigation') }}</p>
       </div>
-      <div class="ferrigation">
+      <div class="md-icon-card">
         <router-link :to="{name: 'FerrigationView'}"><img src="@/assets/ferrigation.png"></router-link>
+        <p>{{ $t('fertigation') }}</p>
       </div>
-      <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'Webcam' }" >
+      <div class="md-icon-card" v-if="devicesStore.deviceData.role !== 'user'" >
+        <router-link :to="{ name: 'Webcam' }" >
+          <img src="@/assets/webcam.png">
+        </router-link>
+        <p>{{ $t('webcam') }}</p>
+      </div>
+      <div class="md-icon-card opacity-40" v-else>
         <img src="@/assets/webcam.png">
-      </router-link>
-      <div v-else>
-        <img src="@/assets/webcam.png" class="opacity-40">
+        <p>{{ $t('webcam') }}</p>
       </div>
-      <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'MapView' }" >
-        <img src="@/assets/map.png">
-      </router-link>
-      <div v-else>
-        <img src="@/assets/map.png" class="opacity-40">
+      <div class="md-icon-card" v-if="devicesStore.deviceData.role !== 'user'" >
+        <router-link  :to="{ name: 'MapView' }" >
+          <img src="@/assets/map.png">
+        </router-link>
+        <p>{{ $t('map') }}</p>
+     </div>
+      <div class="md-icon-card opacity-40" v-else>
+        <img src="@/assets/map.png" >
+        <p>{{ $t('map') }}</p>
       </div>
-      <div class="report">
+      <div class="md-icon-card">
         <router-link :to="{name: 'ReportView'}"><img src="@/assets/report.png"></router-link>
+        <p>{{ $t('report') }}</p>
       </div>
     </div>
   </div>
@@ -124,30 +136,8 @@
 
 }
 
-span h1 {
-  @apply sm:text-3xl text-xl text-[#353535] font-medium
-}
 
-span h2 {
-  @apply text-xs font-light
-}
 
-span p {
-  @apply text-base font-normal
-}
-
-.content img {
-  @apply p-2 rounded   
-  w-28 h-28
-  sm:w-36 sm:h-36 
-  md:w-44 md:h-44 
-  lg:w-48 lg:h-48
-  transition-all ease-in-out duration-300
-}
-.content img:hover {
-  box-shadow: 0px 0px 8px 6px rgba(255, 255, 255, 0.48);
-  @apply transition-all ease-in-out duration-300 rounded-3xl
-}
 /* .content img {
   @apply 
   w-24 h-24

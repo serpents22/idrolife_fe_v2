@@ -18,46 +18,41 @@
           <DatePicker v-model="startDate" @change="dateFiltering()">{{startDate}}</DatePicker>
           <label>AL</label>
           <DatePicker @change="dateFiltering()" v-model="endDate">{{endDate}}</DatePicker>
-
-          <!-- <div class="button-wrapper">
-            <IveButton type="submit" label="Visualizza" />
-          </div> -->
-
         </div>
         <div class="search-field">
           <SearchField v-model="searchValue" />
         </div>
       </div>
       <div class="table-wrap">
-      <EasyDataTable
-        table-class-name="customize-table"
-        alternating
-        buttons-pagination
-        no-hover
-        :loading="historicalDataIsLoading"
-        :headers="headers"
-        :items="formatedhistoricalAlarmi"
-        :search-field="searchField"
-        :search-value="searchValue"
-        :rows-items="[5,10,20,30,40,50]"
-        :rows-per-page="5"
-        theme-color="#1363df">
-        <template #loading>
-          <img
-            src="@/assets/loader/loader.gif"
-            style="width: 100px; height: 80px;"
-          />
-        </template>
-      </EasyDataTable>
-      <download-csv
-      :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}"
-      	class   = "btn btn-default mt-6 justify-end flex"
-      	:data   = "formatedhistoricalAlarmi"
-      	:name    = "fileName">
-        <div class="button-wrapper">
-            <IveButton label="Export CSV" />
-        </div>
-      </download-csv>
+        <EasyDataTable
+          table-class-name="customize-table"
+          alternating
+          buttons-pagination
+          no-hover
+          :loading="historicalDataIsLoading"
+          :headers="headers"
+          :items="formatedhistoricalAlarmi"
+          :search-field="searchField"
+          :search-value="searchValue"
+          :rows-items="[5,10,20,30,40,50]"
+          :rows-per-page="5"
+          theme-color="#1363df">
+          <template #loading>
+            <img
+              src="@/assets/loader/loader.gif"
+              style="width: 100px; height: 80px;"
+            />
+          </template>
+        </EasyDataTable>
+        <download-csv
+        :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}"
+        	class   = "btn btn-default mt-6 justify-end flex"
+        	:data   = "formatedhistoricalAlarmi"
+        	:name    = "fileName">
+          <div class="button-wrapper">
+              <IveButton label="Export CSV" />
+          </div>
+        </download-csv>
       </div>
     </div>
   </div>
@@ -73,7 +68,7 @@ import SearchField from '@/components/input/searchField.vue'
 import DatePicker from '@/components/input/datePicker.vue'
 import IveButton from '@/components/input/iveButton.vue'
 import { toInteger } from 'lodash'
-// import { Header, Item } from "vue3-easy-data-table";
+import { Header, Item } from "vue3-easy-data-table";
 
   //props
   const props = defineProps({
@@ -389,17 +384,7 @@ import { toInteger } from 'lodash'
     pb-4 sm:pb-8
 }
 
-
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
+ 
 
 .content {
   @apply 

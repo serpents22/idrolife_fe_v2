@@ -6,7 +6,7 @@
     :isError="isError"
      @close="closeNotification" />
   <div class="login-container">
-    <IdroTitle title="Benvenuti nel nuovo portale di Idrobit" />
+    <IdroTitle :title="$t('welcomeText')" />
     <div class="menu">
       <Modal>
         <VeeForm :validation-schema="schema" v-slot="{ handleSubmit }" as="div" >
@@ -18,13 +18,13 @@
               <BaseInput name="password" type="password" label="Password" class="text-field" />
             </div>
             <div class="button-wrapper">
-              <MyButton type="submit" class="filled" label="Entra" :loading="isLoading" />
+              <MyButton type="submit" class="filled" :label="$t('login')" :loading="isLoading" />
             </div>
           </form>
         </VeeForm>
         <div class="create-account">
           <router-link :to="{name: 'ResetPassword'}"> {{$t('resetPassword')}} </router-link>
-          <router-link :to="{name: 'RegisterForm'}"> Crea un account </router-link>
+          <router-link :to="{name: 'RegisterForm'}"> {{$t('createAccount')}} </router-link>
         </div>
       </Modal>
     </div>
@@ -40,7 +40,6 @@
   import { ref } from 'vue'
   import { storeToRefs } from 'pinia'
   import { loginSchema } from '@/composable/validationSchemas'
-  import { useI18n } from 'vue-i18n'
 
   const schema = loginSchema
   // auth with pinia

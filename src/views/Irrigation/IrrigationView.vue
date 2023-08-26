@@ -7,22 +7,31 @@
     <deviceCard 
       :small="true"
       :content="newData" />
-    <img class="w-40" src="@/assets/irrigation.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/irrigation.png">
+      <p>{{ $t('irrigation') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
-      <router-link v-if="devicesStore.deviceData.role !== 'user'" :to="{ name: 'IrrigationConfiguration' }" >
-        <img src="@/assets/config_irrigazione.png">
-      </router-link>
-      <div v-else>
+      <div class="sm-icon-card" v-if="devicesStore.deviceData.role !== 'user'">
+        <router-link  :to="{ name: 'IrrigationConfiguration' }" >
+          <img src="@/assets/config_irrigazione.png">
+        </router-link>
+        <p>{{ $t('irrigationConfig') }}</p>
+      </div>
+      <div class="sm-icon-card" v-else>
         <img src="@/assets/config_irrigazione.png" class="opacity-40">
+        <p>{{ $t('irrigationConfig') }}</p>
       </div>
-      <div class="irrigation">
+      <div class="sm-icon-card">
         <router-link :to="{name: 'IrrigationSchedule'}"><img src="@/assets/programma_irrigazione.png"></router-link>
+        <p>{{ $t('irrigationSetting') }}</p>
       </div>
-      <div class="ferrigation">
+      <div class="sm-icon-card">
         <router-link :to="{name: 'IrrigationStatus'}"><img src="@/assets/stato_irrigazione.png"></router-link>
+        <p>{{ $t('irrigationStatus') }}</p>
       </div>
     </div>
   </div>
@@ -71,17 +80,6 @@
 }
 
 
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
-
 .content {
   @apply 
     flex flex-wrap justify-center
@@ -94,17 +92,6 @@
     transition-all ease-in-out duration-300
 
 }    
-
-.content img {
-  @apply 
-    w-[80px] h-[80px]
-    sm:w-[100px] sm:h-[100px]
-    md:w-[120px] md:h-[120px]
-    lg:w-[140px] lg:h-[140px]
-    xl:w-[180px] xl:h-[180px]
-    2xl:w-[200px] 2xl:h-[200px]
-    transition-all ease-in-out duration-300
-}
 
 span h1 {
   @apply sm:text-3xl text-xl text-[#353535] font-medium

@@ -1,14 +1,17 @@
 <template>
   <!-- <div class="sidebar-container"> -->
     <div class="nav-wrapper">
-      <div class="add" @click="addClick" v-show="!noAdd">
+      <div class="xs-icon-card add"  @click="addClick" v-show="!noAdd">
         <img src="@/assets/aggiungiimpianto.png">
+        <p>{{ $t('createPlant') }}</p>
       </div>
-      <div class="edit" @click="editClick">
+      <div class="xs-icon-card edit"  @click="editClick" v-show="!noAdd">
         <img src="@/assets/modificaimpianto.png">
+        <p>{{ $t('editPlant') }}</p>
       </div>
-      <div class="delete" @click="deleteClick">
+      <div class="xs-icon-card delete"  @click="deleteClick" v-show="!noAdd">
         <img src="@/assets/eliminaimpianto.png">
+        <p>{{ $t('deletePlant') }}</p>
       </div>
     </div>
   <!-- </div> -->
@@ -58,7 +61,6 @@ export default {
 
 .nav-wrapper div {
   @apply 
-  w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] md:w-[70px] md:h-[70px] lg:w-[80px] lg:h-[80px] xl:w-[110px] xl:h-[110px]
     items-center justify-center flex cursor-pointer
     transition-all ease-in-out duration-200 hover:scale-110
 

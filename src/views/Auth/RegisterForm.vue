@@ -6,7 +6,7 @@
     :isError="isError"
      @close="closeNotification" />
   <div class="register-container">
-    <IdroTitle title="Benvenuti nel nuovo portale Idrores di Idrobit" />
+    <IdroTitle :title="$t('welcomeText')"/>
     <div class="menu">
       <Modal>
         <VeeForm :validation-schema="schema" v-slot="{ handleSubmit }" as="div" >
