@@ -5,7 +5,7 @@
       <option 
         v-for="tab in tabs" :key="tab.value"
         class="nav"
-        :id="tab">{{tab}}</option>
+        :id="tab">{{tab}} - {{ tab.name }}</option>
   </select>
   <form @submit.prevent="onSubmit" class="table-container">
     <table :tableHeader="tableHeader">
@@ -56,27 +56,41 @@
           <p v-for="valve in tData" :key="valve">{{ valve.ev }}</p>
         </td>
         <td>
+          <input
+            class="w-32" 
+            type="text"
+            placeholder="Nome Gruppo"
+            v-model="tData[0].grpName" 
+            
+            maxlength="15"
+            disabled>
+            <!--value="tData[0].grpName" <select v-model="tData[0].grpName" name="gruppo" class="dropdown" v-for="group in tData" :key="group.grpName">
+              <option>{{ tData[0].grpName }}</option>
+              <option>{{ group.grpName }}</option>
+            </select> -->
+        </td>
+        <td>
           <select v-model="tData[0].ordinare" name="ingresso-1" class="dropdown" @change="updateOrdinareValue(index)">
             <option value="0">OFF</option>
             <option value="1">ON</option>
           </select>
         </td>
-        <td>
+        <!--<td>
           <input
             class="w-32" 
             type="text"
             value="Nome Stazione"
             enabled>
-        </td>
+        </td> MV14.03.2023 cambiato ordine-->
         <td>
           <input
-            class="w-20" :disabled="tempo !== 'ore'"
+            class="w-20" :enabled="tempo !== 'ore'"
             type="number"
             v-model="tData[0].min">
         </td>
         <td>
           <input
-            class="w-20" :disabled="tempo !== 'ore'"
+            class="w-20" :enabled="tempo !== 'ore'"
             type="number"
             v-model="tData[0].sec">
         </td>
@@ -128,6 +142,13 @@ import { toInteger } from 'lodash';
     device_code: null
   })
 
+  //MV legge la configurazione dei gruppi registri da 6000 a 6095
+  const grConfFields = [...Array(1152)].map( (_, index) => `S${6000 + index}` ).join(',');
+  const grConfigParams = ref({
+    fields: grConfFields,
+    measurement: 'GROUPCONFIG',
+    device_code: null
+  })
   
   const evStationParams = ref({
     fields: 'S10100,S10100,S10101,S10102,S10103,S10104,S10105,S10106,S10107,S10108,S10109,S10110,S10111,S10112,S10113,S10114,S10115,S10116,S10117,S10118,S10119,S10120,S10121,S10122,S10123,S10124,S10125,S10126,S10127,S10128,S10129,S10130,S10131,S10132,S10133,S10134,S10135,S10136,S10137,S10138,S10139,S10140,S10141,S10142,S10143,S10144,S10145,S10146,S10147,S10148,S10149,S10150,S10151,S10152,S10153,S10154,S10155,S10156,S10157,S10158,S10159,S10160,S10161,S10162,S10163,S10164,S10165,S10166,S10167,S10168,S10169,S10170,S10171,S10172,S10173,S10174,S10175,S10176,S10177,S10178,S10179,S10180,S10181,S10182,S10183,S10184,S10185,S10186,S10187,S10188,S10189,S10190,S10191,S10192,S10193,S10194,S10195,S10200,S10201,S10202,S10203,S10204,S10205,S10206,S10207,S10208,S10209,S10210,S10211,S10212,S10213,S10214,S10215,S10216,S10217,S10218,S10219,S10220,S10221,S10222,S10223,S10224,S10225,S10226,S10227,S10228,S10229,S10230,S10231,S10232,S10233,S10234,S10235,S10236,S10237,S10238,S10239,S10240,S10241,S10242,S10243,S10244,S10245,S10246,S10247,S10248,S10249,S10250,S10251,S10252,S10253,S10254,S10255,S10256,S10257,S10258,S10259,S10260,S10261,S10262,S10263,S10264,S10265,S10266,S10267,S10268,S10269,S10270,S10271,S10272,S10273,S10274,S10275,S10276,S10277,S10278,S10279,S10280,S10281,S10282,S10283,S10284,S10285,S10286,S10287,S10288,S10289,S10290,S10291,S10292,S10293,S10294,S10295',
@@ -145,6 +166,7 @@ import { toInteger } from 'lodash';
     let evStationIndex1 = 10100
     let satConfigIndex1 = 10001
     let satConfigIndex6 = 10006
+    let groupIndex = 6000 //MV imposto indice registri gruppi. 
     let i = 0
     for (let iFor = 0; iFor < dataStore.evConfigLength / 5; iFor++) {
 
@@ -187,6 +209,7 @@ import { toInteger } from 'lodash';
 
 
         let tmpOrdinare = dataStore.evStation === undefined ? undefined : dataStore.evStation['S' + (((optionValue.value - 1) * 1000) + (evStationIndex2+(dataStore.evConfig['S' + (evIndex+2)]-1)))].split(',')
+        let tmpGrpName = dataStore.groupData == undefined ? "MV GRUPPO" : dataStore.groupData['S' + (((optionValue.value - 1) * 1000) + groupIndex)] //MV carico il gruppo. 
 
         let obj = {
           id: i,
@@ -196,16 +219,20 @@ import { toInteger } from 'lodash';
           ordinare: tmpOrdinare === undefined ? '0' : tmpOrdinare[1],
           min: min.value,
           sec: sec.value,
+          grpName: tmpGrpName,
         }
         evData.value.push(obj)
         postEvStationData.value.payload['S' + (((optionValue.value - 1) * 1000) +(evStationIndex2+(dataStore.evConfig['S' + (evIndex+2)]-1)))] = String(evData.value[i].ordinareValue + ',' + evData.value[i].ordinare)
         postEvStationData.value.payload['S' + (((optionValue.value - 1) * 1000) + (evStationIndex1+(dataStore.evConfig['S' + (evIndex+2)]-1)))] = String(evData.value[i].min + '.' + evData.value[i].sec)        
+        postEvStationData.value.payload['S' + groupIndex] = String(evData.value[i].grpName) //MV assegno il valore del gruppo. 
+
         i++
       }
       } else {
         //i--
       }
       evIndex += 6
+      groupIndex +=1
       // evStationIndex1 += 1
       // evStationIndex2 += 1
     }
@@ -217,7 +244,7 @@ import { toInteger } from 'lodash';
       r[a.stazione] = [...r[a.stazione] || [], a];
     return r;
     }, {})
-    console.log(groupedTableData.value)
+    console.log("grouped table data",groupedTableData.value)
   }
 
   //Lifecycle function
@@ -226,10 +253,12 @@ import { toInteger } from 'lodash';
     satConfigParams.value.device_code = devicesStore.deviceData.code
     evConfigParams.value.device_code = devicesStore.deviceData.code
     evStationParams.value.device_code = devicesStore.deviceData.code
+    grConfigParams.value.device_code = devicesStore.deviceData.code //MV carico i valori dei gruppi 
     title.value = 'Idrosat:' + devicesStore.deviceData.name
     await dataStore.getLastEvConfig(evConfigParams.value)
     await dataStore.getLastSatConfig(satConfigParams.value)
     await dataStore.getLastEvStation(evStationParams.value)
+    await dataStore.getLastGroupData(grConfigParams.value) //MV popolo le configurazioni dei gruppi
     fillEvConfigData()
     groupingTableData()
   })
@@ -436,10 +465,12 @@ import { toInteger } from 'lodash';
 
     satConfigParams.value.measurement = String('SATPRGCONFIG' + e.target.value)
     evStationParams.value.measurement = String('SATPRGTIMES' + e.target.value)
+    grConfigParams.value.measurement = String('GROUPCONFIG' + e.target.value) //MV Gruppi
+
     await dataStore.getLastEvConfig(evConfigParams.value)
     await dataStore.getLastSatConfig(satConfigParams.value)
     await dataStore.getLastEvStation(evStationParams.value)
-
+    await dataStore.getLastGroupData(grConfigParams.value) //MV gruppi
     fillEvConfigData()
     groupingTableData()
 
@@ -456,6 +487,7 @@ import { toInteger } from 'lodash';
   function updateOrdinareValue(index) {
     evData.value[index-1].ordinareValue = index
     groupingTableData()
+    console.log ("ordinare:", evData.value[index-1].ordinareValue = index )
   }
 
   function updatePostData() {
@@ -472,6 +504,8 @@ import { toInteger } from 'lodash';
         counterDebug.value++
         postEvStationData.value.payload['S' + (((optionValue.value - 1) * 1000) + (evStationIndex2+(dataStore.evConfig['S' + (evIndex+2)]-1)))] = String(groupedTableData.value[(dataStore.evConfig['S' + (evIndex+2)])][0].ordinareValue + ',' + groupedTableData.value[(dataStore.evConfig['S' + (evIndex+2)])][0].ordinare)
         postEvStationData.value.payload['S' + (((optionValue.value - 1) * 1000) + (evStationIndex1+(dataStore.evConfig['S' + (evIndex+2)]-1)))] = String(groupedTableData.value[(dataStore.evConfig['S' + (evIndex+2)])][0].min + '.' + groupedTableData.value[(dataStore.evConfig['S' + (evIndex+2)])][0].sec)
+        postEvStationData.value.payload['S' + (((optionValue.value - 1) * 1000) + (groupIndex+(dataStore.evConfig['S' + (groupIndex+2)]-1)))] = String(evData.value[i].grpName) //MV assegno il valore del gruppo. 
+
       i++  
       }
       } else {
@@ -491,7 +525,7 @@ import { toInteger } from 'lodash';
     dataStore.postControl(evConfigParams.value.device_code,postEvStationData.value)
   }
 
-  const tableHeader = ['Ordine Partenza', 'Stazione', 'Nome', 'Stazione ON/OFF', 'Ore', 'Minuti']
+  const tableHeader = ['Step Programma', 'Stazione selezionata', 'Nome', 'Stazione ON/OFF', 'Ore', 'Minuti']
 
 </script>
 

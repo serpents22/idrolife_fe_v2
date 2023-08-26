@@ -46,8 +46,8 @@
   const devicesStore = useDevicesStore()
   const { status } = storeToRefs(useDevicesStore())
   const { supAdmindevices } = storeToRefs(useDeviceManagement())
-  const cancelLabel = ref('CANCELLA')
-  const eliminaLabel = ref('ELIMINA')
+  const cancelLabel = ref('CANCEL')
+  const eliminaLabel = ref('DELETE')
   const buttonClick = ref(0)
   const selectedDevice = ref('')
   const disable = ref(true)
@@ -77,7 +77,7 @@
       } else {
         setTimeout(closeNotification, 3000)
       }
-      eliminaLabel.value = 'ELIMINA'
+      eliminaLabel.value = 'DELETE'
       buttonClick.value = 0
       devicesStore.loadDevices()
     }
@@ -92,9 +92,7 @@
   const target = ref(null)
 
   onClickOutside(target, () => {
-    if (props.isOpen) {
-      emits('close')
-    }
+    emits('close')
   })
 
 //     

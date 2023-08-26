@@ -4,6 +4,7 @@ module.exports = {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
+  important: true,
   theme: {
     extend: {
       colors: {
@@ -12,6 +13,10 @@ module.exports = {
         
       }
     },
+    fontFamily: {
+      'poppins': ['Poppins', 'Sans-serif']
+    },
   },
+
   plugins: [],
 }

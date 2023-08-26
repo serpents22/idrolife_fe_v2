@@ -6,21 +6,38 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData" 
-      :id="props.id"/>
-    <img class="w-40" src="@/assets/ferrigation.png">
+      :content="newData" />
+    <div class="xs-icon-card">
+      <img src="@/assets/ferrigation.png">
+      <p>{{ $t('fertigation') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
-      <div class="sensor" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
-        <router-link :to="{name: 'FerrigationConfiguration'}"><img src="@/assets/configurazione_fertirrigazione.png"></router-link>
+      <div class="sm-icon-card" v-if="devicesStore.deviceData.role !== 'user'" >
+        <router-link :to="{ name: 'FerrigationConfiguration' }" >
+          <img src="@/assets/configurazione_fertirrigazione.png">
+        </router-link>
+        <p>{{ $t('fertigationConfig') }}</p>
       </div>
-      <div class="irrigation" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
-        <router-link :to="{name: 'FerrigationProgram'}"><img src="@/assets/programma_fertirrigaz.png"></router-link>
+      <div class="sm-icon-card opacity-40" v-else>
+        <img src="@/assets/configurazione_fertirrigazione.png">
+        <p>{{ $t('fertigationConfig') }}</p>
       </div>
-      <div class="ferrigation">
+      <div class="sm-icon-card" v-if="devicesStore.deviceData.role !== 'user'" >
+        <router-link :to="{ name: 'FerrigationProgram' }" >
+          <img src="@/assets/programma_fertirrigaz.png">
+        </router-link>
+        <p>{{ $t('fertigationProgram') }}</p>
+      </div>
+      <div class="sm-icon-card opacity-40" v-else>
+        <img src="@/assets/programma_fertirrigaz.png">
+        <p>{{ $t('fertigationProgram') }}</p>
+      </div>
+      <div class="sm-icon-card">
         <router-link :to="{name: 'FerrigationStatus'}"><img src="@/assets/stato_fertirrigazione.png"></router-link>
+        <p>{{ $t('fertigationStatus') }}</p>
       </div>
     </div>
   </div>
@@ -61,22 +78,11 @@
   }
   
   .device-container {
-    @apply 
-      flex flex-col fixed items-center gap-2
-      bottom-0 left-4
-      pb-4 sm:pb-8
-  }
-  
-  .device-container img {
-    @apply 
-      w-[40px] h-[40px] 
-      sm:w-[60px] sm:h-[60px]
-      md:w-[70px] md:h-[70px]
-      lg:w-[80px] lg:h-[80px]
-      xl:w-[100px] xl:h-[100px]
-      2xl:w-[130px] 2xl:h-[130px]
-      transition-all ease-in-out duration-300
-  }
+  @apply 
+    flex sm:flex-col fixed items-end sm:items-center gap-2
+    bottom-0 left-4
+    pb-4 sm:pb-8
+}
   
   .content {
     @apply 
@@ -90,17 +96,7 @@
       transition-all ease-in-out duration-300
   
   }    
-  
-  .content img {
-    @apply 
-      w-[80px] h-[80px]
-      sm:w-[100px] sm:h-[100px]
-      md:w-[120px] md:h-[120px]
-      lg:w-[140px] lg:h-[140px]
-      xl:w-[180px] xl:h-[180px]
-      2xl:w-[200px] 2xl:h-[200px]
-      transition-all ease-in-out duration-300
-  }
+   
   
   span h1 {
     @apply sm:text-3xl text-xl text-[#353535] font-medium

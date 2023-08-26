@@ -6,32 +6,39 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
-    <img class="w-40" src="@/assets/report.png">
+      :content="newData" />
+    <div class="xs-icon-card">
+      <img src="@/assets/report.png">
+      <p>{{ $t('report') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
       <div class="flex flex-col gap-12">
-        <div id="report_allarmi">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'ReportAlarm'}"><img src="@/assets/report_allarmi.png"></router-link>
+        <p>{{ $t('alarms') }}</p>
         </div>
-        <div id="report_eventi_programmi">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'ReportEventi'}"><img src="@/assets/report_eventi_programmi.png"></router-link>
+        <p>{{ $t('programEventReports') }}</p>
         </div>
       </div>
       <div class="flex flex-col gap-12">
-        <div id="report_rilevazioni">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'ReportRilevazioni'}"><img src="@/assets/report_rilevazioni.png"></router-link>
+        <p>{{ $t('eventReports') }}</p>
         </div>
       </div>
       <div class="flex flex-col gap-12">
-        <div id="report_eventi_sensori_umidita">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'ReportUmidita'}"><img src="@/assets/report_eventi_sensori_umidita.png"></router-link>
+        <p>{{ $t('soilMoistureReports') }}</p>
         </div>
-        <div id="report_planning">
-          <router-link :to="{name: 'ReportView'}"><img src="@/assets/report_planning.png"></router-link>
+        <div class="sm-icon-card">
+          <router-link :to="{name: 'Planning'}"><img src="@/assets/report_planning.png"></router-link>
+        <p>{{ $t('planning') }}</p>
         </div>
       </div>
     </div>
@@ -76,22 +83,12 @@
 
 .device-container {
   @apply 
-    flex flex-col fixed items-center gap-2
+    flex sm:flex-col fixed items-end sm:items-center gap-2
     bottom-0 left-4
     pb-4 sm:pb-8
 }
 
-
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
+ 
 
 .content {
   @apply 
@@ -111,17 +108,6 @@
     md:gap-[20px]
     lg:gap-[40px]
     xl:gap-[80px]
-    transition-all ease-in-out duration-300
-}
-
-.content img {
-  @apply
-    relative
-    w-[80px] h-[80px]
-    md:w-[120px] md:h-[120px]
-    lg:w-[140px] lg:h-[140px]
-    xl:w-[180px] xl:h-[180px]
-    2xl:w-[200px] 2xl:h-[200px]
     transition-all ease-in-out duration-300
 }
 

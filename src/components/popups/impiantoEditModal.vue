@@ -19,14 +19,15 @@
         <div class="flex flex-col gap-4">
           <div class="w-[300px]">
             <Field name="deviceId" as="select" class="dropdown">
-              <option :value=device.id v-for="device in devicesList" :key="device.id">{{device.code}}</option>
+              <option disabled value="">Please select one</option>
+              <option :value=device.id v-for="device in supAdmindevices" :key="device.id">{{device.name}}</option>
             </Field>
           </div>
           <div class="w-[300px]">
             <iveText placeholder="Nome" name="name" type="text" class="text-field"/>
           </div>
           <div class="w-[300px]">
-            <iveButton type="submit" class="filled" label="Salva"/>
+            <iveButton type="submit" class="filled" label="SAVE"/>
           </div>
         </div>
       </form>
@@ -40,6 +41,7 @@ import iveText from '@/components/input/inputBase.vue'
 import iveButton from '@/components/button/BaseButton.vue'
 import { Form as VeeForm, Field, ErrorMessage } from 'vee-validate'
 import { updateDeviceSchema } from '@/composable/devicesSchema'
+import { useDeviceManagement } from '@/stores/DeviceManagementStore'
 import { useDevicesStore } from '@/stores/DevicesStore'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
@@ -62,6 +64,7 @@ export default {
 
     const devicesStore = useDevicesStore()
     const { devicesList, status, createDeviceIsLoading } = storeToRefs(useDevicesStore())
+    const { supAdmindevices } = storeToRefs(useDeviceManagement())
 
     const delay = (time) => new Promise((resolve) => setTimeout(resolve, time))
 
@@ -95,7 +98,7 @@ export default {
 
 
     return {
-      close, onSubmit, schema, status, isError, modalActive, devicesList, createDeviceIsLoading
+      close, onSubmit, schema, status, isError, modalActive, devicesList, createDeviceIsLoading, supAdmindevices
     }
   } 
 

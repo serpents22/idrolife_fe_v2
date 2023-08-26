@@ -60,7 +60,7 @@
           <input
             class="w-32" 
             type="text"
-            value="Nome Stazione"
+            placeholder="Nome Stazione"
             enabled>
         </td>
         <td>

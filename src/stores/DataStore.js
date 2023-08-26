@@ -3,6 +3,7 @@ import dataAPI from '@/services/dataAPI'
 import { ref } from 'vue'
 
 export const useDataStore = defineStore('data', () => {
+  const alarmState = ref(false)
   const fertConfig = ref([])
   const fertConfigIsLoading = ref(false)
   const pumpConfig = ref([])
@@ -39,6 +40,10 @@ export const useDataStore = defineStore('data', () => {
   const evConfigIsLoading = ref(false)
   const evStationIsLoading = ref(false)
   const postControlIsLoading = ref(false)
+  //MV aggiunta gruppi
+  const groupData = ref([])
+  const groupDataIsLoading = ref(false)
+  const groupDataLength = ref()
   const status = ref({
     message: null,
     code: null,
@@ -74,6 +79,17 @@ export const useDataStore = defineStore('data', () => {
     satStatIsLoading.value = true
     try {
       const res = await dataAPI.getLast(params)
+      if (res.data.data.hasOwnProperty('S15')) {
+        console.log(res.data.data.S15)
+        if (res.data.data.S15 != 0) {
+          alarmState.value = true
+        } else {
+          alarmState.value = false
+        }
+      } else {
+        alarmState.value = false
+      }
+      console.log(alarmState.value)
       satStat.value = res.data.data
       satStatIsLoading.value = false
   } catch (err) {
@@ -242,10 +258,25 @@ export const useDataStore = defineStore('data', () => {
       return err
     } 
   }
-
+  
+  //MV aggiungo il caricamento e la scritura dei gruppi
+  const getLastGroupData = async (params) => {
+    groupDataIsLoading.value = true
+    try {
+      const res = await dataAPI.getLast(params)
+      groupData.value = res.data.data
+      groupDataLength.value = res.data.data === undefined ? 0 : Object.keys(res.data.data).length - 6
+      groupDataIsLoading.value = false
+  } catch (err) {
+      console.error(err)
+      groupDataIsLoading.value = false
+      return err
+    } 
+  }
 
 
   return {
+    alarmState,
     meteoStat, satStat, isLoading, getLastMeteoStat, getLastSatStat, status, getLastGropointStat, gropointStat,
     satStatIsLoading,
     getLastEvConfig, evConfig, evConfigIsLoading, evConfigLength, 
@@ -257,6 +288,6 @@ export const useDataStore = defineStore('data', () => {
     satStarts, satStartsIsLoading, getLastSatStarts, satStartsLength,
     pumpConfig, pumpConfigIsLoading, getLastPumpConfig, pumpConfigLength,
     mvConfig, mvConfigIsLoading, getLastMvConfig, mvConfigLength,gropointStatIsLoading, gropointStatLength,
-    historicalData, historicalDataIsLoading, historicalDataLength, getHistoricalData
+    historicalData, historicalDataIsLoading, historicalDataLength, getHistoricalData, getLastGroupData, groupData, groupDataIsLoading
   }
 })

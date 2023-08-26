@@ -7,9 +7,11 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
-    <img class="w-40" src="@/assets/report_eventi_programmi.png">
+      :content="newData" />
+    <div class="xs-icon-card">
+      <img src="@/assets/report_eventi_programmi.png">
+      <p>{{ $t('programEventReports') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
@@ -137,7 +139,7 @@
         </template>
       </EasyDataTable>
       <download-csv
-        :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}"
+      :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}"
       	class   = "btn btn-default mt-6 justify-end flex"
       	:data   = "formatedhistoricalEventi"
       	:name    = "fileName">
@@ -438,17 +440,7 @@ import { toInteger } from 'lodash'
     pb-4 sm:pb-8
 }
 
-
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
+ 
 
 .content {
   @apply 

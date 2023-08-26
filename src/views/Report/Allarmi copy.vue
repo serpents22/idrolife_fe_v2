@@ -6,8 +6,7 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
+      :content="newData" />
     <img class="w-40" src="@/assets/report_allarmi.png">
   </div>
   <div class="dashboard-container">
@@ -160,21 +159,11 @@
 
 .device-container {
   @apply 
-    flex flex-col fixed items-center gap-2
+    flex sm:flex-col fixed items-end sm:items-center gap-2
     bottom-0 left-4
     pb-4 sm:pb-8
 }
-
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
+ 
 
 .content {
   @apply 

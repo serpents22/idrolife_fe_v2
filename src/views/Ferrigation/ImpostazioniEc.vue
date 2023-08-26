@@ -9,9 +9,11 @@
       <deviceCard 
         :small=true
         :content="newData" 
-        :id="props.id"
         />
+    <div class="xs-icon-card">
       <img src="@/assets/EC_fertirrigazione.png">
+      <p>{{ $t('fertigationEC') }}</p>
+    </div>
     </div>
     <div class="content">
       <IdroTitle :title="title"/>
@@ -102,11 +104,11 @@
                   <span class="flex flex-col pl-4">
                     <span class="flex gap-2">
                       <input id="phacido" :disabled="fertData.F01 === undefined" type="radio" v-model="fertData.F01" value="0" name="F01">
-                      <label for="phacido">Ph acido</label>
+                      <label for="phacido">Ph basico</label>
                     </span>
                     <span class="flex gap-2">
                       <input id="phbasico" :disabled="fertData.F01 === undefined" type="radio" v-model="fertData.F01" value="1" name="F01">
-                      <label for="phbasico">Ph basico</label>
+                      <label for="phbasico">Ph acido</label> <!-- MV invertito 05.04.2023 richiesto da Giuseppe-->
                     </span>
                   </span>
                 </td>
@@ -240,17 +242,6 @@
       flex sm:flex-col fixed items-end sm:items-center gap-2
       bottom-0 left-4
       pb-4 sm:pb-8
-  }
-  
-  .device-container img {
-    @apply 
-      w-[40px] h-[40px] 
-      sm:w-[60px] sm:h-[60px]
-      md:w-[70px] md:h-[70px]
-      lg:w-[80px] lg:h-[80px]
-      xl:w-[100px] xl:h-[100px]
-      2xl:w-[130px] 2xl:h-[130px]
-      transition-all ease-in-out duration-300
   }
   
   .content {

@@ -6,12 +6,12 @@
   <ShareDevice
     :isOpen="isShowAddRole"
     @close="toggleAddRole" 
-    title="Aggiungi Ruolo"
+    :title="$t('addRule')"
   />
   <ManageShare
     :isOpen="isShowManageRole"
     @close="toggleManageRole" 
-    title="Gestisci Ruolo" 
+    :title="$t('manageRule')" 
   />
     
   <sidebar
@@ -22,10 +22,10 @@
     <IdroTitle :title="title" />
     <div class="manage-account-container">
       <div class="addrole" @click="toggleAddRole">
-        <span>Aggiungi Ruolo</span>
+        <span>{{$t('addRule')}}</span>
       </div>
       <div class="managerole" @click="toggleManageRole">
-        <span>Gestisci Ruolo</span>
+        <span>{{$t('manageRule')}}</span>
       </div>
     </div>
   </div>

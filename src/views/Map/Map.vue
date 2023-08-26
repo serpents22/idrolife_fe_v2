@@ -13,19 +13,22 @@
       :small=true
       :content="newData"
       :id="props.id" />
-    <img class="w-40" src="@/assets/map.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/map.png">
+      <p>{{ $t('map') }}</p>
+    </div>
   </div>
   <div class="content">
     <IdroTitle :title="title"/>
     <div class="main">
-      <div id="mapid"></div>
+      <div id="mapid" :class="{'hide-map' : isExpand}"></div>
       <div class="button-wrapper">
         <IveButton type="button" class="filled__blue mt-6" label="Add new dispenser" @click="toggleMenu"/>
       </div>
     </div>
   </div>
 </div>
-<sideBarVue :isExpand="isExpand" :evList="evList" :deviceData="devicesStore.deviceData" :formData="devicesStore.deviceGeo" />
+<sideBarVue :isExpand="isExpand" :evList="evList" :deviceData="devicesStore.deviceData" :formData="devicesStore.deviceGeo" @close="toggleMenu"/>
 </template>
 
 <script setup>
@@ -244,17 +247,7 @@ import sideBarVue from '@/components/navigation/sideBar.vue'
     flex sm:flex-col fixed items-end sm:items-center gap-2
     bottom-0 left-4
     pb-4 sm:pb-8
-}
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
+} 
 
 .content {
   @apply 
@@ -272,6 +265,10 @@ input[type=text], input[type=password], input[type=number] {
 
 .button-wrapper {
   @apply mt-2 flex
+}
+
+.hide-map {
+  @apply invisible sm:visible
 }
 
 </style>

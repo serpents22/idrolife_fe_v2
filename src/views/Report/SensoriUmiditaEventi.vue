@@ -7,9 +7,11 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
-    <img class="w-40" src="@/assets/report_eventi_sensori_umidita.png">
+      :content="newData" />
+    <div class="xs-icon-card">
+      <img src="@/assets/report_eventi_sensori_umidita.png">
+      <p>{{ $t('soilMoistureReports') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
@@ -63,6 +65,7 @@
             <IveButton label="Export CSV" />
         </div>
       </download-csv>
+      <div id="chart" class="mt-20"></div>
       </div>
     </div>
   </div>
@@ -77,6 +80,7 @@ import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-
 import SearchField from '@/components/input/searchField.vue'
 import DatePicker from '@/components/input/datePicker.vue'
 import IveButton from '@/components/input/iveButton.vue'
+import ApexCharts from "apexcharts";
 import { toInteger } from 'lodash'
 // import { Header, Item } from "vue3-easy-data-table";
 
@@ -84,7 +88,27 @@ import { toInteger } from 'lodash'
   const props = defineProps({
     id: String
   })
-
+  var options = {
+    chart: {
+      type: 'line',
+      zoom: {
+        enabled: true
+      }
+    },
+    // series: [
+    //     {
+    //       name: 'Series 1',
+    //       data: [
+    //       [1691028000000, 0],[1691031600000, 0],[1691035200000, 0],[1691038800000, 0]
+    //       ],
+    //     },],
+    series: [],
+    xaxis: {
+      type: 'datetime',
+      // categories: [],
+      tickPlacement: 'on'
+    }
+  }
   
   //asynchronus component
   const deviceCard = defineAsyncComponent(
@@ -155,6 +179,7 @@ import { toInteger } from 'lodash'
     console.log(dataStore.historicalData)
     formatedhistoricalEventi.value = []
     let tmphistoricalEventi
+    let chartData = []
 
     if (dataStore.historicalData !== undefined) {
       dataStore.historicalData.map((data) => {
@@ -167,10 +192,38 @@ import { toInteger } from 'lodash'
           rh3: String(tmphistoricalEventi[4] + ' %'),
           rh4: String(tmphistoricalEventi[5] + ' %')
         }
+        let newObj2 = {
+          date: toInteger(tmphistoricalEventi[0])*1000,
+          numeroSensori: toInteger(tmphistoricalEventi[1]),
+          rh1: toInteger(tmphistoricalEventi[2]),
+          rh2: toInteger(tmphistoricalEventi[3]),
+          rh3: toInteger(tmphistoricalEventi[4]),
+          rh4: toInteger(tmphistoricalEventi[5])
+        }
+        chartData.push(newObj2)
         formatedhistoricalEventi.value.push(newObj)
       })
+      options.series = []
+      options.series.push({
+        name: 'RH1',
+        data: chartData.map(obj => [obj.date,obj.rh1])
+      })
+      options.series.push({
+        name: 'RH2',
+        data: chartData.map(obj => [obj.date,obj.rh2])
+      })
+      options.series.push({
+        name: 'RH3',
+        data: chartData.map(obj => [obj.date,obj.rh3])
+      })
+      options.series.push({
+        name: 'RH4',
+        data: chartData.map(obj => [obj.date,obj.rh4])
+      })
     }
-    console.log(formatedhistoricalEventi.value)
+    chart.updateSeries(options.series)
+    console.log('table-data', formatedhistoricalEventi.value)
+    console.log('chart-data', options.series)
   }
 
   //table headers
@@ -195,12 +248,14 @@ import { toInteger } from 'lodash'
     getHistoryData()
   }
 
-
+  let chart
   onMounted( async () => {
     await devicesStore.loadDevice(props.id)
     title.value = 'Idrosat:' + devicesStore.deviceData.name
     historicalEventiParams.value.device_code = devicesStore.deviceData.code
     dateFiltering()
+    chart = new ApexCharts(document.querySelector("#chart"), options)
+    chart.render()
   })
 
   const newData = computed(() => {
@@ -228,17 +283,7 @@ import { toInteger } from 'lodash'
     pb-4 sm:pb-8
 }
 
-
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
+ 
 
 .content {
   @apply 

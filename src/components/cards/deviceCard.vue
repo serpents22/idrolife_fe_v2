@@ -8,15 +8,25 @@
           <span class="title">
             {{ impianto.name }} 
           </span>
-              <img class="images" src="@/assets/device.png" id="logo">
+          <div class="grid grid-cols-3 justify-end items-end w-full">
+            <img class="opacity-0 w-2" src="@/assets/device.png" id="logo">
+            <img class="images" src="@/assets/device.png" id="logo">
+            <div class="w-full flex justify-end">
+              <img :class="{'opacity-0' : !impianto.alarm}" class="warning-icon" src="@/assets//icon/warning-icon.png" id="logo">
+            </div>
+          </div>
           <div class="flex flex-col">
+            <span class="flex flex-row justify-between mb-1">
+              <h2>Stato</h2>
+              <Indicator :status="impianto.stato" />
+            </span>
             <span class="flex flex-row justify-between">
               <h2>ID</h2>
               <p>{{ impianto.code }}</p>
             </span>
-            <span v-if="content.length === 1" class="flex flex-row justify-between">
-              <h2>Stato</h2>
-              <Indicator :status="stato" />
+            <span class="flex flex-row justify-between">
+              <h2>Last Heard</h2>
+              <p>{{ impianto.device_time }}</p>
             </span>
             <span class="flex flex-row justify-between">
               <h2>MAC Address</h2>
@@ -47,9 +57,8 @@
 <script>
 import { useDevicesStore } from '@/stores/DevicesStore'
 import Indicator from '@/components/Indicator.vue'
-import { storeToRefs } from 'pinia'
 import { useDataStore } from '@/stores/DataStore'
-import { onMounted, computed, ref } from '@vue/runtime-core'
+import { ref } from '@vue/runtime-core'
 
 export default {
   components: {
@@ -67,26 +76,33 @@ export default {
   ],
 
   async mounted() {
-    // console.log(this.content)
-    await this.devicesStore.loadDevice(this.id)
-    console.log(this.devicesStore.deviceData)
-    this.satStatParams.device_code = this.devicesStore.deviceData.code
-    await this.dataStore.getLastSatStat(this.satStatParams)
     this.dataInterval = setInterval(async () => {
-      this.S8 = this.dataStore.satStat.S8
-      await this.dataStore.getLastSatStat(this.satStatParams)
-      if (this.S8 === this.dataStore.satStat.S8) {
-        this.stato = false
-      } else {
-        this.stato = true
-      }
-    }, 5000)
+      this.content.forEach(async (device, index) => {
+        this.satStatParams.device_code = device.code
+        await this.dataStore.getLastSatStat(this.satStatParams)
+        if (this.dataStore.satStat !== undefined) {
+          let timeNow = new Date(Date.now())
+          this.S8 = new Date((this.dataStore.satStat.S8- 2 * 60 * 60) * 1000)
+          let differsTime = Math.floor((timeNow - this.S8) / (1000 * 60))
+          this.content[index].device_time = new Date(this.dataStore.satStat.S8 * 1000).toLocaleString()
+          if (differsTime > 2) {
+            this.content[index].stato = false
+          } else {
+            this.content[index].stato = true
+          }
+          if (this.dataStore.satStat.S15 != 0) {
+            this.content[index].alarm = true
+          } else {
+            this.content[index].alarm = false
+          }
+        } else {
+          this.content[index].alarm = false
+          this.content[index].stato = false
+        }
+      })
+    }, 3000)
   },
 
-  // getLastData(){
-  //   this.dataStore.getLastSatStat(this.satStatParams)
-  //   console.log(this.S8, this.dataStore.S8)
-  // },
 
   unmounted() {
     clearInterval(this.dataInterval)
@@ -96,7 +112,7 @@ export default {
     const devicesStore = useDevicesStore()
     const dataStore = useDataStore()
     const satStatParams = ref({
-      fields: 'S8',
+      fields: 'S8,S15',
       measurement: 'SATSTAT',
       device_code: null
     })
@@ -108,7 +124,7 @@ export default {
       dataStore,
       satStatParams,
       dataInterval,
-      S8
+      S8,
     }
   }
 }
@@ -131,6 +147,7 @@ export default {
   @apply 
     flex flex-wrap justify-center gap-8 mx-auto 
     w-[240px] sm:w-[480px] md:w-[900px]
+    h-fit
     items-center
     transition-transform duration-200 ease-in-out transform
 }
@@ -138,9 +155,15 @@ export default {
 .medium {
   @apply 
     gap-2 md:gap-4
-    py-2 px-6 lg:px-8
-    w-48 h-60 sm:w-64 sm:h-72 md:w-[300px] md:h-[310px] lg:w-[360px] lg:h-[390px] xl:w-[420px] xl:h-[440px]
-    rounded-[40px] md:rounded-[50px] lg:rounded-[60px]
+    py-4 px-6 lg:px-8
+    w-48 
+    sm:w-64 
+    md:w-[300px] 
+    lg:w-[360px] 
+    xl:w-[420px] 
+    rounded-[40px] 
+    md:rounded-[50px] 
+    lg:rounded-[60px]
     transition-transform duration-200 ease-in-out transform
 }
 .small {
@@ -164,6 +187,12 @@ export default {
 .small .images {
   @apply
     h-[34px] sm:h-[36px] md:h-[40px] lg:h-[60px] xl:h-[100px] 2xl:h-[120px]
+    object-contain
+    transition-transform duration-200 ease-in-out transform
+}
+.small .warning-icon {
+  @apply
+    h-[20px] sm:h-[24px] md:h-[30px] lg:h-[40px] xl:h-[50px] 2xl:h-[60px]
     object-contain
     transition-transform duration-200 ease-in-out transform
 }
@@ -193,7 +222,11 @@ export default {
     object-contain
     transition-transform duration-200 ease-in-out transform
 }
-
+.medium .warning-icon {
+  @apply
+    h-[20px] sm:h-[24px] md:h-[30px] lg:h-[40px] xl:h-[50px] 2xl:h-[60px]
+    transition-transform duration-200 ease-in-out transform
+}
 .medium .title {
   @apply 
     text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl

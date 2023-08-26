@@ -1,35 +1,60 @@
 <template>
+  <DeviceAlarm
+    :isOpen="isShowAlarmModal" 
+    @close="deviceAlarmToggle"
+    :id="device_code"
+    title="Alarm List" 
+  />
   <loading :loading="isLoading" />
   <sidebar 
     :backOn="true" 
     :noSocial="true" 
+    :isAlarm="alarmState"
+    @alarmList="deviceAlarmToggle"
     />
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
+      :content="newData" />
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title" />
     <div class="content">
-      <div class="sensor">
+      <div class="md-icon-card">
         <router-link :to="{name: 'SensorView'}"><img src="@/assets/sensor.png"></router-link>
+        <p>{{ $t('sensor') }}</p>
       </div>
-      <div class="irrigation">
+      <div class="md-icon-card">
         <router-link :to="{name: 'IrrigationView'}"><img src="@/assets/irrigation.png"></router-link>
+        <p>{{ $t('irrigation') }}</p>
       </div>
-      <div class="ferrigation">
+      <div class="md-icon-card">
         <router-link :to="{name: 'FerrigationView'}"><img src="@/assets/ferrigation.png"></router-link>
+        <p>{{ $t('fertigation') }}</p>
       </div>
-      <div class="webcam" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
-        <router-link :to="{name: 'Webcam'}"><img src="@/assets/webcam.png"></router-link>
+      <div class="md-icon-card" v-if="devicesStore.deviceData.role !== 'user'" >
+        <router-link :to="{ name: 'Webcam' }" >
+          <img src="@/assets/webcam.png">
+        </router-link>
+        <p>{{ $t('webcam') }}</p>
       </div>
-      <div class="map" :class="{'restrictedAccess': devicesStore.deviceData.role == 'user'}">
-        <router-link :to="{name: 'MapView'}"><img src="@/assets/map.png"></router-link>
+      <div class="md-icon-card opacity-40" v-else>
+        <img src="@/assets/webcam.png">
+        <p>{{ $t('webcam') }}</p>
       </div>
-      <div class="report" >
+      <div class="md-icon-card" v-if="devicesStore.deviceData.role !== 'user'" >
+        <router-link  :to="{ name: 'MapView' }" >
+          <img src="@/assets/map.png">
+        </router-link>
+        <p>{{ $t('map') }}</p>
+     </div>
+      <div class="md-icon-card opacity-40" v-else>
+        <img src="@/assets/map.png" >
+        <p>{{ $t('map') }}</p>
+      </div>
+      <div class="md-icon-card">
         <router-link :to="{name: 'ReportView'}"><img src="@/assets/report.png"></router-link>
+        <p>{{ $t('report') }}</p>
       </div>
     </div>
   </div>
@@ -38,8 +63,10 @@
 <script setup>
   import { useDevicesStore } from '@/stores/DevicesStore'
   import { storeToRefs } from 'pinia'
-  import { defineAsyncComponent,  computed,  onBeforeMount,  ref } from '@vue/runtime-core'
-  
+  import { defineAsyncComponent,  computed,  onBeforeMount, onUnmounted,  ref } from '@vue/runtime-core'
+  import { useAlarmStore } from '@/stores/alarm/AlarmStore'
+  import { useDataStore } from '@/stores/DataStore'
+
   //props
   const props = defineProps({
     id: String
@@ -49,20 +76,40 @@
   const deviceCard = defineAsyncComponent(
     () => import('@/components/cards/deviceCard.vue'),
   )
+
+  const DeviceAlarm = defineAsyncComponent(
+    () => import('@/components/modal/devices/DeviceAlarm.vue'),
+  )
   //state
   const devicesStore = useDevicesStore()
+  const alarmStore = useAlarmStore()
+  const dataStore = useDataStore()
+  const { alarmState } = storeToRefs(useDataStore())
   const { isLoading } = storeToRefs(useDevicesStore())
   const newData = computed(() => {
       return [devicesStore.deviceData]
     })
-  console.log(devicesStore.deviceData.role)
+  
   const title = ref()
-
+  const device_code = ref()
+  let satStatParams = {
+      fields: 'S15',
+      measurement: 'SATSTAT',
+      device_code: null
+    }
   onBeforeMount( async () => {
     await devicesStore.loadDevice(props.id)
+    satStatParams.device_code = devicesStore.deviceData.code
     title.value = 'Idrosat:' + devicesStore.deviceData.name
+    device_code.value = devicesStore.deviceData.code
   })
 
+  const isShowAlarmModal = ref(false)
+
+  async function deviceAlarmToggle() {
+    await alarmStore.getAlarmList(device_code.value)
+    isShowAlarmModal.value = !isShowAlarmModal.value
+  }
 
 </script>
 
@@ -73,7 +120,7 @@
 
 .device-container {
   @apply 
-    flex flex-col fixed items-center gap-2
+    flex sm:flex-col fixed items-end sm:items-center gap-2
     bottom-0 left-4
     pb-4 sm:pb-8
 }
@@ -89,30 +136,8 @@
 
 }
 
-span h1 {
-  @apply sm:text-3xl text-xl text-[#353535] font-medium
-}
 
-span h2 {
-  @apply text-xs font-light
-}
 
-span p {
-  @apply text-base font-normal
-}
-
-.content div {
-  @apply p-2 rounded   
-  w-28 h-28
-  sm:w-36 sm:h-36 
-  md:w-44 md:h-44 
-  lg:w-48 lg:h-48
-  transition-all ease-in-out duration-300
-}
-.content div:hover {
-  box-shadow: 0px 0px 8px 6px rgba(255, 255, 255, 0.48);
-  @apply transition-all ease-in-out duration-300 rounded-3xl
-}
 /* .content img {
   @apply 
   w-24 h-24
@@ -121,5 +146,4 @@ span p {
   lg:w-60 lg:h-60
   transition-all ease-in-out delay-150
 } */
-
 </style>

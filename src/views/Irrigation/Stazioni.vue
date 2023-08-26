@@ -7,12 +7,15 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="props.id" />
-    <img class="w-40" src="@/assets/programma_stazioni.png">
+      :content="newData" />
+    <div class="xs-icon-card">
+      <img src="@/assets/programma_stazioni.png">
+      <p>{{ $t('stationManagement') }}</p>
+    </div>
   </div>
   <div class="content">
     <IdroTitle :title="title"/>
+    <h2 class="title">Gestione Stazioni</h2>
     <div class="main">
       <Accordion
         :id="props.id"
@@ -21,17 +24,6 @@
         :solenoidList="solenoidList"
         :pumpList="pumpList"
         :masterList="mvList"  />
-        <!-- <template #title>
-          <div class="text-xl font-semibold">
-            <span>Station N:{{tData.stazione}}</span>
-          </div>
-        </template>
-        <template #subtitle>
-          <div class="flex w-full justify-between bg-[#DDE8FA]/60 backdrop-blur-lg py-2 px-4">
-            <span class="text-sm font-semibold">EV No: {{tData.id+1}} EV Serial : {{tData.ev}}(Master No:{{tData.masterv}} - Pompa No:{{tData.pompa}})</span>
-          </div>
-        </template>
-      </Accordion> -->
     </div>
   </div>
 </div>
@@ -44,6 +36,7 @@ import { useDevicesStore } from '@/stores/DevicesStore'
 import { useDataStore } from '@/stores/DataStore';
 import { storeToRefs } from 'pinia'
 import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-core'
+
 
   //props
   const props = defineProps({
@@ -80,6 +73,14 @@ import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-
     device_code: null
   })  
 
+  //MV legge la configurazione dei gruppi registri da 6000 a 6095
+  const grConfFields = [...Array(1152)].map( (_, index) => `S${6000 + index}` ).join(',');
+  const grConfigParams = ref({
+    fields: grConfFields,
+    measurement: 'GROUPCONFIG',
+    device_code: null
+  })
+  
   const tableData = ref([])
   const deviceCode = ref()
   const groupedTableData = ref([]) 
@@ -95,16 +96,21 @@ import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-
     let evIndex = 2000    
     let mvIndex = 1600
     let pumpIndex = 1500
+    //let groupIndex = 6000
     let i = 0
     for (let iFor = 0; iFor < dataStore.evConfigLength / 5; iFor++) {
       if (dataStore.evConfig.hasOwnProperty('S' + evIndex)) {
         if (dataStore.evConfig['S' + evIndex] !== "FFFFFF") {
+          var groupIndex=Number(dataStore.evConfig['S' + (evIndex + 2)]);
+          if(groupIndex==0) groupIndex=1;
+          var groupRegister= groupIndex + 6000 -1;
           let mainDataObj = {
             id: String(i+1),
             ev: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + evIndex], 
             stazione: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (evIndex+2)], 
             pompa: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (evIndex+3)], 
-            masterv: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (evIndex+4)], 
+            masterv: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (evIndex+4)],
+            group: dataStore.groupData === undefined ? 'errore gruppo' : dataStore.groupData["S"+groupRegister]
           }
           tableData.value.push(mainDataObj)
           let solenoidOption = {
@@ -118,6 +124,7 @@ import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-
         //i--
       }
       evIndex += 6
+      groupIndex +=1
     }
     
     i=0
@@ -160,20 +167,7 @@ import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-
       r[a.stazione] = [...r[a.stazione] || [], a];
     return r;
     }, {});
-
-      // for (let i = 0; i < tableData.value.length; i++) {
-      //   let stazione = tableData.value[i].stazione
-      //   let ev = tableData.value[i].ev
-      //   let pompa = tableData.value[i].pompa
-      //   let masterv = tableData.value[i].masterv
-      //   let id = tableData.value[i].id
-
-      //   groupedTableData.value[i] = []
-      //   groupedTableData.value[stazione-1][groupedTableData.value[stazione-1].length] = {stazione: stazione, evNumber : id+1, ev: ev, pump: pompa, mv: masterv}
-      // }
   }
-
-
 
   onMounted( async () => {
     await devicesStore.loadDevice(props.id)
@@ -181,28 +175,15 @@ import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-
     evConfigParams.value.device_code = devicesStore.deviceData.code
     pumpConfigParams.value.device_code = devicesStore.deviceData.code
     mvConfigParams.value.device_code = devicesStore.deviceData.code
+    grConfigParams.value.device_code = devicesStore.deviceData.code //MV carico i valori dei gruppi 
     title.value = 'Idrosat:' + devicesStore.deviceData.name
     await dataStore.getLastEvConfig(evConfigParams.value)    
     await dataStore.getLastPumpConfig(pumpConfigParams.value)
     await dataStore.getLastMvConfig(mvConfigParams.value)
+    await dataStore.getLastGroupData(grConfigParams.value) //MV popolo le configurazioni dei gruppi
     fillTableData()
     groupingTableData()
-
-    console.log(tableData.value)
-    console.log(groupedTableData.value)
-
-    // const newData = tableData.value.map((data) => {
-    //   return {
-    //     group: data.stazione,
-    //     data: data.ev
-    //   }
-    // })
-    // console.log(newData)
-    // console.log(solenoidList.value)
-    // console.log(pumpList.value)
-    // console.log(mvList.value)
   })
-
 
 
 </script>
@@ -227,17 +208,7 @@ import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-
     bottom-0 left-4
     pb-4 sm:pb-8
 }
-
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
+ 
 
 .content {
   @apply 

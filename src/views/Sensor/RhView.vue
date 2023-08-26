@@ -7,9 +7,11 @@
     <div class="device-container">
       <deviceCard 
         :small=true
-        :content="newData"
-        :id="props.id" />
+        :content="newData" />
+    <div class="xs-icon-card">
       <img src="@/assets/umiditterreno.png">
+      <p>{{ $t('soilMoisture') }}</p>
+    </div>
     </div>
     <div class="content">
       <IdroTitle :title="title"/>
@@ -22,16 +24,16 @@
                   <span></span>
                 </th>
                 <th>
-                  <span>Livello 1</span>
+                  <span>{{$t('level')}} 1</span>
                 </th>
                 <th>
-                  <span>Livello 2</span>
+                  <span>{{$t('level')}} 2</span>
                 </th>
                 <th>
-                  <span>Livello 3</span>
+                  <span>{{$t('level')}} 3</span>
                 </th>
                 <th>
-                  <span>Livello 4</span>
+                  <span>{{$t('level')}} 4</span>
                 </th>
               </tr>
             </thead>
@@ -206,16 +208,6 @@ import { defineAsyncComponent,  computed,  onMounted,  ref, onBeforeMount, onUnm
       pb-4 sm:pb-8
   }
   
-  .device-container img {
-    @apply 
-      w-[40px] h-[40px] 
-      sm:w-[60px] sm:h-[60px]
-      md:w-[70px] md:h-[70px]
-      lg:w-[80px] lg:h-[80px]
-      xl:w-[100px] xl:h-[100px]
-      2xl:w-[130px] 2xl:h-[130px]
-      transition-all ease-in-out duration-300
-  }
   
   .content {
     @apply 

@@ -8,7 +8,10 @@
     <deviceCard 
       :small=true
       :content="newData" />
-    <img class="w-40" src="@/assets/report_rilevazioni.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/report_rilevazioni.png">
+      <p>{{ $t('eventReports') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
@@ -96,7 +99,7 @@ import ApexCharts from "apexcharts";
     series: [],
     xaxis: {
       type: 'datetime',
-      categories: [],
+      // categories: [],
       tickPlacement: 'on'
     }
   }
@@ -169,11 +172,8 @@ import ApexCharts from "apexcharts";
     console.log(dataStore.historicalData)
     formatedhistoricalEventi.value = []
     let tmphistoricalEventi
-    var tmpTemperature = []
-    var tmpPioggia = []
-    var tmpRadiazioneSolare = []
-    var tmpUmidita = []
-    var tmpVelocitaVento = []
+    var chartData = []
+
     if (dataStore.historicalData !== undefined) {
       dataStore.historicalData.map((data, index) => {
         tmphistoricalEventi = data.S86.split(',')
@@ -186,37 +186,41 @@ import ApexCharts from "apexcharts";
           direzioneVento: tmphistoricalEventi[5],
           pioggia: (tmphistoricalEventi[6] + ' mm/m²')
         }
-        if (index > dataStore.historicalData.length - 100) {
-          tmpTemperature.push(toInteger(tmphistoricalEventi[1]))
-          tmpPioggia.push(toInteger(tmphistoricalEventi[6]))
-          tmpRadiazioneSolare.push(toInteger(tmphistoricalEventi[3]))
-          tmpUmidita.push(toInteger(tmphistoricalEventi[2]))
-          tmpVelocitaVento.push(toInteger(tmphistoricalEventi[4]))
-          options.xaxis.categories.push(toInteger(tmphistoricalEventi[0] * 1000));
-        }
+        let newObj2 = {
+            date: toInteger(tmphistoricalEventi[0])*1000,
+            temperature: toInteger(tmphistoricalEventi[1]),
+            pioggia: toInteger(tmphistoricalEventi[6]),
+            radiazioneSolare: toInteger(tmphistoricalEventi[3]),
+            umidita: toInteger(tmphistoricalEventi[2]),
+            velocitaVento: toInteger(tmphistoricalEventi[4])
+          }
+        chartData.push(newObj2)
         formatedhistoricalEventi.value.push(newObj)
       })
+      options.series = []
       options.series.push({
         name: 'Temperatura',
-        data: tmpTemperature
+        data: chartData.map(obj => [obj.date,obj.temperature])
       })
       options.series.push({
         name: 'Pioggia',
-        data: tmpPioggia
+        data: chartData.map(obj => [obj.date,obj.pioggia])
       })
       options.series.push({
         name: 'Radiazione Solare',
-        data: tmpRadiazioneSolare
+        data: chartData.map(obj => [obj.date,obj.radiazioneSolare])
       })
       options.series.push({
         name: 'Umidita',
-        data: tmpUmidita
+        data: chartData.map(obj => [obj.date,obj.umidita])
       })
       options.series.push({
         name: 'Velocita Vento',
-        data: tmpVelocitaVento
+        data: chartData.map(obj => [obj.date,obj.velocitaVento])
       })
     }
+    chart.updateSeries(options.series)
+    console.log('chart-data',chartData)
     console.log(formatedhistoricalEventi.value)
   }
     
@@ -231,13 +235,13 @@ import ApexCharts from "apexcharts";
     fileName.value = String(startDate.value + '_' + endDate.value) + '_Rilevazoni_Eventi.csv'
     getHistoryData()
   }
-
+  let chart
   onMounted( async () => {
     await devicesStore.loadDevice(props.id)
     historicalEventiParams.value.device_code = devicesStore.deviceData.code
     title.value = 'Idrosat:' + devicesStore.deviceData.name
     dateFiltering()
-    var chart = new ApexCharts(document.querySelector("#chart"), options)
+    chart = new ApexCharts(document.querySelector("#chart"), options)
     chart.render()
   })
 
@@ -264,7 +268,6 @@ import ApexCharts from "apexcharts";
   @apply 
     relative flex flex-col 
     px-[16px] md:px-[200px] lg:px-[260px] xl:px-[320px] 2xl:px-[360px]
-    
 }
 .dashboard-container {
   @apply flex flex-col w-full justify-center items-center
@@ -277,17 +280,7 @@ import ApexCharts from "apexcharts";
     pb-4 sm:pb-8
 }
 
-
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
+ 
 
 .content {
   @apply 

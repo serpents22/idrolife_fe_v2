@@ -9,17 +9,17 @@
   <NewDevice 
     :isOpen="isShowAddModal" 
     @close="toggleAddModal" 
-    title="AGGIUNGI IMPIANTO" 
+    :title="$t('createPlant')" 
     />
   <impiantoEditModal 
     v-if="isShowEditModal" 
     @close="toggleEditModal" 
-    title="MODIFICA IMPIANTO" 
+    :title="$t('editPlant')" 
     />
   <impiantoDelModal 
     v-if="isShowDelModal" 
     @close="toggleDelModal" 
-    title="ELIMINA IMPIANTO" 
+    :title="$t('deletePlant')" 
     />
   <toolBar
     :noAdd=false
@@ -46,7 +46,6 @@
   import { useDevicesStore } from '@/stores/DevicesStore'
   import { storeToRefs } from 'pinia'
   import { defineAsyncComponent,  onBeforeMount,onMounted,  ref } from '@vue/runtime-core'
-  import { useAuthStore } from '@/stores/AuthStore'
   import router from '@/router'
   import NewDevice from '@/components/modal/devices/NewDevice'
   import { useDeviceManagement } from '@/stores/DeviceManagementStore'
@@ -71,7 +70,6 @@
   )
   //init store
   const devicesStore = useDevicesStore()
-  const authStore = useAuthStore()
   const { devicesList, isLoading } = storeToRefs(useDevicesStore())
   const title = 'Benvenuto, ' + localStorage.getItem('auth.user')
   //function

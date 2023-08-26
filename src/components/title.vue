@@ -19,7 +19,7 @@ export default {
   @apply 
   relative
     flex flex-col justify-center h-fit w-full items-center 
-    gap-[10px] mt-[40px] mb-[16px] md:my-[40px]
+    gap-[10px] mt-[10px] mb-[16px] md:my-[40px]
 }
 .header img {
   @apply 

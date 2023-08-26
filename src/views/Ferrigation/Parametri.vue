@@ -7,9 +7,11 @@
     <div class="device-container">
       <deviceCard 
         :small=true
-        :content="newData"
-        :id="props.id" />
-      <img class="w-40" src="@/assets/parametri_fertirrigazione.png">
+        :content="newData" />
+    <div class="xs-icon-card">
+      <img src="@/assets/parametri_fertirrigazione.png">
+      <p>{{ $t('fertigationParameter') }}</p>
+    </div>
     </div>
     <div class="content">
       <div class="header">
@@ -335,17 +337,7 @@ import MyButton from '@/components/button/BaseButton.vue'
     bottom-0 left-4
     pb-4 sm:pb-8
 }
-
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
+ 
 
 .content {
   @apply 

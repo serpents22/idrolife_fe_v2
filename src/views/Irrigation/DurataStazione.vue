@@ -7,18 +7,22 @@
   <div class="device-container">
     <deviceCard 
       :small=true
-      :content="newData"
-      :id="id" />
+      :content="newData" />
+    <div class="xs-icon-card">
       <img src="@/assets/durata_stazioni.png">
+      <p>{{ $t('stationTime') }}</p>
+    </div>
   </div>
   <div class="content">
-    <IdroTitle title="Programma" />
-    <div class="main">
+    <!-- <IdroTitle title="Programma" /> -->
+    <IdroTitle title="Durata Stazioni" />
+    <!--<div class="main">
       <Tab :tabs="tabs" @clicked= "changeNavigation" />
-      <!-- <keep-alive> -->
+      
         <component :is="comp" :id="deviceId"></component>
-      <!-- </keep-alive> -->
-    </div>
+      
+    </div>-->
+    <component :is="comp" :id="deviceId"></component>
   </div>
 </div>
 </template>
@@ -32,6 +36,7 @@ import { useDevicesStore } from '@/stores/DevicesStore';
 import { ref } from '@vue/reactivity';
 import { computed, defineAsyncComponent, onMounted } from '@vue/runtime-core';
 import { storeToRefs } from 'pinia';
+
 
 //asynchronus component
 const deviceCard = defineAsyncComponent(
@@ -84,8 +89,8 @@ export default {
     const title = ref()
 
     onMounted(async() => {
-      var element = document.getElementById("Minuti/Secondi");
-      element.classList.add("active");
+      /*var element = document.getElementById("Minuti/Secondi");
+      element.classList.add("active");*/
 
       await deviceStore.loadDevice(props.id)
       title.value = 'Idrosat:' + deviceStore.deviceData.name
@@ -108,7 +113,6 @@ export default {
   @apply 
     relative flex flex-col 
     px-[16px] md:px-[200px] lg:px-[260px] xl:px-[320px] 2xl:px-[360px]
-    
 }
 .main {
   @apply flex flex-col w-full justify-center items-center relative gap-8
@@ -121,16 +125,6 @@ export default {
     pb-4 sm:pb-8
 }
 
-.device-container img {
-  @apply 
-    w-[40px] h-[40px] 
-    sm:w-[60px] sm:h-[60px]
-    md:w-[70px] md:h-[70px]
-    lg:w-[80px] lg:h-[80px]
-    xl:w-[100px] xl:h-[100px]
-    2xl:w-[130px] 2xl:h-[130px]
-    transition-all ease-in-out duration-300
-}
 
 .content {
   @apply 

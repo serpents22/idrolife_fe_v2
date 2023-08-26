@@ -6,9 +6,9 @@
     :isError="isError"
      @close="closeNotification" />
   <div class="login-container">
-    <IdroTitle title="Benvenuti nel nuovo portale di Idrobit" />
-    <div class="modal">
-      <div class="modal-inner">
+    <IdroTitle :title="$t('welcomeText')" />
+    <div class="menu">
+      <Modal>
         <VeeForm :validation-schema="schema" v-slot="{ handleSubmit }" as="div" >
           <form  @submit="handleSubmit($event, onSubmit)" class="form-wrapper" >
             <div class="field-wrapper">
@@ -18,15 +18,15 @@
               <BaseInput name="password" type="password" label="Password" class="text-field" />
             </div>
             <div class="button-wrapper">
-              <MyButton type="submit" class="filled" label="Entra" :loading="isLoading" />
+              <MyButton type="submit" class="filled" :label="$t('login')" :loading="isLoading" />
             </div>
           </form>
         </VeeForm>
         <div class="create-account">
-          <router-link :to="{name: 'ResetPassword'}"> Recupera password </router-link>
-          <router-link :to="{name: 'RegisterForm'}"> Crea un account </router-link>
+          <router-link :to="{name: 'ResetPassword'}"> {{$t('resetPassword')}} </router-link>
+          <router-link :to="{name: 'RegisterForm'}"> {{$t('createAccount')}} </router-link>
         </div>
-      </div>
+      </Modal>
     </div>
   </div>
 </template>
@@ -42,9 +42,8 @@
   import { loginSchema } from '@/composable/validationSchemas'
 
   const schema = loginSchema
-
   // auth with pinia
-  const authStore = useAuthStore();
+  const authStore = useAuthStore()
   const { status, isLoading } = storeToRefs(useAuthStore())
   const modalActive = ref(false)
   const isError = ref(false)
@@ -73,21 +72,7 @@
 .login-container {
   @apply flex flex-col
 }
-.modal {
-  @apply 
-    w-full h-full
-    fixed top-0 left-0 px-8 py-12
-    overflow-x-hidden overflow-y-auto z-10
-    justify-center items-center flex
-    mt-10 sm:mt-2
-}
 
-.modal-inner {
-  background: linear-gradient(45.06deg, #010AD1 -8.2%, #1BF728 108.15%);
-  @apply 
-  rounded-[40px] border-2 border-[#FFEE58] max-w-[500px] w-full h-fit px-10 py-20
-  text-left text-white
-}
 .menu {
   @apply flex flex-col w-full items-center justify-center
 }
