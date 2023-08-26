@@ -3,12 +3,12 @@
     <div class="header">
       <img src="@/assets/logo.png" id="logo">
       <span>
-        <h1>Benvenuti nel nuovo portale IdroLife di Idrobit</h1>
+        <h1>{{$t('welcomeText')}}</h1>
       </span>
     </div>
     <router-link class="menu" :to="{name: 'LoginForm'}">
       <img src="../assets/Accedi.png">
-      <p>Accedi</p>
+      <p>{{$t('login')}}</p>
     </router-link>
       <footer class="grid grid-cols-4 items-end justify-between mb-2">
         <div class="w-fit">
