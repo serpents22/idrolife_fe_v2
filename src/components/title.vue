@@ -2,7 +2,7 @@
   <div class="header">
     <img src="@/assets/logo.png" id="logo">
     <span>
-      <h1 class="title">{{title}}</h1>
+      <h1 class="title">{{title}}, {{ name }}</h1>
       <slot></slot>
     </span>
   </div>
@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  props:['title']
+  props:['title','name']
 }
 </script>
 

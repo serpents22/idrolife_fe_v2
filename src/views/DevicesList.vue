@@ -32,7 +32,9 @@
     :backOn="true" 
     />
   <div class="dashboard-container">
-    <IdroTitle :title="title" />
+    <div class="flex">
+      <IdroTitle :title="$t('welcome')" :name="username" />
+    </div>
     <deviceCard 
         :content="devicesList" 
         :clickable=true
@@ -71,7 +73,7 @@
   //init store
   const devicesStore = useDevicesStore()
   const { devicesList, isLoading } = storeToRefs(useDevicesStore())
-  const title = 'Benvenuto, ' + localStorage.getItem('auth.user')
+  const username = localStorage.getItem('auth.user')
   //function
   const isShowAddModal = ref(false)
   const isShowDelModal = ref(false)
