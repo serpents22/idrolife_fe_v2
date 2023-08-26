@@ -8,7 +8,10 @@
     <deviceCard 
       :small=true
       :content="newData" />
-    <img class="w-40" src="@/assets/report_allarmi.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/report_allarmi.png">
+      <p>{{ $t('alarms') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
@@ -68,7 +71,7 @@ import SearchField from '@/components/input/searchField.vue'
 import DatePicker from '@/components/input/datePicker.vue'
 import IveButton from '@/components/input/iveButton.vue'
 import { toInteger } from 'lodash'
-import { Header, Item } from "vue3-easy-data-table";
+// import { Header, Item } from "vue3-easy-data-table";
 
   //props
   const props = defineProps({

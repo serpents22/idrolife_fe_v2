@@ -7,30 +7,38 @@
     <deviceCard 
       :small=true
       :content="newData" />
-    <img class="w-40" src="@/assets/report.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/report.png">
+      <p>{{ $t('report') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
     <div class="content">
       <div class="flex flex-col gap-12">
-        <div id="report_allarmi">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'ReportAlarm'}"><img src="@/assets/report_allarmi.png"></router-link>
+        <p>{{ $t('alarms') }}</p>
         </div>
-        <div id="report_eventi_programmi">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'ReportEventi'}"><img src="@/assets/report_eventi_programmi.png"></router-link>
+        <p>{{ $t('programEventReports') }}</p>
         </div>
       </div>
       <div class="flex flex-col gap-12">
-        <div id="report_rilevazioni">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'ReportRilevazioni'}"><img src="@/assets/report_rilevazioni.png"></router-link>
+        <p>{{ $t('eventReports') }}</p>
         </div>
       </div>
       <div class="flex flex-col gap-12">
-        <div id="report_eventi_sensori_umidita">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'ReportUmidita'}"><img src="@/assets/report_eventi_sensori_umidita.png"></router-link>
+        <p>{{ $t('soilMoistureReports') }}</p>
         </div>
-        <div id="report_planning">
+        <div class="sm-icon-card">
           <router-link :to="{name: 'Planning'}"><img src="@/assets/report_planning.png"></router-link>
+        <p>{{ $t('planning') }}</p>
         </div>
       </div>
     </div>
@@ -100,17 +108,6 @@
     md:gap-[20px]
     lg:gap-[40px]
     xl:gap-[80px]
-    transition-all ease-in-out duration-300
-}
-
-.content img {
-  @apply
-    relative
-    w-[80px] h-[80px]
-    md:w-[120px] md:h-[120px]
-    lg:w-[140px] lg:h-[140px]
-    xl:w-[180px] xl:h-[180px]
-    2xl:w-[200px] 2xl:h-[200px]
     transition-all ease-in-out duration-300
 }
 

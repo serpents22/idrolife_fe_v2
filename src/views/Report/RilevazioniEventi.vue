@@ -8,7 +8,10 @@
     <deviceCard 
       :small=true
       :content="newData" />
-    <img class="w-40" src="@/assets/report_rilevazioni.png">
+    <div class="xs-icon-card">
+      <img src="@/assets/report_rilevazioni.png">
+      <p>{{ $t('eventReports') }}</p>
+    </div>
   </div>
   <div class="dashboard-container">
     <IdroTitle :title="title"/>
