@@ -26,7 +26,7 @@
     <div class="content">
       <IdroTitle :title="title"/>
       <div class="main">
-        <GoogleMap v-if="allDataReady" :class="{'hide-map' : isExpand}" class="map-style" :api-key="apiKey" style="width: 100%; height: 500px" :center="idrosatMarkerPosition" :zoom="6">
+        <GoogleMap v-if="allDataReady" :class="{'hide-map' : isExpand}" class="map-style" :api-key="apiKey" style="width: 100%; height: 500px" :center="idrosatMarkerPosition" :zoom="10">
             <CustomMarker v-if="isIdrosatCoordinateValid" :options="{ position: idrosatMarkerPosition, anchorPoint: 'BOTTOM_CENTER' }">
               <div style="text-align: center">
               <img src="../../assets/map/map-idrosat.png" width="50" height="50" style="margin-top: 8px" />
@@ -34,7 +34,8 @@
           </CustomMarker>
           <MarkerCluster>
             <CustomMarker v-for="(marker, index) in evMarkerPosition" :key="index" :options="{ position: { lat: marker.lat, lng: marker.lng }, anchorPoint: 'BOTTOM_CENTER' }">
-              <div style="text-align: center">
+              <div class="flex flex-col justify-center items-center">
+                <div class="bg-white flex rounded-sm font-semibold px-4 py-2">{{ marker.serial }}</div>
                 <img v-if="marker.status == '0'" src="../../assets/map/map-evOFF.png" width="50" height="50" style="margin-top: 8px" />
                 <img v-else src="../../assets/map/map-ev.gif" width="50" height="50" style="margin-top: 8px" />
               </div>
@@ -58,7 +59,7 @@
   import IveButton from '@/components/button/BaseButton.vue'
   import sideBarVue from '@/components/navigation/sideBar.vue'
   //maps
-  import { GoogleMap, MarkerCluster , CustomMarker  } from "vue3-google-map";
+  import { GoogleMap, MarkerCluster , CustomMarker,InfoWindow   } from "vue3-google-map";
   
   //props
   const props = defineProps({
@@ -152,6 +153,7 @@
         lng: null
       }
       if (tmpAzioneTempo !== undefined) {
+        newObj.serial = valve.ev_serial
         newObj.status = tmpAzioneTempo[0]
         newObj.lat = parseFloat(valve.latitude)
         newObj.lng = parseFloat(valve.longitude)
