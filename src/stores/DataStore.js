@@ -80,7 +80,6 @@ export const useDataStore = defineStore('data', () => {
     try {
       const res = await dataAPI.getLast(params)
       if (res.data.data.hasOwnProperty('S15')) {
-        console.log(res.data.data.S15)
         if (res.data.data.S15 != 0) {
           alarmState.value = true
         } else {
@@ -89,7 +88,6 @@ export const useDataStore = defineStore('data', () => {
       } else {
         alarmState.value = false
       }
-      console.log(alarmState.value)
       satStat.value = res.data.data
       satStatIsLoading.value = false
   } catch (err) {

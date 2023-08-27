@@ -49,7 +49,7 @@ import ReportEventi from '@/views/Report/EventiProgrammi.vue'
 import Planning from '@/views/Report/Planning.vue'
 import ReportRilevazioni from '@/views/Report/RilevazioniEventi.vue'
 import ReportUmidita from '@/views/Report/SensoriUmiditaEventi.vue'
-import MapView from '@/views/Map/Map.vue'
+import MapView from '@/views/Map/MapGoogle.vue'
 import Webcam from '@/views/Webcam/Webcam.vue'
 
 
