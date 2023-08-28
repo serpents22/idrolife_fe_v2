@@ -16,8 +16,8 @@ export default {
     return apiClient.get('data/last',{ params })
   },
 
-  getAlarmsList(params) {
-    return apiClient.get(`device-alarm/${ params }`)
+  getAlarmsList(id, locale) {
+    return apiClient.get(`device-alarm/${ id }/${ locale }`)
   },
 
   postControl(device_code,data) {

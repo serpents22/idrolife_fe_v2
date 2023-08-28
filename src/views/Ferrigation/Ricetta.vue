@@ -14,7 +14,7 @@
     </div>
   </div>
   <div class="main">
-    <IdroTitle title="Programma" />
+    <IdroTitle :title="$t('program')" />
     <div class="content">
       <Tab :tabs="tabs" @clicked= "changeNavigation" />
       <!-- <keep-alive> -->
@@ -88,7 +88,7 @@ export default {
     }
 
     onMounted(async() => {
-      var element = document.getElementById("Ricette 1");
+      var element = document.getElementById("RicetteTable1");
       element.classList.add("active");
 
       await deviceStore.loadDevice(props.id)

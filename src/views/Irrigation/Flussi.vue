@@ -24,10 +24,10 @@
                 <span>ev</span>
               </th>
               <th>
-                <span>stazione</span>
+                <span>{{$t('station')}}</span>
               </th>
               <th>
-                <span>pompa</span>
+                <span>{{$t('pump')}}</span>
               </th>
               <th>
                 <span>master v.</span>
@@ -37,7 +37,7 @@
                 <span>Auto</span>
               </th>
               <th>
-                <span>Valori</span>
+                <span>{{$t('values')}}</span>
               </th>
             </tr>
           </thead>
@@ -100,7 +100,7 @@
           </tbody>
         </table>
         <div class="button-wrapper">
-          <MyButton type="submit" class="filled" label="Salva" :loading="postControlIsLoading" />
+          <MyButton type="submit" class="filled"  :label="$t('save')" :loading="postControlIsLoading" />
         </div>
       </form>
     </div>

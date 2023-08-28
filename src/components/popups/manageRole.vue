@@ -46,7 +46,7 @@
     </tbody>
   </table>
   <div class="w-[300px]" style="    margin: auto;margin-top: 50px;">
-            <iveButton type="submit" class="filled" label="Salva"/>
+            <iveButton type="submit" class="filled"  :label="$t('save')"/>
           </div>
    </div>
   </modal>

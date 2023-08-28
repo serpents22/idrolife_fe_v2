@@ -15,20 +15,20 @@
               <form  @submit="handleSubmit($event, onSubmit)" class="form-wrapper" >
                 <BaseInput name="email" type="email" placeholder="Email" class="white" label="Email"/>
                 <div class="select-option flex flex-col gap-1 text-left">
-                  <label for="ruolo" class="text-xs font-bold ">Ruolo</label>
+                  <label for="ruolo" class="text-xs font-bold ">{{$t('rule')}}</label>
                   <select name="ruolo" v-model="selectedRole" class="cursor-pointer bg-transparent text-[#3a3a3a]" required>
                     <option class="text-[#3a3a3a]" v-for="item in role" :key="item" :value="item">{{ item }}</option>
                   </select> 
                 </div>
                 <div class="select-option flex flex-col gap-1 text-left">
-                  <label for="master" class="text-xs font-bold">Master</label>
+                  <label for="master" class="text-xs font-bold">{{$t('master')}}</label>
                   <select name="master" v-model="selectedDevice" class="cursor-pointer bg-transparent" required>
                     <option v-for="item in supAdmindevices" :key="item.id" :value="item.code">{{ item.name }}</option>
                   </select> 
                 </div>
                 <div class="sm:flex-row flex-col flex justify-between gap-4 sm:gap-10"> 
-                  <BaseButton type="button" class="outlined" :label="cancelLabel" @click="cancelForm"/>
-                  <BaseButton type="submit" class="filled" :label="registerLabel" :loading="isLoading"   />
+                  <BaseButton type="button" class="outlined"  :label="cancelLabel" @click="cancelForm"/>
+                  <BaseButton type="submit" class="filled"  :label="registerLabel" :loading="isLoading"   />
                 </div>
               </form>
             </VeeForm>
@@ -50,7 +50,9 @@ import { addRoleSchema } from '@/composable/validationSchemas'
 import { storeToRefs } from 'pinia'
 import { ref, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
- 
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
   const props = defineProps({
       isOpen: Boolean,
       title: String
@@ -64,8 +66,8 @@ import { onClickOutside } from '@vueuse/core'
   const deviceManagementStore = useDeviceManagement()
   const { status, isLoading } = storeToRefs(useDeviceManagement())
   const { supAdmindevices } = storeToRefs(useDeviceManagement())
-  const cancelLabel = ref('CANCEL')
-  const registerLabel = ref('SAVE')
+  const cancelLabel = ref(t('cancel'))
+  const registerLabel = ref(t('save'))
   const regButtonClick = ref(0)
   const cancelButtonClick = ref(0)
 
@@ -76,7 +78,7 @@ import { onClickOutside } from '@vueuse/core'
     console.log(newValues)
     regButtonClick.value = ++regButtonClick.value
     if (regButtonClick.value == 1) {
-      registerLabel.value = 'the data entered is correct?'
+      registerLabel.value = t('dataCorrect')
     }
 
     if (regButtonClick.value == 2) {
@@ -88,7 +90,7 @@ import { onClickOutside } from '@vueuse/core'
         setTimeout(closeNotification, 3000)
         resetForm()
       }
-      registerLabel.value = 'SAVE'
+      registerLabel.value = t('save')
       regButtonClick.value = 0
     }
   }
@@ -103,6 +105,10 @@ import { onClickOutside } from '@vueuse/core'
   const target = ref(null)
 
   onClickOutside(target, () => {
+    cancelButtonClick.value = 0
+    regButtonClick.value = 0
+    registerLabel.value = t('save')
+    cancelLabel.value = t('cancel')
     if (props.isOpen) {
       emits('close')
     }
@@ -112,13 +118,13 @@ import { onClickOutside } from '@vueuse/core'
     cancelButtonClick.value = ++cancelButtonClick.value
     switch (cancelButtonClick.value) {
       case 1:
-      cancelLabel.value = 'The entered data will be lost!'
+      cancelLabel.value = t('dataLost')
         break;
       case 2:
       form.value.resetForm()
       emits('close')
       cancelButtonClick.value = 0
-      cancelLabel.value = 'CANCEL'
+      cancelLabel.value = t('cancel')
         break;
     }
   }

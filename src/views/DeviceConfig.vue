@@ -3,7 +3,7 @@
     :isOpen="isShowAlarmModal" 
     @close="deviceAlarmToggle"
     :id="device_code"
-    title="Alarm List" 
+    :title="$t('alarmsList')" 
   />
   <loading :loading="isLoading" />
   <sidebar 

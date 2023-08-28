@@ -24,10 +24,10 @@
                   <span>Programma</span>
                 </th>
                 <th>
-                  <span>Stato</span>
+                  <span>{{$t('status')}}</span>
                 </th>
                 <th>
-                  <span>Azione</span>
+                  <span>{{$t('action')}}</span>
                 </th>
                 <th>
                   <span>Stazione Attiva su<br>questo programma</span>

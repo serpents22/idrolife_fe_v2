@@ -1,7 +1,8 @@
 <template>
     <div class="nav-wrapper">
-      <div class="xs-icon-card" v-show="isAlarm" >
-        <img src="@/assets/icon/warning-icon.png" class="cursor-pointer" @click="emits('alarmList')">
+      <div class="xs-icon-card cursor-pointer" v-show="isAlarm" @click="emits('alarmList')" >
+        <img src="@/assets/icon/warning-icon.png" class="cursor-pointer" >
+        <p>{{ $t('alarms') }}</p>
       </div>
       <div class="xs-icon-card" v-show="noSocial">
         <router-link :to="{name: 'Dashboard'}"><img src="@/assets/whatsapp.png"></router-link>

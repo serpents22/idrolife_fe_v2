@@ -12,9 +12,9 @@
             <div class="modal-content">
             <h1 class="title">{{title}}</h1>
               <div class="select-option flex flex-col gap-1 text-left">
-                <label for="master" class="font-bold">Master</label>
+                <label for="master" class="font-bold">{{$t('master')}}</label>
                 <select name="master" v-model="selectedDevice" class="cursor-pointer bg-transparent">
-                  <option disabled value="">Select master</option>
+                  <option disabled value="">{{$t('selectMaster')}}</option>
                   <option v-for="item in supAdmindevices" :key="item.id" :value="item.code">{{ item.name }}</option>
                 </select> 
               </div>
@@ -22,8 +22,8 @@
                 <table>
                   <thead>
                     <th>Email</th>
-                    <th>Role</th>
-                    <th class="text-center">Action</th>
+                    <th>{{$t('rule')}}</th>
+                    <th class="text-center">{{$t('action')}}</th>
                   </thead>
                   <tbody>
                     <tr v-for="member in members" :key="member.id">
@@ -34,7 +34,7 @@
                         <p>{{ member.role }}</p>
                       </td>
                       <td>
-                        <button @click="onSubmit(member.email)" class="filled_red">Elimina</button>
+                        <button @click="onSubmit(member.email)" class="filled_red">{{$t('delete')}}</button>
                       </td>
                     </tr>
                   </tbody>

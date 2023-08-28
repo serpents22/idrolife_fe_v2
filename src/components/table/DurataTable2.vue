@@ -97,7 +97,7 @@
       </tr>
     </table>
     <div class="button-wrapper">
-      <MyButton type="submit" class="filled" label="Salva" :loading="postControlIsLoading" />
+      <MyButton type="submit" class="filled"  :label="$t('save')" :loading="postControlIsLoading" />
     </div>
   </form>
 </template>
@@ -109,6 +109,8 @@ import { storeToRefs } from 'pinia'
 import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-core'
 import MyButton from '@/components/button/BaseButton.vue'
 import { toInteger } from 'lodash';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
   //props
   const props = defineProps({

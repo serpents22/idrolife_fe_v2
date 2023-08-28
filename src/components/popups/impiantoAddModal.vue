@@ -36,7 +36,7 @@
             <iveText placeholder="GPS Location" name="coordinate" type="text" class="text-field" />
           </div>
           <div class="w-[300px]">
-            <iveButton type="submit" class="filled" label="Salva" :loading="createDeviceIsLoading" />
+            <iveButton type="submit" class="filled"  :label="$t('save')" :loading="createDeviceIsLoading" />
           </div>
         </div>
       </form>

@@ -2,12 +2,12 @@
   <form @submit.prevent="onSubmit" class="table-container">
     <div class="frame">
       <div class="frame-header">
-        <span class="text-left font-semibold">Elemento</span>
-        <span class="text-left font-semibold">Azione</span>
+        <span class="text-left font-semibold">{{$t('element')}}</span>
+        <span class="text-left font-semibold">{{$t('action')}}</span>
       </div>
       <div class="field-wrapper">
         <span class="flex text-left">
-          <label>Programmi idrosat che azionano questo programma</label>
+          <label>{{$t('idrosatProgram')}}</label>
         </span>
         <span class="flex flex-col pl-4">
           <span class="flex gap-2">
@@ -47,7 +47,7 @@
       <div class="slider-wrapper">
         <div class="field-wrapper">
           <span class="flex">
-            <label for="nome">Dosaggio Pompa 1 (%)</label>
+            <label for="nome">{{$t('dosagePump')}} 1 (%)</label>
           </span>
           <div class="text-left px-4 py-2 bg-gray-200 rounded">{{fertData.F12005}}</div>
         </div>
@@ -58,7 +58,7 @@
       <div class="slider-wrapper">
         <div class="field-wrapper">
           <span class="flex">
-            <label for="nome">Dosaggio Pompa 2 (%)</label>
+            <label for="nome">{{$t('dosagePump')}} 2 (%)</label>
           </span>
           <div class="text-left px-4 py-2 bg-gray-200 rounded">{{fertData.F12006}}</div>
         </div>
@@ -69,7 +69,7 @@
       <div class="slider-wrapper">
         <div class="field-wrapper">
           <span class="flex">
-            <label for="nome">Dosaggio Pompa 3 (%)</label>
+            <label for="nome">{{$t('dosagePump')}} 3 (%)</label>
           </span>
           <div class="text-left px-4 py-2 bg-gray-200 rounded">{{fertData.F12007}}</div>
         </div>
@@ -80,7 +80,7 @@
       <div class="slider-wrapper">
         <div class="field-wrapper">
           <span class="flex">
-            <label for="nome">Dosaggio Pompa 4 (%)</label>
+            <label for="nome">{{$t('dosagePump')}} 4 (%)</label>
           </span>
           <div class="text-left px-4 py-2 bg-gray-200 rounded">{{fertData.F12008}}</div>
         </div>
@@ -90,7 +90,7 @@
       </div>
     </div>
     <div class="button-wrapper">
-      <MyButton type="submit" class="filled" label="Salva" :loading="postControlIsLoading" />
+      <MyButton type="submit" class="filled"  :label="$t('save')" :loading="postControlIsLoading" />
     </div>
   </form>
 </template>

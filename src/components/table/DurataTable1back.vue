@@ -90,7 +90,7 @@
   
       </table>
       <div class="button-wrapper">
-        <MyButton type="submit" class="filled" label="Salva" :loading="postControlIsLoading" />
+        <MyButton type="submit" class="filled"  :label="$t('save')" :loading="postControlIsLoading" />
       </div>
     </form>
   </template>

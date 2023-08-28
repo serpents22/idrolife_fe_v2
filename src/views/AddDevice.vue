@@ -35,10 +35,10 @@
         <VeeForm :validation-schema="schema" v-slot="{ handleSubmit }" as="div" >
           <form  @submit="handleSubmit($event, onSubmit)" class="form-wrapper" >
             <div class="field-wrapper">
-              <iveText name="name" type="text"  placeholder="nome" class="text-field" />
+              <iveText name="name" type="text"  :placeholder="$t('name')" class="text-field" />
               <img class="h-[200px] object-contain mb-6 self-center" src="@/assets/device.png" id="logo">
               <iveText name="code" type="text" placeholder="ID" class="text-field" />
-              <iveButton type="submit" class="filled" label="Entra" :loading="isLoading" />
+              <iveButton type="submit" class="filled"  :label="$('enter')" :loading="isLoading" />
             </div>
           </form>
         </VeeForm>

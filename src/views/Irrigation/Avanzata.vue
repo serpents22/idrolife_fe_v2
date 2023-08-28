@@ -22,10 +22,10 @@
           <thead>
             <tr>
               <th>
-                <span>Elemento</span>
+                <span>{{$t('element')}}</span>
               </th>
               <th>
-                <span>Azione</span>
+                <span>{{$t('action')}}</span>
               </th>
             </tr>
           </thead>
@@ -126,7 +126,7 @@
            <tr>
              <td>
                <div class="button-wrapper">
-                 <MyButton type="submit" class="filled" label="Salva" :loading="dataStore.postControlIsLoading" />
+                 <MyButton type="submit" class="filled"  :label="$t('save')" :loading="dataStore.postControlIsLoading" />
                </div>
              </td>
              <td>

@@ -35,7 +35,7 @@
                   <span>Parametro</span>
                 </th>
                 <th>
-                  <span>Azione</span>
+                  <span>{{$t('action')}}</span>
                 </th>
               </tr>
             </thead>
@@ -90,7 +90,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Tempo stazione</label>
+                  <label>Tempo {{$t('station')}}</label>
                 </td>
                 <td>
                   <span class="flex flex-col gap-1">
@@ -244,7 +244,7 @@
             </tbody>
           </table>
           <div class="button-wrapper">
-            <MyButton type="submit" class="filled" label="Salva" :loading="postControlIsLoading" />
+            <MyButton type="submit" class="filled"  :label="$t('save')" :loading="postControlIsLoading" />
           </div>
         </form>
       </div>

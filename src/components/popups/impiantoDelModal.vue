@@ -20,10 +20,10 @@
       </div>
       <div class="w-[372px] flex justify-between mt-6">
         <div class="w-[170px]">
-          <iveButton class="grey" @click="emits('close')" :label="cancelLabel" />
+          <iveButton class="grey" @click="emits('close')"  :label="cancelLabel" />
         </div>
         <div class="w-[170px]">
-          <iveButton class="red" :disable="disable" :label="eliminaLabel" @click="onSubmit" />
+          <iveButton class="red" :disable="disable"  :label="eliminaLabel" @click="onSubmit" />
         </div>
       </div> 
     </div>
@@ -37,6 +37,8 @@
   import { useDeviceManagement } from '@/stores/DeviceManagementStore'
   import { useDevicesStore } from '@/stores/DevicesStore'
   import { onClickOutside } from '@vueuse/core'
+  import { useI18n } from 'vue-i18n';
+  const { t } = useI18n();
 
   const props = defineProps({
     isOpen: Boolean,
@@ -46,8 +48,8 @@
   const devicesStore = useDevicesStore()
   const { status } = storeToRefs(useDevicesStore())
   const { supAdmindevices } = storeToRefs(useDeviceManagement())
-  const cancelLabel = ref('CANCEL')
-  const eliminaLabel = ref('DELETE')
+  const cancelLabel = ref(t('cancel'))
+  const eliminaLabel = ref(t('delete'))
   const buttonClick = ref(0)
   const selectedDevice = ref('')
   const disable = ref(true)
@@ -66,7 +68,7 @@
     console.log(values)
     buttonClick.value = ++buttonClick.value
     if (buttonClick.value == 1) {
-      eliminaLabel.value = 'the data entered is correct?'
+      eliminaLabel.value = t('dataCorrect')
     }
 
     if (buttonClick.value == 2) {
@@ -77,7 +79,7 @@
       } else {
         setTimeout(closeNotification, 3000)
       }
-      eliminaLabel.value = 'DELETE'
+      eliminaLabel.value = t('delete')
       buttonClick.value = 0
       devicesStore.loadDevices()
     }
@@ -92,6 +94,7 @@
   const target = ref(null)
 
   onClickOutside(target, () => {
+    eliminaLabel.value = t('delete')
     emits('close')
   })
 

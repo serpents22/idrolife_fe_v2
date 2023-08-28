@@ -31,17 +31,17 @@
             <thead>
               <tr>
                 <th>
-                  <span>Elemento</span>
+                  <span>{{$t('element')}}</span>
                 </th>
                 <th>
-                  <span>Azione</span>
+                  <span>{{$t('action')}}</span>
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
-                  <label>Isteresi</label>
+                  <label>{{$t('hysteresis')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -53,7 +53,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Controlla ogni</label>
+                  <label>{{$t('checkEvery')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -62,11 +62,11 @@
                     <span class="flex flex-col sm:flex-row gap-2 sm:gap-4 pl-4">
                       <span class="flex gap-2">
                         <input id="secondi" type="radio" :disabled="fertData.F17 === undefined"  v-model="fertData.F17" value="0" name="F17">
-                        <label for="secondi">secondi</label>
+                        <label for="secondi">{{$t('second')}}</label>
                       </span>
                       <span class="flex gap-2">
                         <input id="cicli" type="radio" :disabled="fertData.F17 === undefined" v-model="fertData.F17" value="1" name="F17">
-                        <label for="cicli">cicli</label>
+                        <label for="cicli">{{$t('cycles')}}</label>
                       </span>
                     </span>
                   </span>
@@ -98,17 +98,17 @@
               </tr>
               <tr>
                 <td>
-                  <label>Dosaggio pH</label>
+                  <label>{{$t('dosage')}} pH</label>
                 </td>
                 <td>
                   <span class="flex flex-col pl-4">
                     <span class="flex gap-2">
                       <input id="phacido" :disabled="fertData.F01 === undefined" type="radio" v-model="fertData.F01" value="0" name="F01">
-                      <label for="phacido">Ph basico</label>
+                      <label for="phacido">Ph {{$t('basic')}}</label>
                     </span>
                     <span class="flex gap-2">
                       <input id="phbasico" :disabled="fertData.F01 === undefined" type="radio" v-model="fertData.F01" value="1" name="F01">
-                      <label for="phbasico">Ph acido</label> <!-- MV invertito 05.04.2023 richiesto da Giuseppe-->
+                      <label for="phbasico">Ph {{$t('acid')}}</label> <!-- MV invertito 05.04.2023 richiesto da Giuseppe-->
                     </span>
                   </span>
                 </td>
@@ -118,8 +118,8 @@
               <tr>
                 <td>
                   <div class="button-wrapper">
-                    <MyButton type="submit" class="filled__blue" label="Salva" :loading="postControlIsLoading" />
-                    <MyButton type="button" class="filled__blue" label="Cancella" :loading="fertConfigIsLoading" @click="onCancel" />
+                    <MyButton type="submit" class="filled__blue"  :label="$t('save')" :loading="postControlIsLoading" />
+                    <MyButton type="button" class="filled__blue"  :label="$t('cancel')" :loading="fertConfigIsLoading" @click="onCancel" />
                   </div>
                 </td>
                 <td>

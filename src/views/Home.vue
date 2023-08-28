@@ -10,11 +10,11 @@
       <img src="../assets/Accedi.png">
       <p>{{$t('login')}}</p>
     </router-link>
-      <footer class="grid grid-cols-4 items-end justify-between mb-2">
-        <div class="w-fit">
+      <footer class="grid grid-cols-1 sm:grid-cols-4 items-center justify-center mb-2">
+        <div class="w-fit m-auto sm:ml-10">
           <Tab :tabs="tabs" @clicked= "chageLanguage" />
         </div>
-        <h2 class="col-span-2">Idrobit srl - Via Giuseppe Garibaldi, 85, 00012 Villanova di Guidonia - © Idrobit srl 2023</h2>
+        <h2 class="col-span-2 text-[8px] sm:text-base">Idrobit srl - Via Giuseppe Garibaldi, 85, 00012 Villanova di Guidonia - © Idrobit srl 2023</h2>
         <div class="w-2 h-2">
 
         </div>
@@ -41,7 +41,7 @@ export default {
     const tabs = [
         {
           title: 'Italy',
-          value: 'it'
+          value: 'ita'
         },
         {
           title: 'English',

@@ -6,7 +6,7 @@
     <h1 class="font-semibold text-2xl">Add New Dispenser</h1>
     <form @submit.prevent="onSubmit" class="form-wrapper">
       <div class="field-wrapper">
-        <label for="name">Name : </label>
+        <label for="name">{{$t('name')}} : </label>
         <input type="text" id="name">
       </div>
       <div class="field-wrapper">
@@ -18,12 +18,12 @@
         <input type="number" id="long" step="0.1">
       </div>
       <div class="field-wrapper">
-        <label for="stazioni">Numero di stazioni : </label>
+        <label for="stazioni">{{$t('stationNumber')}} : </label>
         <input type="number" id="stazioni">
       </div>
       <div class="button-wrapper">
-        <IveButton type="submit" class="filled__blue mt-6" label="Salva" />
-        <IveButton type="button" class="filled__red mt-6" label="Cancella" @click="toggleMenu"/>
+        <IveButton type="submit" class="filled__blue mt-6"  :label="$t('save')" />
+        <IveButton type="button" class="filled__red mt-6"  :label="$t('cancel')" @click="toggleMenu"/>
       </div>
     </form>
   </div>

@@ -15,7 +15,7 @@
     </div>
     <div class="content">
       <div class="header">
-        <IdroTitle title="Programma" />
+        <IdroTitle :title="$t('program')" />
         <select 
           class="cursor-pointer w-[200px] rounded-md px-2 py-1 sm:px-4 sm:py-2 self-center" 
           @change="changeOption($event)">
@@ -30,12 +30,12 @@
         <form @submit.prevent="onSubmit" class="table-container">
           <div class="frame">
             <div class="frame-header justify-between">
-              <span class="text-left font-semibold">Elemento</span>
-              <span class="text-left font-semibold">Azione</span>
+              <span class="text-left font-semibold">{{$t('element')}}</span>
+              <span class="text-left font-semibold">{{$t('action')}}</span>
             </div>
             <div class="field-wrapper">
               <span class="flex text-left">
-                <label>Programmi idrosat che azionano questo programma</label>
+                <label>{{$t('idrosatProgram')}}</label>
               </span>
               <span class="flex flex-col pl-4">
                 <span class="flex gap-2"  v-for="check in checks" :key="check">
@@ -83,7 +83,7 @@
             <div class="slider-wrapper">
               <div class="field-wrapper">
                 <span class="flex">
-                  <label for="nome">Dosaggio Pompa 1 (%)</label>
+                  <label for="nome">{{$t('dosagePump')}} 1 (%)</label>
                 </span>
                 <div class="text-left px-4 py-2 bg-gray-200 rounded">{{fertData.F5}}</div>
               </div>
@@ -98,7 +98,7 @@
             <div class="slider-wrapper">
               <div class="field-wrapper">
                 <span class="flex">
-                  <label for="nome">Dosaggio Pompa 2 (%)</label>
+                  <label for="nome">{{$t('dosagePump')}} 2 (%)</label>
                 </span>
                 <div class="text-left px-4 py-2 bg-gray-200 rounded">{{fertData.F6}}</div>
               </div>
@@ -109,7 +109,7 @@
             <div class="slider-wrapper">
               <div class="field-wrapper">
                 <span class="flex">
-                  <label for="nome">Dosaggio Pompa 3 (%)</label>
+                  <label for="nome">{{$t('dosagePump')}} 3 (%)</label>
                 </span>
                 <div class="text-left px-4 py-2 bg-gray-200 rounded">{{fertData.F7}}</div>
               </div>
@@ -120,7 +120,7 @@
             <div class="slider-wrapper">
               <div class="field-wrapper">
                 <span class="flex">
-                  <label for="nome">Dosaggio Pompa 4 (%)</label>
+                  <label for="nome">{{$t('dosagePump')}} 4 (%)</label>
                 </span>
                 <div class="text-left px-4 py-2 bg-gray-200 rounded">{{fertData.F8}}</div>
               </div>
@@ -130,7 +130,7 @@
             </div>
           </div>
           <div class="button-wrapper">
-            <MyButton type="submit" class="filled" label="Salva" :loading="postControlIsLoading" />
+            <MyButton type="submit" class="filled"  :label="$t('save')" :loading="postControlIsLoading" />
           </div>
         </form>
       </div>
@@ -174,7 +174,8 @@ import MyButton from '@/components/button/BaseButton.vue'
 
   function fillFertData() {
 
-    let checkBoxF0 = binToArray(dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10000)])
+
+    let checkBoxF0 = dataStore.fertConfig === undefined ? undefined : binToArray(dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10000)])
 
     fertData.value.F0 = checkBoxF0 === undefined ? undefined : checkBoxF0
     fertData.value.F5 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10005)]

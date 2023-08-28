@@ -6,7 +6,7 @@
     :isError="isError"
      @close="closeNotification" />
   <div class="new-password-container">
-    <IdroTitle title="Reset Password" />
+    <IdroTitle :title="$('resetPassword')" />
     <div class="menu">
       <Modal>
         <VeeForm :validation-schema="schema" v-slot="{ handleSubmit }" as="div" >
@@ -18,7 +18,7 @@
               <BaseInput name="password_confirmation" type="password" label="Repeat New Password" class="text-field" />
             </div>
             <div class="button-wrapper">
-              <MyButton type="submit" class="filled" label="Send" :loading="isLoading"  />
+              <MyButton type="submit" class="filled"  :label="$t('send')" :loading="isLoading"  />
             </div>
           </form>
         </VeeForm>

@@ -105,8 +105,8 @@ const routes = [
   // { path: '/:catchALL(.*)', name: 'NotFound', component: NotFound },
   ,
   {
-    path: '/:catchAll(.*)', // Redirect for URLs without a language prefix
-    redirect: '/it', // Redirect to the default language
+    path: '/', // Redirect for URLs without a language prefix
+    redirect: '/ita', // Redirect to the default language
   },
 ]
 

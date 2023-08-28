@@ -22,7 +22,7 @@
                 <span>ev</span>
               </th>
               <th>
-                <span>stazione</span>
+                <span>st{{$t('action')}}</span>
               </th>
               <th>
                 <span>pompa</span>
@@ -66,7 +66,7 @@
           </tbody>
         </table>
         <div class="button-wrapper">
-          <MyButton type="submit" class="filled" label="Salva" :loading="isLoading" />
+          <MyButton type="submit" class="filled"  :label="$t('save')" :loading="isLoading" />
         </div>
       </form>
     </div>

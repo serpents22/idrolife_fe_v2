@@ -72,7 +72,7 @@
           </div>
         </div> -->
         <div class="button-wrapper">
-          <MyButton type="submit" class="filled" label="Salva" :loading="isLoading" />
+          <MyButton type="submit" class="filled"  :label="$t('save')" :loading="isLoading" />
         </div>
       </form>
     </div>

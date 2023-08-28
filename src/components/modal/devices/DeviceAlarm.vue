@@ -21,7 +21,7 @@
                 <p class="col-span-3 mb-2">{{ alarm.description }}</p>
               </span>
             </div>
-            <BaseButton type="button" class="outlined" :label="resetLabel" @click="onSubmit"/>
+            <BaseButton type="button" class="outlined"  :label="resetLabel" @click="onSubmit"/>
           </div>
         </div>
       </transition>

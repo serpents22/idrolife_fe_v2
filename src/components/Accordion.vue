@@ -86,8 +86,8 @@
       </form>
       <form class="add-form" @submit.prevent="addConfiguration(tData,addFormData)">
         <div class="flex w-full py-2 justify-center items-center text-xl font-bold bg-[#E6EDCB]">
-          <span v-if="tData[0].stazione > 0">Aggiungi Configurazione</span>
-          <span v-if="tData[0].stazione == 0">Inserisci nuova stazione</span>
+          <span v-if="tData[0].stazione > 0">Aggiungi Configur{{$t('action')}}</span>
+          <span v-if="tData[0].stazione == 0">Inserisci nuova st{{$t('action')}}</span>
         </div>
         <div class="flex items-center py-2 border-t-2 border-[#EFF5E4]">
           <span class="font-semibold w-[360px] text-left">Elettrovalvola No:</span>
@@ -127,7 +127,7 @@
           </select>
         </div>
         <div class="w-20">
-          <IveButton type="submit" class="filled__blue" label="Salva" :loading="postControlIsLoading" />
+          <IveButton type="submit" class="filled__blue"  :label="$t('save')" :loading="postControlIsLoading" />
         </div>
       </form>
       <slot name="content" ></slot>

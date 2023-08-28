@@ -12,7 +12,7 @@
       <thead>
         <tr>
           <th>
-            <span>Ricette 3</span>
+            <span>{{$t('recipe')}} 3</span>
           </th>
           <th>
           </th>
@@ -21,7 +21,7 @@
       <tbody>
         <tr>
           <td>
-            <label>Erogazione acqua</label>
+            <label>{{$t('waterDispensing')}}</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
@@ -33,7 +33,7 @@
                 </span>
                 <span class="flex gap-2">
                   <input id="litri" type="radio" :disabled="fertData.F150 === undefined" v-model="fertData.F150" value="1" name="F150">
-                  <label for="litri">litri</label>
+                  <label for="litri">{{$t('litre')}}</label>
                 </span>
               </span>
             </span>
@@ -41,7 +41,7 @@
         </tr>
         <tr>
           <td>
-            <label>Erogazione fertilizzante 1</label>
+            <label>{{$t('fertilizerDispensing')}} 1</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
@@ -53,7 +53,7 @@
                 </span>
                 <span class="flex gap-2">
                   <input id="litri" type="radio" :disabled="fertData.F152 === undefined" v-model="fertData.F152" value="1" name="F152">
-                  <label for="litri">litri</label>
+                  <label for="litri">{{$t('litre')}}</label>
                 </span>
               </span>
             </span>
@@ -61,7 +61,7 @@
         </tr>
         <tr>
           <td>
-            <label>Erogazione fertilizzante 2</label>
+            <label>{{$t('fertilizerDispensing')}} 2</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
@@ -73,7 +73,7 @@
                 </span>
                 <span class="flex gap-2">
                   <input id="litri" type="radio" :disabled="fertData.F154 === undefined" v-model="fertData.F154" value="1" name="F154">
-                  <label for="litri">litri</label>
+                  <label for="litri">{{$t('litre')}}</label>
                 </span>
               </span>
             </span>
@@ -81,7 +81,7 @@
         </tr>
         <tr>
           <td>
-            <label>Erogazione fertilizzante 3</label>
+            <label>{{$t('fertilizerDispensing')}} 3</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
@@ -93,7 +93,7 @@
                 </span>
                 <span class="flex gap-2">
                   <input id="litri" type="radio" :disabled="fertData.F156 === undefined" v-model="fertData.F156" value="1" name="F156">
-                  <label for="litri">litri</label>
+                  <label for="litri">{{$t('litre')}}</label>
                 </span>
               </span>
             </span>
@@ -101,7 +101,7 @@
         </tr>
         <tr>
           <td>
-            <label>Erogazione fertilizzante 4</label>
+            <label>{{$t('fertilizerDispensing')}} 4</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
@@ -113,7 +113,7 @@
                 </span>
                 <span class="flex gap-2">
                   <input id="litri" type="radio" :disabled="fertData.F158 === undefined" v-model="fertData.F158" value="1" name="F158">
-                  <label for="litri">litri</label>
+                  <label for="litri">{{$t('litre')}}</label>
                 </span>
               </span>
             </span>
@@ -121,18 +121,18 @@
         </tr>
         <tr>
           <td>
-            <label>Risciacquo</label>
+            <label>{{$t('systemRinse')}}</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
               <input :disabled="fertData.F163 === undefined" v-model="fertData.F163" type="number" name="risciacquo">
-              <p>minuti</p>
+              <p>{{$t('minute')}}</p>
             </span>
           </td>
         </tr>
         <tr>
           <td>
-            <label>Durata</label>
+            <label>{{$t('timeDuration')}}</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
@@ -146,8 +146,8 @@
         <tr>
           <td>
             <div class="button-wrapper">
-              <MyButton type="submit" class="filled" label="Salva" :loading="postControlIsLoading" />
-              <MyButton type="button" class="filled" label="Cancella" :loading="fertConfigIsLoading" @click="onCancel"/>
+              <MyButton type="submit" class="filled"  :label="$t('save')" :loading="postControlIsLoading" />
+              <MyButton type="button" class="filled"  :label="$t('cancel')" :loading="fertConfigIsLoading" @click="onCancel"/>
             </div>
           </td>
           <td>
@@ -165,6 +165,8 @@ import { storeToRefs } from 'pinia'
 import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-core'
 import MyButton from '@/components/button/BaseButton.vue'
 import { useDataStore } from '@/stores/DataStore'
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
   //props
   const props = defineProps({

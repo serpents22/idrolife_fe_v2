@@ -6,7 +6,7 @@
         <h1>LA tua password è stata reimpostata</h1>
         <h2>Puoi effettuare il login qui
           <span class="font-bold">
-            <router-link :to="{name: 'LoginForm'}"> Accedi </router-link>
+            <router-link :to="{name: 'LoginForm'}"> {{$t('login')}} </router-link>
           </span>
         </h2>
       </span>

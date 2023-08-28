@@ -4,17 +4,17 @@
       <thead>
         <tr>
           <th>
-            <span>Elemento</span>
+            <span>{{$t('element')}}</span>
           </th>
           <th>
-            <span>Azione</span>
+            <span>{{$t('action')}}</span>
           </th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
-            <label>Contatore 1</label>
+            <label>{{$t('counter')}} 1</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
@@ -33,7 +33,7 @@
         </tr>
         <tr>
           <td>
-            <label>Impulsi per 100 litri</label>
+            <label>{{$t('impulsiLitri')}}</label>
           </td>
           <td>
             <span class="flex gap-2">
@@ -45,7 +45,7 @@
         </tr>
         <tr>
           <td>
-            <label>Ritardo allarme contatore</label>
+            <label>{{$t('counterAlarm')}}</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
@@ -58,7 +58,7 @@
         </tr>
         <tr>
           <td>
-            <label>Durata attivazione agitatore prima fase (minuti)</label>
+            <label>{{$t('activationDuration')}} {{ $t('minute') }}</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
@@ -70,7 +70,7 @@
         </tr>
         <tr>
           <td>
-            <label>Durata pausa agitatore prima fase (minuti)</label>
+            <label>{{$t('breakDuration')}} {{ $t('minute') }}</label>
           </td>
           <td>
             <span class="flex gap-2 items-center">
@@ -85,8 +85,8 @@
         <tr>
           <td>
             <div class="button-wrapper">
-              <MyButton type="submit" class="filled" label="Salva" :loading="postControlIsLoading" />
-              <MyButton type="button" class="filled" label="Cancella" :loading="fertConfigIsLoading" @click="onCancel" />
+              <MyButton type="submit" class="filled"  :label="$t('save')" :loading="postControlIsLoading" />
+              <MyButton type="button" class="filled"  :label="$t('cancel')" :loading="fertConfigIsLoading" @click="onCancel" />
             </div>
           </td>
           <td>
@@ -103,6 +103,8 @@ import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue';
 import MyButton from '@/components/button/BaseButton.vue'
 import { useDevicesStore } from '@/stores/DevicesStore';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
   const props = defineProps({
     id: String

@@ -1,8 +1,8 @@
 <template>
   <div class="email-confirmation-container">
-    <IdroTitle title="Abbiamo mandato un messaggio di attivazione alla tua email">
-      <h2>Controlla la tua casella di posta e conferma l'attivazione, poi esegui il login qui 
-        <span class="font-bold">
+    <IdroTitle :title="$t('emailConfirmation')">
+      <h2 class="mt-10">{{$t('checkEmail')}}
+        <span class="font-bold mt-4">
           <router-link :to="{name: 'LoginForm'}"> LOGIN </router-link>
         </span>
       </h2>

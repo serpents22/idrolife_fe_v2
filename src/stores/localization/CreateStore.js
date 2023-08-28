@@ -2,7 +2,7 @@ import { createPinia } from 'pinia';
 import { useI18n } from 'vue-i18n';
 
 const i18n = createI18n({
-    locale: 'it',
+    locale: 'ita',
 });
 
 export const pinia = createPinia();

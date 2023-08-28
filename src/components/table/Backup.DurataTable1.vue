@@ -144,11 +144,11 @@
                 {{ groupObj.group }}
               </option>
             </select>
-            <button type="button" class="filled_green mp-button mlw-30" @click="addStep()">Aggiungi Gruppo</button>
+            <button type="button" class="filled_green mp-button mlw-30" @click="addStep()">{{$t('addGroup')}}</button>
           </div>
         </div>
         <div class="button-wrapper no-margin">
-          <MyButton type="submit" class="filled" label="Salva" :loading="postControlIsLoading" />
+          <MyButton type="submit" class="filled"  :label="$t('save')" :loading="postControlIsLoading" />
         </div>
       </div>
     </form>
@@ -942,7 +942,7 @@ import Checkbox from '../input/Checkbox.vue';
     
   }
 
-  const tableHeader = ['Sposta', 'Num. Step', 'Stazione',  'Gruppo', 'E.V.', 'Stato', "Ore", 'Minuti', 'Secondi', "Volume", 'Rimuovi Step']
+  const tableHeader = [t('shift'), 'Num. Step', t('station'), t('group'), 'E.V.', t('status'), t('hour'), t('minute'), t('second'), "Volume", t('removeStep')]
   
 
 </script>

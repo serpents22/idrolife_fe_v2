@@ -36,6 +36,7 @@
   import { ref } from '@vue/reactivity';
   import { computed, defineAsyncComponent, onMounted } from '@vue/runtime-core';
   import { storeToRefs } from 'pinia';
+  import { useI18n } from 'vue-i18n';
   
   //asynchronus component
   const deviceCard = defineAsyncComponent(
@@ -55,6 +56,7 @@
       'id'
     ],
     setup(props, { emit }) {
+      const { t } = useI18n()
       const deviceId = props.id
       const comp = ref('ContatoreTable1')
       const isActive = ref(true)
@@ -62,19 +64,19 @@
       const { isLoading } = storeToRefs(useDevicesStore())
       const tabs = ref([
       {
-        title: 'Contatore 1',
+        title: t('counter') + ' 1',
         value: 'ContatoreTable1'
       },
       {
-        title: 'Contatore 2',
+        title: t('counter') + ' 2',
         value: 'ContatoreTable2'
       },
       {
-        title: 'Contatore 3',
+        title: t('counter') + ' 3',
         value: 'ContatoreTable3'
       },
       {
-        title: 'Contatore 4',
+        title: t('counter') + ' 4',
         value: 'ContatoreTable4'
       }
     ])
@@ -93,7 +95,7 @@
       const title = ref()
   
       onMounted(async() => {
-        var element = document.getElementById("Contatore 1");
+        var element = document.getElementById('ContatoreTable1');
         element.classList.add("active");
   
         await deviceStore.loadDevice(props.id)

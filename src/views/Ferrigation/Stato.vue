@@ -21,7 +21,7 @@
             <thead>
               <tr>
                 <th>
-                  <span>Stato</span>
+                  <span>{{$t('status')}}</span>
                 </th>
                 <th>
                 </th>
@@ -30,7 +30,7 @@
             <tbody>
               <tr>
                 <td>
-                  <p>Contatore Principale</p>
+                  <p>{{$t('counter')}} {{$t('principal')}}</p>
                 </td>
                 <td>
                   <div v-show="isLoading" role="status" class="max-w-sm animate-pulse">
@@ -41,7 +41,7 @@
               </tr>
               <tr>
                 <td>
-                  <p>Contatore 1</p>
+                  <p>{{$t('counter')}}  1</p>
                 </td>
                 <td>
                   <div v-show="isLoading" role="status" class="max-w-sm animate-pulse">
@@ -52,7 +52,7 @@
               </tr>
               <tr>
                 <td>
-                  <p>Contatore 2</p>
+                  <p>{{$t('counter')}}  2</p>
                 </td>
                 <td>
                   <div v-show="isLoading" role="status" class="max-w-sm animate-pulse">
@@ -63,7 +63,7 @@
               </tr>
               <tr>
                 <td>
-                  <p>Contatore 3</p>
+                  <p>{{$t('counter')}}  3</p>
                 </td>
                 <td>
                   <div v-show="isLoading" role="status" class="max-w-sm animate-pulse">
@@ -74,7 +74,7 @@
               </tr>
               <tr>
                 <td>
-                  <p>Contatore 4</p>
+                  <p>{{$t('counter')}}  4</p>
                 </td>
                 <td>
                   <div v-show="isLoading" role="status" class="max-w-sm animate-pulse">
@@ -107,7 +107,7 @@
               </tr>
               <tr>
                 <td>
-                  <p>Numero allarmi</p>
+                  <p>{{$t('numberOfAlarm')}} </p>
                 </td>
                 <td>
                   <div v-show="isLoading" role="status" class="max-w-sm animate-pulse">
@@ -122,7 +122,7 @@
             <thead>
               <tr>
                 <th>
-                  <span>Programma Attivi</span>
+                  <span>{{$t('activeProg')}} </span>
                 </th>
                 <th>
                 </th>
@@ -131,7 +131,7 @@
             <tbody>
               <tr v-for="tData,index in fertData.F17" :key="tData">
                 <td>
-                  <p>Programma {{index+1}}</p>
+                  <p>{{$t('program')}} {{index+1}}</p>
                 </td>
                 <td>
                   <Indicator :status="tData" />

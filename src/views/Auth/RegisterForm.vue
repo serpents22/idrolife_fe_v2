@@ -12,10 +12,10 @@
         <VeeForm :validation-schema="schema" v-slot="{ handleSubmit }" as="div" >
           <form  @submit="handleSubmit($event, onSubmit)" class="form-wrapper" >
             <div class="input-field">
-              <BaseInput name="firstName" type="firstName" label="Nome" class="text-field" />
+              <BaseInput name="firstName" type="firstName"  :label="$t('name')" class="text-field" />
             </div>
             <div class="input-field">
-              <BaseInput name="lastName" type="lastName" label="Cognome" class="text-field" />
+              <BaseInput name="lastName" type="lastName"  :label="$t('surname')" class="text-field" />
             </div>
             <div class="input-field">
               <BaseInput name="email" type="email" label="E-mail" class="text-field" />
@@ -24,15 +24,15 @@
               <BaseInput name="password" type="password" label="Password" class="text-field" />
             </div>
             <div class="input-field">
-              <BaseInput name="passwordConfirmation" type="password" label="Conferma password" class="text-field" />
+              <BaseInput name="passwordConfirmation" type="password"  :label="$t('confirmPassword')" class="text-field" />
             </div>
             <div class="button-wrapper">
-              <MyButton type="submit" class="filled" label="Registrati" :loading="isLoading" />
+              <MyButton type="submit" class="filled"  :label="$t('register')" :loading="isLoading" />
             </div>
           </form>
         </VeeForm>
         <div class="create-account">
-          <router-link :to="{name: 'LoginForm'}"> Possiedi un account? </router-link>
+          <router-link :to="{name: 'LoginForm'}"> {{$t('haveAccount')}}? </router-link>
         </div>
       </Modal>
     </div>

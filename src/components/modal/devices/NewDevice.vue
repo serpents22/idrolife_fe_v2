@@ -14,14 +14,14 @@
             <VeeForm :validation-schema="schema" v-slot="{ handleSubmit }" as="div" ref="form" >
               <form  @submit="handleSubmit($event, onSubmit)" class="form-wrapper" >
                 <BaseInput name="code" type="text" placeholder="Device ID" class="white" label="Device ID"/>
-                <BaseInput name="name" type="text" placeholder="Nome" class="white" label="Nome"/>
+                <BaseInput name="name" type="text" :placeholder="$t('name')" class="white"  :label="$t('name')"/>
                 <BaseInput name="password" type="password" placeholder="Password" class="white" label="Password"/>
                 <BaseInput name="type" type="text" placeholder="Type" class="white" label="Type"/>
                 <!-- <BaseInput name="max_devices" type="number" placeholder="Max devices" class="white" label="Max Devices"/> -->
                 <BaseInput name="coordinate" type="text" placeholder="GPS Location" class="white" label="GPS Location"/>
                 <div class="sm:flex-row flex-col flex justify-between gap-6 sm:gap-10"> 
-                  <BaseButton type="button" class="outlined" :label="cancelLabel" @click="cancelForm"/>
-                  <BaseButton type="submit" class="filled" :label="registerLabel" :loading="createDeviceIsLoading"   />
+                  <BaseButton type="button" class="outlined"  :label="cancelLabel" @click="cancelForm"/>
+                  <BaseButton type="submit" class="filled"  :label="registerLabel" :loading="createDeviceIsLoading"   />
                 </div>
               </form>
             </VeeForm>
@@ -43,7 +43,9 @@ import { ref, onMounted } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { addDeviceSchema } from '@/composable/devicesSchema'
 import { useDevicesStore } from '@/stores/DevicesStore'
- 
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
   const props = defineProps({
       isOpen: Boolean,
       title: String
@@ -53,8 +55,8 @@ import { useDevicesStore } from '@/stores/DevicesStore'
   const modalActive = ref(false)
   const devicesStore = useDevicesStore()
   const {  status, createDeviceIsLoading } = storeToRefs(useDevicesStore())
-  const cancelLabel = ref('CANCEL')
-  const registerLabel = ref('SAVE')
+  const cancelLabel = ref(t('cancel'))
+  const registerLabel = ref(t('save'))
   const regButtonClick = ref(0)
   const cancelButtonClick = ref(0)
 
@@ -67,7 +69,7 @@ import { useDevicesStore } from '@/stores/DevicesStore'
     console.log(values)
     regButtonClick.value = ++regButtonClick.value
     if (regButtonClick.value == 1) {
-      registerLabel.value = 'the data entered is correct?'
+      registerLabel.value = t('dataCorrect')
     }
 
     if (regButtonClick.value == 2) {
@@ -79,7 +81,7 @@ import { useDevicesStore } from '@/stores/DevicesStore'
         setTimeout(closeNotification, 3000)
         resetForm()
       }
-      registerLabel.value = 'SAVE'
+      registerLabel.value = t('save')
       regButtonClick.value = 0
       devicesStore.loadDevices()
     }
@@ -95,6 +97,10 @@ import { useDevicesStore } from '@/stores/DevicesStore'
   const target = ref(null)
 
   onClickOutside(target, () => {
+    cancelButtonClick.value = 0
+    regButtonClick.value = 0
+    registerLabel.value = t('save')
+    cancelLabel.value = t('cancel')
     if (props.isOpen) {
       emits('close')
     }
@@ -104,13 +110,13 @@ import { useDevicesStore } from '@/stores/DevicesStore'
     cancelButtonClick.value = ++cancelButtonClick.value
     switch (cancelButtonClick.value) {
       case 1:
-      cancelLabel.value = 'The entered data will be lost!'
+      cancelLabel.value = t('dataLost')
         break;
       case 2:
       form.value.resetForm()
       emits('close')
       cancelButtonClick.value = 0
-      cancelLabel.value = 'CANCEL'
+      cancelLabel.value = t('cancel')
         break;
     }
   }

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import dataAPI from '@/services/dataAPI'
 import { ref } from 'vue'
 
+
 export const useAlarmStore = defineStore('alarm', {
   state: () => ({
     alarmsList: ref([]),
@@ -16,7 +17,7 @@ export const useAlarmStore = defineStore('alarm', {
     async getAlarmList(params) {
       this.isLoading = true
       try {
-        const res = await dataAPI.getAlarmsList(params)
+        const res = await dataAPI.getAlarmsList(params, localStorage.getItem('locale').toUpperCase())
         console.log(res)
         this.alarmsList = res.data.data.resultAlarms
         this.isLoading = false

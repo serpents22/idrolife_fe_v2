@@ -23,10 +23,10 @@
           <thead>
             <tr>
               <th>
-                <span>Elemento</span>
+                <span>{{$t('element')}}</span>
               </th>
               <th>
-                <span>Azione</span>
+                <span>{{$t('action')}}</span>
               </th>
             </tr>
           </thead>
@@ -46,7 +46,7 @@
             </tr>
             <tr>
               <td>
-                <label for="numero-stazioni">Numero di stazioni</label>
+                <label for="numero-stazioni">{{$t('stationNumber')}}</label>
               </td>
               <td>
                 <input 
@@ -55,64 +55,64 @@
             </tr>
             <tr>
               <td>
-                <label for="Ingresso-1">Ingresso 1</label>
+                <label for="Ingresso-1">{{$t('entry')}} 1</label>
               </td>
               <td>
                 <span>
                   <select :disabled="satData.S1013 === undefined" v-model="satData.S1013" name="Ingresso-1" class="dropdown">
-                    <option value="0">non usato</option>
-                    <option value="1">normalmente aperto</option>
-                    <option value="2">normalmente chiuso</option>
+                    <option value="0">{{ $t('notUsed') }}</option>
+                    <option value="1">{{$t('NO')}}</option>
+                    <option value="2">{{$t('NC')}}</option>
                   </select>
                 </span>
               </td>
             </tr>
             <tr>
               <td>
-                <label for="Ingresso-2">Ingresso 2</label>
+                <label for="Ingresso-2">{{$t('entry')}} 2</label>
               </td>
               <td>
                 <span>
                   <select :disabled="satData.S1014 === undefined" v-model="satData.S1014" name="Ingresso-2" class="dropdown">
-                    <option value="0">non usato</option>
-                    <option value="1">normalmente aperto</option>
-                    <option value="2">normalmente chiuso</option>
+                    <option value="0">{{ $t('notUsed') }}</option>
+                    <option value="1">{{$t('NO')}}</option>
+                    <option value="2">{{$t('NC')}}</option>
                   </select>
                 </span>
               </td>
             </tr>
             <tr>
               <td>
-                <label for="Ingresso-3">Ingresso 3</label>
+                <label for="Ingresso-3">{{$t('entry')}} 3</label>
               </td>
               <td>
                 <span>
                   <select :disabled="satData.S1032 === undefined" v-model="satData.S1032" name="Ingresso-3" class="dropdown">
-                    <option value="0">non usato</option>
-                    <option value="1">normalmente aperto</option>
-                    <option value="2">normalmente chiuso</option>
+                    <option value="0">{{ $t('notUsed') }}</option>
+                    <option value="1">{{$t('NO')}}</option>
+                    <option value="2">{{$t('NC')}}</option>
                   </select>
                 </span>
               </td>
             </tr>
             <tr>
               <td>
-                <label for="Ingresso-4">Ingresso 4</label>
+                <label for="Ingresso-4">{{$t('entry')}} 4</label>
               </td>
               <td>
                 <span>
                   <select :disabled="satData.S1033 === undefined" v-model="satData.S1033" name="Ingresso-4" class="dropdown">
-                    <option value="0">non usato</option>
-                    <option value="1">normalmente aperto</option>
-                    <option value="2">normalmente chiuso</option>
-                    <option value="11">emergenza</option>
+                    <option value="0">{{ $t('notUsed') }}</option>
+                    <option value="1">{{$t('NO')}}</option>
+                    <option value="2">{{$t('NC')}}</option>
+                    <option value="11">{{$t('emergency')}}</option>
                   </select>
                 </span>
               </td>
             </tr>
             <tr>
               <td>
-                <label for="funzionamento-impianto">Funzionamento Impianto</label>
+                <label for="funzionamento-impianto">{{$t('plantOperationStatus')}}</label>
               </td>
               <td>
                 <span>
@@ -128,7 +128,7 @@
             </tr>
             <tr>
               <td>
-                <label for="max-programmi-attivi">Max Programmi Attivi</label>
+                <label for="max-programmi-attivi">{{$t('maxActiveProgram')}}</label>
               </td>
               <td>
                 <input 
@@ -138,20 +138,20 @@
             </tr>
             <tr>
               <td>
-                <label for="flow-off">Flow Off (Massima Perdita a impianto spento)</label>
+                <label for="flow-off">Flow Off ({{$t('maxLoss')}})</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
                   <input 
                     :disabled="satData.S1020 === undefined"
                     v-model="satData.S1020" type="number" name="flow-off">
-                  <p>litri/ora</p>
+                  <p>{{$t('litre')}}/{{$t('hour')}}</p>
                 </span>
               </td>
             </tr>
             <tr>
               <td>
-                <label for="toleranza-flow-off">Toleranza del flow off</label>
+                <label for="toleranza-flow-off">{{$t('flowOffTolerance')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -164,7 +164,7 @@
             </tr>
             <tr>
               <td>
-                <label for="impulsi">Impulsi</label>
+                <label for="impulsi">{{$t('pulses')}}</label>
               </td>
               <td class="flex">
                 <span class="flex gap-2 items-center">
@@ -175,22 +175,22 @@
                 <span class="flex flex-col pl-4 gap-2">
                   <span class="flex gap-2">
                     <input :disabled="satData.S1007 === undefined" name ="impulsi" id="alte" type="radio" v-model="satData.S1007" value="0">
-                    <label for="alte">Portarte alte M<sup>3</sup>/H</label>
+                    <label for="alte">{{$t('highFlow')}} M<sup>3</sup>/H</label>
                   </span>
                   <span class="flex gap-2">
                     <input :disabled="satData.S1007 === undefined" name ="impulsi" id="normali"  type="radio" v-model="satData.S1007" value="1">
-                    <label for="normali">Portarte normali HL/H</label>
+                    <label for="normali">{{$t('normalFlow')}} HL/H</label>
                   </span>
                   <span class="flex gap-2">
                     <input :disabled="satData.S1007 === undefined" name ="impulsi" id="basse" type="radio" v-model="satData.S1007" value="2">
-                    <label for="basse">Portarte basse L/H</label>
+                    <label for="basse">{{$t('lowFlow')}} L/H</label>
                   </span>
                 </span>
               </td>
             </tr>
             <tr>
               <td>
-                <label for="radiazione-solare">Radiazione Solare</label>
+                <label for="radiazione-solare">{{$t('solarIntensity')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -203,7 +203,7 @@
             </tr>
             <tr>
               <td>
-                <label for="velocita-vento">Velocita Vento</label>
+                <label for="velocita-vento">{{$t('windSpeed')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -216,7 +216,7 @@
             </tr>
             <tr>
               <td>
-                <label>Master Valvova</label>
+                <label>{{$t('evMaster')}}</label>
               </td>
               <td>
                 <span class="flex flex-col pl-4">
@@ -241,7 +241,7 @@
             </tr>
             <tr>
               <td>
-                <label>Comando Valvova</label>
+                <label>{{$t('ecCommand')}}</label>
               </td>
               <td>
                 <span class="flex flex-col pl-4">
@@ -270,7 +270,7 @@
           <thead>
             <tr>
               <th>
-                <span>Ritardi</span>
+                <span>{{$t('ritardi')}}</span>
               </th>
               <th>
                 <span> </span>
@@ -280,7 +280,7 @@
           <tbody>
             <tr>
               <td>
-                <label>Ingresso 1</label>
+                <label>{{$t('entry')}} 1</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -293,7 +293,7 @@
             </tr>
             <tr>
               <td>
-                <label>Ingresso 2</label>
+                <label>{{$t('entry')}} 2</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -306,7 +306,7 @@
             </tr>
             <tr>
               <td>
-                <label>Ingresso 3</label>
+                <label>{{$t('entry')}} 3</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -319,7 +319,7 @@
             </tr>
             <tr>
               <td>
-                <label>Ingresso 4</label>
+                <label>{{$t('entry')}} 4</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -332,7 +332,7 @@
             </tr>
             <tr>
               <td>
-                <label>Ritardo Disattivazione Pompa</label>
+                <label>{{$t('pumpDelay')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -345,7 +345,7 @@
             </tr>
             <tr>
               <td>
-                <label>Ritardo Allarme Flusso</label>
+                <label>{{$t('flowAlarmDelay')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -358,7 +358,7 @@
             </tr>
             <tr>
               <td>
-                <label>Ritardo Tra Stazioni</label>
+                <label>{{$t('stationDelay')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -371,7 +371,7 @@
             </tr>
             <tr>
               <td>
-                <label>Temperatura</label>
+                <label>{{$t('temperature')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -384,7 +384,7 @@
             </tr>
             <tr>
               <td>
-                <label>Umidita (Rh)</label>
+                <label>{{$t('humidity')}} (Rh)</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -397,7 +397,7 @@
             </tr>
             <tr>
               <td>
-                <label>Radiazione Solare</label>
+                <label>{{$t('solarIrradiation')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -410,7 +410,7 @@
             </tr>
             <tr>
               <td>
-                <label>Sensore Vento</label>
+                <label>{{$t('windSensor')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -424,7 +424,7 @@
           </tbody>
         </table>
         <div class="button-wrapper">
-          <MyButton type="submit" class="filled" label="Salva" :loading="dataStore.postControlIsLoading" />
+          <MyButton type="submit" class="filled"  :label="$t('save')" :loading="dataStore.postControlIsLoading" />
         </div>
       </form>
     </div>

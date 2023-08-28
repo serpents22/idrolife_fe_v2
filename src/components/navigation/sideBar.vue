@@ -14,9 +14,9 @@
       class="form-wrapper"
       :class="`${isExpanded ? 'form-expanded' : ''}`">
       <div class="field-wrapper">
-        <label for="name">Name : </label>
+        <label for="name">{{$t('name')}} : </label>
         <select id="name" class="dropdown" v-model="formData.ev_serial" :value="formData.ev_serial" @change="onChange(formData.ev_serial)">
-          <option value="0">non selezionato</option>
+          <option value="0">{{$t('notSelected')}}</option>
           <option 
             v-for="option in props.evList" :key="option"
             class="nav"
@@ -26,20 +26,20 @@
         </select>
       </div>
       <div class="field-wrapper">
-        <label for="lat">Latitudine : </label>
+        <label for="lat">Latitude : </label>
         <input type="text" 
           v-model="formData.latitude"
           id="lat">
       </div>
       <div class="field-wrapper">
-        <label for="long">Longitudine : </label>
+        <label for="long">Longitude : </label>
         <input type="text" 
           v-model="formData.longitude"
           id="long">
       </div>
       <div class="button-wrapper">
-        <IveButton type="submit" class="filled__blue mt-6" label="Salva" :loading="postDeviceGeoIsLoading"/>
-        <IveButton type="button" class="filled__red mt-6" label="Cancella" @click="toggleMenu"/>
+        <IveButton type="submit" class="filled__blue mt-6"   :label="$t('save')" :loading="postDeviceGeoIsLoading"/>
+        <IveButton type="button" class="filled__red mt-6"  :label="$t('cancel')" @click="toggleMenu"/>
       </div>
     </form>
   </div>

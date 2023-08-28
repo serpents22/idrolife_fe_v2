@@ -6,7 +6,7 @@
     :isError="isError"
      @close="closeNotification" />
   <div class="login-container">
-    <IdroTitle title="Inserisci l'e-mail per recuperare la password" />
+    <IdroTitle :title="$t('enterEmail')" />
     <div class="menu">
       <Modal>
         <VeeForm :validation-schema="schema" v-slot="{ handleSubmit }" as="div" >
@@ -15,7 +15,7 @@
               <BaseInput name="email" type="email" label="Email" placeholder="mail@mail.com" class="text-field" />
             </div>
             <div class="button-wrapper">
-              <MyButton type="submit" class="filled" label="Invia" :loading="isLoading" />
+              <MyButton type="submit" class="filled"  :label="$t('send')" :loading="isLoading" />
             </div>
           </form>
         </VeeForm>

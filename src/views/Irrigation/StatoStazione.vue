@@ -21,13 +21,13 @@
             <thead>
               <tr>
                 <th>
-                  <span>Stazione</span>
+                  <span>St{{$t('action')}}</span>
                 </th>
                 <th>
-                  <span>Stato</span>
+                  <span>{{$t('status')}}</span>
                 </th>
                 <th>
-                  <span>Azione</span>
+                  <span>{{$t('action')}}</span>
                 </th>
                 <th>
                   <span>Tempo rimanente</span>

@@ -19,15 +19,15 @@
         <div class="flex flex-col gap-4">
           <div class="w-[300px]">
             <Field name="deviceId" as="select" class="dropdown">
-              <option disabled value="">Please select one</option>
+              <option disabled value="">{{$t('selectOne')}}</option>
               <option :value=device.id v-for="device in supAdmindevices" :key="device.id">{{device.name}}</option>
             </Field>
           </div>
           <div class="w-[300px]">
-            <iveText placeholder="Nome" name="name" type="text" class="text-field"/>
+            <iveText :placeholder="$t('name')" name="name" type="text" class="text-field"/>
           </div>
           <div class="w-[300px]">
-            <iveButton type="submit" class="filled" label="SAVE"/>
+            <iveButton type="submit" class="filled"   :label="$t('save')"/>
           </div>
         </div>
       </form>

@@ -18,7 +18,7 @@
               <BaseInput name="password" type="password" label="Password" class="text-field" />
             </div>
             <div class="button-wrapper">
-              <MyButton type="submit" class="filled" :label="$t('login')" :loading="isLoading" />
+              <MyButton type="submit" class="filled"  :label="$t('login')" :loading="isLoading" />
             </div>
           </form>
         </VeeForm>

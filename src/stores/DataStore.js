@@ -88,6 +88,8 @@ export const useDataStore = defineStore('data', () => {
       } else {
         alarmState.value = false
       }
+      console.log(res.data.data.S15)
+      console.log(alarmState.value)
       satStat.value = res.data.data
       satStatIsLoading.value = false
   } catch (err) {

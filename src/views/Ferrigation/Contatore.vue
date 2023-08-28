@@ -23,17 +23,17 @@
             <thead>
               <tr>
                 <th>
-                  <span>Elemento</span>
+                  <span>{{$t('element')}}</span>
                 </th>
                 <th>
-                  <span>Azione</span>
+                  <span>{{$t('action')}}</span>
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
-                  <label>Contatore principale</label>
+                  <label>{{$t('counter')}} {{$t('principal')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -52,7 +52,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Impulsi per 1000 litri</label>
+                  <label>{{$t('impulsiLitri')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2">
@@ -64,7 +64,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Ritardo allarme contatore</label>
+                  <label>{{$t('counterAlarm')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -77,7 +77,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Valore minimo di portata</label>
+                  <label>{{$t('minimumFlowRate')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -87,11 +87,11 @@
                     <span class="fle flex-col sm:flex-row gap-4 pl-4">
                       <span class="flex gap-2">
                         <input id="litri/minuto" name="F1017" :disabled="fertData.F1017 === undefined" type="radio" v-model="fertData.F1017" value="0">
-                        <label for="litri/minuto">litri/minuto</label>
+                        <label for="litri/minuto">{{$t('litre')}}/{{$t('minute')}}</label>
                       </span>
                       <span class="flex gap-2">
                         <input id="m3/ora" name="F1017" :disabled="fertData.F1017 === undefined" type="radio" v-model="fertData.F1017" value="1">
-                        <label for="m3/ora">m<sup>3</sup>/ora</label>
+                        <label for="m3/ora">m<sup>3</sup>/{{$t('hour')}}</label>
                       </span>
                     </span>
                   </span>
@@ -99,24 +99,24 @@
               </tr>
               <tr>
                 <td>
-                  <label>Dosaggio pH</label>
+                  <label>{{$t('dosage')}} pH</label>
                 </td>
                 <td>
                   <span class="flex flex-col pl-4">
                     <span class="flex gap-2">
                       <input id="phacido" :disabled="fertData.F1026 === undefined" type="radio" v-model="fertData.F1026" value="0" name="F1026">
-                      <label for="phacido">Ph acido</label>
+                      <label for="phacido">Ph {{$t('acid')}}</label>
                     </span>
                     <span class="flex gap-2">
                       <input id="phbasico" :disabled="fertData.F1026 === undefined" type="radio" v-model="fertData.F1026" value="1" name="F1026">
-                      <label for="phbasico">Ph basico</label>
+                      <label for="phbasico">Ph {{$t('basic')}}</label>
                     </span>
                   </span>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <label>Isteresi Ph</label>
+                  <label>{{$t('hysteresis')}} Ph</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -131,8 +131,8 @@
               <tr>
                 <td>
                   <div class="button-wrapper">
-                    <MyButton type="submit" class="filled" label="Salva" :loading="dataStore.postControlIsLoading" />
-                    <MyButton type="button" class="filled" label="Cancella" :loading="fertConfigIsLoading" @click="onCancel"/>
+                    <MyButton type="submit" class="filled"  :label="$t('save')" :loading="dataStore.postControlIsLoading" />
+                    <MyButton type="button" class="filled"  :label="$t('cancel')" :loading="fertConfigIsLoading" @click="onCancel"/>
                   </div>
                 </td>
                 <td>
