@@ -26,7 +26,7 @@
       </div>
       <div class="field-wrapper">
         <span class="w-full bg-[#00B0F0] text-white px-5 py-3 text-xl">
-          <label for="nome">Seriale</label>
+          <label for="nome">{{ $t('idSerial') }}</label>
         </span>
         <span class="w-full bg-white text-center px-5 py-3 text-xl">
           <label for="nome">{{devicesStore.deviceData.code}}</label>
@@ -34,7 +34,7 @@
       </div>
       <div class="field-wrapper">
         <span class="w-full bg-[#00B0F0] text-white px-5 py-3 text-xl">
-          <label for="nome">Versione Firmware</label>
+          <label for="nome">{{ $t('fwVersion') }}</label>
         </span>
         <span class="w-full bg-white text-center px-5 py-3 text-xl">
           <label for="nome">{{devicesStore.deviceData.firmwareVersion}}</label>
@@ -42,7 +42,7 @@
       </div>
       <div class="field-wrapper">
         <span class="w-full bg-[#00B0F0] text-white px-5 py-3 text-xl">
-          <label for="nome">Versione Hardware</label>
+          <label for="nome">{{ $t('hardwareVersion') }}</label>
         </span>
         <span class="w-full bg-white text-center px-5 py-3 text-xl">
           <label for="nome">{{devicesStore.deviceData.hardwareVersion}}</label>
@@ -58,7 +58,7 @@
       </div>
       <div class="field-wrapper">
         <span class="w-full bg-[#00B0F0] text-white px-5 py-3 text-xl">
-          <label for="nome">Contatore</label>
+          <label for="nome">{{ $t('counter') }}</label>
         </span>
         <span class="w-full bg-white text-center px-5 py-3 text-xl">
           <label for="nome">{{devicesStore.deviceData.contatore}}</label>
@@ -66,7 +66,7 @@
       </div>
       <div class="field-wrapper">
         <span class="w-full bg-[#00B0F0] text-white px-5 py-3 text-xl">
-          <label for="nome">Stazioni</label>
+          <label for="nome">{{ $t('stations') }}</label>
         </span>
         <span class="w-full bg-white text-center px-5 py-3 text-xl">
           <label for="nome">{{devicesStore.deviceData.station}}</label>
@@ -74,7 +74,7 @@
       </div>
       <div class="field-wrapper">
         <span class="w-full bg-[#00B0F0] text-white px-5 py-3 text-xl">
-          <label for="nome">Programmi</label>
+          <label for="nome">{{ $t('programs') }}</label>
         </span>
         <span class="w-full bg-white text-center px-5 py-3 text-xl">
           <label for="nome">{{devicesStore.deviceData.prog}}</label>
@@ -82,7 +82,7 @@
       </div>
       <div class="field-wrapper">
         <span class="w-full bg-[#00B0F0] text-white px-5 py-3 text-xl">
-          <label for="nome">Pressione</label>
+          <label for="nome">{{ $t('pressure') }}</label>
         </span>
         <span class="w-full bg-white text-center px-5 py-3 text-xl">
           <label for="nome">{{devicesStore.deviceData.pressione}}</label>
@@ -90,19 +90,19 @@
       </div>
 
       <div class="pompa-wrapper">
-        <h2 class="font-semibold text-[24px]">Consumo istantaneo M3/H o L/H</h2>
+        <h2 class="font-semibold text-[24px]">{{ $t('instantConsumption') }} M3/H o L/H</h2>
         <div class="pompa">
           <div class="flex flex-col gap-4 items-center" v-for="(pompa,index) in istantaneo" :key="pompa">
-            <span class="text-[24px] font-semibold">Pompa {{index+1}}</span>
+            <span class="text-[24px] font-semibold">{{ $t('pump') }} {{index+1}}</span>
             <span>
               <Counter :dataNumber="pompa"/>
             </span>
           </div>
         </div>
-        <h2 class="font-semibold text-[24px] mt-20">Consumo totale M3</h2>
+        <h2 class="font-semibold text-[24px] mt-20">{{ $t('totalConsumption') }} M3</h2>
         <div class="pompa">
           <div class="flex flex-col gap-4 items-center" v-for="(pompa,index) in totale" :key="pompa">
-            <span class="text-[24px] font-semibold">Pompa {{index+1}}</span>
+            <span class="text-[24px] font-semibold">{{ $t('pump') }} {{index+1}}</span>
             <span>
               <Counter :dataNumber="pompa"/>
             </span>

@@ -21,7 +21,7 @@
             <thead>
               <tr>
                 <th>
-                  <span>St{{$t('action')}}</span>
+                  <span>{{$t('station')}}</span>
                 </th>
                 <th>
                   <span>{{$t('status')}}</span>
@@ -30,7 +30,7 @@
                   <span>{{$t('action')}}</span>
                 </th>
                 <th>
-                  <span>Tempo rimanente</span>
+                  <span>{{$t('remainingTime')}}</span>
                 </th>
               </tr>
             </thead>
@@ -86,7 +86,9 @@ import { storeToRefs } from 'pinia'
 import { defineAsyncComponent,  computed,  onMounted,  ref, onBeforeMount, onUnmounted } from '@vue/runtime-core'
 import Indicator from '@/components/Indicator.vue'
 import MyButton from '@/components/button/BaseButton.vue'
-  
+import { useI18n } from 'vue-i18n'
+
+const {t} = useI18n()
   //props
   const props = defineProps({
     id: String
@@ -169,13 +171,13 @@ import MyButton from '@/components/button/BaseButton.vue'
       if (tmpAzioneTempo !== undefined) {
         let tmpBoolean = tmpAzioneTempo[0]
         if (tmpBoolean == '0') {
-          tmpAzione = 'non attivo'
+          tmpAzione = t('notActive')
         } else if (tmpBoolean == '1') {
-          tmpAzione = 'attivo'
+          tmpAzione = t('active')
         }
         tmpTempo = tmpAzioneTempo[1].replaceAll('.',' : ')
       } else {
-        tmpAzione = 'non attivo'
+        tmpAzione = t('notActive')
         tmpTempo = '00:00:00'
       }
       let newObj = {

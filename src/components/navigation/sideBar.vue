@@ -8,7 +8,7 @@
     class="container"
     :class="`${isExpanded ? 'expand' : ''}`">
 
-    <h1 :class="`${isExpanded ? 'text-expanded' : ''}`">Aggiungi EV</h1>
+    <h1 :class="`${isExpanded ? 'text-expanded' : ''}`">{{$t('addEV')}}</h1>
     <form 
       @submit.prevent="onSubmit" 
       class="form-wrapper"
@@ -26,13 +26,13 @@
         </select>
       </div>
       <div class="field-wrapper">
-        <label for="lat">Latitude : </label>
+        <label for="lat">{{$t('latitude')}} : </label>
         <input type="text" 
           v-model="formData.latitude"
           id="lat">
       </div>
       <div class="field-wrapper">
-        <label for="long">Longitude : </label>
+        <label for="long">{{$t('longitude')}} : </label>
         <input type="text" 
           v-model="formData.longitude"
           id="long">

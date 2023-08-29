@@ -17,11 +17,11 @@
           </div>
           <div class="flex flex-col">
             <span class="flex flex-row justify-between mb-1">
-              <h2>Stato</h2>
+              <h2>{{$t('status')}}</h2>
               <Indicator :status="impianto.stato" />
             </span>
             <span class="flex flex-row justify-between">
-              <h2>ID</h2>
+              <h2>{{$t('idSerial')}}</h2>
               <p>{{ impianto.code }}</p>
             </span>
             <span class="flex flex-row justify-between">
@@ -33,19 +33,19 @@
               <p>{{ impianto.macAddress }}</p>
             </span>
             <span class="flex flex-row justify-between">
-              <h2>Version</h2>
+              <h2>{{$t('fwVersion')}}</h2>
               <p>{{ impianto.firmwareVersion }}</p>
             </span>
             <span class="flex flex-row justify-between">
-              <h2>Prog. Attivi</h2>
+              <h2>{{$t('activeProg')}}</h2>
               <p>{{ impianto.prog }}</p>
             </span>
             <span class="flex flex-row justify-between">
-              <h2>St. Attive</h2>
+              <h2>{{$t('activeSt')}}</h2>
               <p>{{ impianto.station }}</p>
             </span>
             <span class="flex flex-row justify-between">
-              <h2>Portata</h2>
+              <h2>{{$t('flow')}}</h2>
               <p>{{ impianto.portarta }}</p>
             </span>
           </div>

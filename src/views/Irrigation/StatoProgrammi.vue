@@ -21,7 +21,7 @@
             <thead>
               <tr>
                 <th>
-                  <span>Programma</span>
+                  <span>{{$t('program')}}</span>
                 </th>
                 <th>
                   <span>{{$t('status')}}</span>
@@ -30,10 +30,10 @@
                   <span>{{$t('action')}}</span>
                 </th>
                 <th>
-                  <span>Stazione Attiva su<br>questo programma</span>
+                  <span>{{$t('stationUsed')}}</span>
                 </th>
                 <th>
-                  <span>Tempo rimanente</span>
+                  <span>{{$t('remainingTime')}}</span>
                 </th>
               </tr>
             </thead>
@@ -97,7 +97,9 @@ import { storeToRefs } from 'pinia'
 import { defineAsyncComponent,  computed,  onMounted,  ref, onBeforeMount, onUnmounted } from '@vue/runtime-core'
 import Indicator from '@/components/Indicator.vue'
 import MyButton from '@/components/button/BaseButton.vue'
-  
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
   //props
   const props = defineProps({
     id: String
@@ -225,23 +227,23 @@ import MyButton from '@/components/button/BaseButton.vue'
         let tmpBoolean = tmpAzioneTempo[0]
         switch (tmpBoolean) {
           case '1':
-          tmpAzione = 'In attesa di partenza'
+          tmpAzione = t('waitingDeparture')
             break;
           case '2':
-          tmpAzione = 'MV Attiva'
+          tmpAzione = t('mvActive')
             break;
           case '3':
-          tmpAzione = 'In pausa'
+          tmpAzione = t('pause')
             break;
           case '4':
-          tmpAzione = 'EV Attiva'
+          tmpAzione = t('evActive')
             break;
           default:
-          tmpAzione = 'Non attivo'
+          tmpAzione = t('notActive')
             break;
         }
       } else {
-        tmpAzione = 'non attivo'
+        tmpAzione = t('notActive')
         tmpTempo = '00:00:00'
       }
       let newObj = {
