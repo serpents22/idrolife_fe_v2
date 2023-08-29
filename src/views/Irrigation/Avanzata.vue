@@ -32,7 +32,7 @@
           <tbody>
             <tr>
               <td>
-                <label>Corrente di circuito aperto</label>
+                <label>{{$t('openedCircuit')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -45,7 +45,7 @@
             </tr>
             <tr>
               <td>
-                <label>Durata impulso acknowledge</label>
+                <label>{{$t('acknowledgePulseTime')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -58,7 +58,7 @@
             </tr>
             <tr>
               <td>
-                <label>Soglia minima corrente durante autoricerca</label>
+                <label>{{$t('minAmpere')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -71,7 +71,7 @@
             </tr>
             <tr>
               <td>
-                <label>Ritardo tra attivazione valvova master e prima elettrovalvola</label>
+                <label>{{$t('activationDelayMaster')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -84,7 +84,7 @@
             </tr>
             <tr>
               <td>
-                <label>Ritardo tra attivazione tra due elettrovalvola</label>
+                <label>{{$t('activationDelayEV')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -97,7 +97,7 @@
             </tr>
             <tr>
               <td>
-                <label>Tensione mantenimento elettrovalvola</label>
+                <label>{{$t('evHoldingVoltage')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">
@@ -110,7 +110,7 @@
             </tr>
             <tr>
               <td>
-                <label>Durata impulso innesco elettrovalvola</label>
+                <label>{{$t('triggerPulseTime')}}</label>
               </td>
               <td>
                 <span class="flex gap-2 items-center">

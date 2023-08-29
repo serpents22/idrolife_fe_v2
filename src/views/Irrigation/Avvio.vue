@@ -19,12 +19,12 @@
       <form @submit.prevent="onSubmit" class="form-container">
         <div class="frame">
           <div class="frame-header">
-            <span class="font-bold text-xl">Avvio Manuale Stazione Idrosat</span>
+            <span class="font-bold text-xl">{{$t('manualIdrosatStart')}}</span>
           </div>
           <div class="frame-content">
             <div class="field-wrapper">
               <span class="w-[320px] flex text-left font-semibold">
-                <label for="radiazione-solare">Stazione numero :</label>
+                <label for="radiazione-solare">{{$t('stationsNumber')}} :</label>
               </span>
               <span class="flex w-full gap-2 items-center">
                 <input 
@@ -34,7 +34,7 @@
             </div>
             <div class="field-wrapper flex-col sm:flex-row ">
               <span class="w-[320px] flex text-left font-semibold">
-                <label for="radiazione-solare">Durata Irrigazione :</label>
+                <label for="radiazione-solare">{{$t('irrigationTime')}} :</label>
               </span>
               <span class="flex w-full gap-2 items-center">
                 <input 
@@ -59,7 +59,7 @@
             </div>
             <div class="field-wrapper">
               <span class="w-[320px] flex text-left font-semibold">
-                <label for="radiazione-solare">Ferma stazione N :</label>
+                <label for="radiazione-solare">{{$t('stopStation')}} N :</label>
               </span>
               <span class="flex w-full gap-2 items-center">
                 <input 
@@ -75,7 +75,7 @@
             </div>
             <div class="field-wrapper">
               <span class="w-[320px] flex text-left font-semibold">
-                <label for="radiazione-solare">Salta stazione N(solo se attiva in un programma) :</label>
+                <label for="radiazione-solare">{{$t('skipStation')}} :</label>
               </span>
               <span class="flex w-full gap-2 items-center">
                 <input class="w-full" type="number" name="radiazione-solare"

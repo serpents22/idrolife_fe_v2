@@ -15,7 +15,7 @@
   </div>
   <div class="content">
     <IdroTitle :title="title"/>
-    <h2 class="title">Gestione Stazioni</h2>
+    <h2 class="title">{{$t('stationsManagement')}}</h2>
     <div class="main">
       <Accordion
         :id="props.id"

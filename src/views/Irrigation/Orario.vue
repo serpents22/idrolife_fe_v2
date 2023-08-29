@@ -21,7 +21,7 @@
           <thead>
             <tr>
               <th>
-                <span>Imposta orario alla tua idrosat</span>
+                <span>{{$t('idrosatSettingDataTime')}}</span>
               </th>
             </tr>
           </thead>
@@ -34,7 +34,7 @@
                   <input class="self-center" v-model="satData.mese" type="number" name="mese">
                   <span>/</span>
                   <input class="self-center" v-model="satData.anno" type="number" name="anno">
-                  <span>giorno/mese/anno</span>
+                  <span>{{$t('day')}}/{{$t('month')}}/{{$t('year')}}</span>
                 </div>
               </td>
             </tr>
@@ -44,7 +44,7 @@
                   <input class="self-center" v-model="satData.ore" type="number" name="ore">
                   <span>:</span>
                   <input class="self-center" v-model="satData.min" type="number" name="min">
-                  <span>ore:min</span>
+                  <span>{{$t('hour')}}:{{$t('minute')}}</span>
                 </div>
               </td>
             </tr>

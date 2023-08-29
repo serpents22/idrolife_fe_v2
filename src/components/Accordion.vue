@@ -38,16 +38,16 @@
     </div>
     
     <div v-for="valve in tData" :key="valve"  class="flex w-full justify-between bg-[#DDE8FA]/60 backdrop-blur-lg py-2 px-4">
-      <span class="text-sm font-semibold">EV N<sup>o</sup> : {{valve.id}} Serial : {{valve.ev}} (Master No: {{valve.masterv}} - Pompa No: {{valve.pompa}})</span>
+      <span class="text-sm font-semibold">EV N<sup>o</sup> : {{valve.id}} Serial : {{valve.ev}} ({{$t('master')}} No: {{valve.masterv}} - {{$t('pump')}} No: {{valve.pompa}})</span>
     </div>
 
     <div v-show="isOpen[index]" :id="`collapse`" class="flex w-full flex-col justify-between gap-10 bg-[#DDE8FA]/60 backdrop-blur-lg py-2 px-4">
       <form v-if="tData[0].stazione > 0" v-for="valve in tData" :key="valve" class="edit-form " @submit.prevent="editConfiguration(valve)">
         <div class="flex w-full py-2 justify-center items-center text-xl font-bold bg-[#E6EDCB]">
-          <span>Configura</span>
+          <span>{{$t('configure')}}</span>
         </div>
         <div class="flex items-center py-2 border-t-2 border-[#EFF5E4]">
-          <span class="font-semibold w-[360px] text-left">Elettrovalvola No:</span>
+          <span class="font-semibold w-[360px] text-left">{{$t('ev')}} No:</span>
           <!--:value="valve.id"-->
           <select  class="dropdown" v-model = "valve.id"  >
             <option value="0">OFF</option>
@@ -60,14 +60,14 @@
           </select>
         </div>
         <div class="flex items-center py-2 border-t-2 border-[#EFF5E4]">
-          <span class="font-semibold w-[360px] text-left">Pompa No:</span>
+          <span class="font-semibold w-[360px] text-left">{{$t('pump')}} No:</span>
           <select  class="dropdown" v-model = "valve.pompa" :value="valve.pompa">
             <option value="0">OFF</option>
             <option v-for="option in props.pumpList" :key="option" class="nav"  @click="onClick(option.index)" :value="option.index" :id="option.index">{{option.index}} : {{option.title}}</option>
           </select>
         </div>
         <div class="flex items-center py-2 border-t-2 border-[#EFF5E4]">
-          <span class="font-semibold w-[360px] text-left">Master No:</span>
+          <span class="font-semibold w-[360px] text-left">{{$t('master')}} No:</span>
           <select  class="dropdown" v-model = "valve.masterv" :value="valve.masterv">
             <option value="0">OFF</option>
             <option 
@@ -79,18 +79,18 @@
           </select>
         </div>
         <div class="w-20 flex gap-4">
-          <IveButton type="submit" class="filled__blue" label="Aggiorna" :loading="postControlIsLoading"/>
-          <IveButton type="button" class="filled" label="Resetta" :loading="postControlIsLoading" @click="restoreConfiguration(valve)"/>
-          <IveButton type="button" class="filled__red" label="Rimuovi" :loading="postControlIsLoading" @click="removeConfiguration(valve)"/>
+          <IveButton type="submit" class="filled__blue" :label="$t('refresh')" :loading="postControlIsLoading"/>
+          <IveButton type="button" class="filled" :label="$t('reset')" :loading="postControlIsLoading" @click="restoreConfiguration(valve)"/>
+          <IveButton type="button" class="filled__red" :label="$t('remove')" :loading="postControlIsLoading" @click="removeConfiguration(valve)"/>
         </div>
       </form>
       <form class="add-form" @submit.prevent="addConfiguration(tData,addFormData)">
         <div class="flex w-full py-2 justify-center items-center text-xl font-bold bg-[#E6EDCB]">
-          <span v-if="tData[0].stazione > 0">Aggiungi Configur{{$t('action')}}</span>
-          <span v-if="tData[0].stazione == 0">Inserisci nuova st{{$t('action')}}</span>
+          <span v-if="tData[0].stazione > 0">{{$t('addConfiguration')}}</span>
+          <span v-if="tData[0].stazione == 0">{{$t('insertNewStation')}}</span>
         </div>
         <div class="flex items-center py-2 border-t-2 border-[#EFF5E4]">
-          <span class="font-semibold w-[360px] text-left">Elettrovalvola No:</span>
+          <span class="font-semibold w-[360px] text-left">{{$t('ev')}} No:</span>
           <!--:value="addFormData.evNumber"-->
           <select  class="dropdown" v-model="addFormData.evNumber" >
             <option value="0">OFF</option>
@@ -103,7 +103,7 @@
           </select>
         </div>
         <div class="flex items-center py-2 border-t-2 border-[#EFF5E4]">
-          <span class="font-semibold w-[360px] text-left">Pompa No:</span>
+          <span class="font-semibold w-[360px] text-left">{{$t('pump')}} No:</span>
           <select  class="dropdown" v-model="addFormData.pump" :value="addFormData.pump">
             <option value="0">OFF</option>
             <option 
@@ -115,7 +115,7 @@
           </select>
         </div>
         <div class="flex items-center py-2 border-t-2 border-[#EFF5E4]">
-          <span class="font-semibold w-[360px] text-left">Master No:</span>
+          <span class="font-semibold w-[360px] text-left">{{$t('master')}} No:</span>
           <select  class="dropdown" v-model="addFormData.mv" :value="addFormData.mv">
             <option value="0">OFF</option>
             <option 

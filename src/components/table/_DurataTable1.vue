@@ -933,7 +933,7 @@ const { t } = useI18n();
     
   }
 
-  const tableHeader = [t('shift'), 'Num. Step', t('station'), t('group'), 'E.V.', t('status'), t('hour'), t('minute'), t('second'), "Volume", t('removeStep')]
+  const tableHeader = [t('shift'), t('stepNum'), t('station'), t('group'), 'E.V.', t('status'), t('hour'), t('minute'), t('second'), "Volume", t('removeStep')]
   
 
 </script>

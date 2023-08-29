@@ -15,7 +15,7 @@
   </div>
   <div class="content">
     <!-- <IdroTitle title="Programma" /> -->
-    <IdroTitle title="Durata Stazioni" />
+    <IdroTitle :title="$t('stationsDuration')" />
     <!--<div class="main">
       <Tab :tabs="tabs" @clicked= "changeNavigation" />
       

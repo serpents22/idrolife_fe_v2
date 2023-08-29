@@ -15,7 +15,7 @@
     </div>
     <div class="content">
       <div class="header">
-        <IdroTitle title="Programma" />
+        <IdroTitle :title="$t('program')" />
         <div class="flex items-center gap-4 mb-4 bg-white rounded-md px-4">
           <select 
           class="dropdown"
@@ -35,14 +35,14 @@
             <thead>
                 <tr>
                   <th class="w-10">
-                    <label>Attiva</label>
+                    <label>{{ $t('activate') }}</label>
                   </th>
                   <th class="w-40">
-                    <label>Orario di inizio</label>
+                    <label>{{ $t('startTime') }}</label>
                   </th>
                   <th class="w-40">
-                    <label v-if="endProgramMode==1">Cicli</label>
-                    <label v-if="endProgramMode==0">Orario di fine</label>
+                    <label v-if="endProgramMode==1">{{ $t('cycles') }}</label>
+                    <label v-if="endProgramMode==0">{{ $t('endTime') }}</label>
                   </th>
                 </tr>
             </thead>
@@ -57,29 +57,29 @@
                   <div class="mp-flex">
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.ore0" class="w-30" :disabled="satData.isAuto1 === false" type="number" name="ore0">
-                      <label>ore</label>
+                      <label>{{$t('hour')}}</label>
                     </div>
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.min0" class="w-30" :disabled="satData.isAuto1 === false" type="number" name="min0">
-                      <label>min</label>
+                      <label>{{$t('minute')}}</label>
                     </div>
                   </div>
                 </td>
                 <td v-if="endProgramMode==1">
                   <div class="flex gap-2 items-center">
                     <input v-model="satData.S1" class="w-30"  :disabled="satData.isAuto1 === false" type="number" name="cicli0">
-                    <label>cicli</label>
+                    <label>{{$t('cycles')}}</label>
                   </div>
                 </td>
                 <td name="OrarioFine1" v-if="endProgramMode==0" :disabled="satData.isAuto1 === false">
                   <div class="mp-flex">
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.Time1H" class="w-30" :disabled="satData.isAuto1 === false" type="number" name="ore2">
-                      <label>ore</label>
+                      <label>{{$t('hour')}}</label>
                     </div>
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.Time1M" class="w-30" :disabled="satData.isAuto1 === false" type="number" name="min2">
-                      <label>min</label>
+                      <label>{{$t('minute')}}</label>
                     </div>
                   </div>
                 </td>
@@ -95,30 +95,30 @@
                   <div class="mp-flex">
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.ore2" class="w-30" :disabled="satData.isAuto2 === false" type="number" name="ore2">
-                      <label>ore</label>
+                      <label>{{$t('hour')}}</label>
                     </div>
                     <div class="flex gap-2 items-center td-gap">
                       <input 
                         v-model="satData.min2" class="w-30" :disabled="satData.isAuto2 === false" type="number" name="min2">
-                      <label>min</label>
+                      <label>{{$t('minute')}}</label>
                     </div>
                   </div>
                 </td>
                 <td v-if="endProgramMode==1">
                   <div class="flex gap-2 items-center">
                     <input v-model="satData.S3" class="w-30" :disabled="satData.isAuto2 === false" type="number" name="cicli3">
-                    <label>cicli</label>
+                    <label>{{$t('cycles')}}</label>
                   </div>
                 </td>
                 <td name="OrarioFine3" v-if="endProgramMode==0">
                   <div class="mp-flex">
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.Time3H" class="w-30" :disabled="satData.isAuto2 === false" type="number" name="ore2">
-                      <label>ore</label>
+                      <label>{{$t('hour')}}</label>
                     </div>
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.Time3M" class="w-30" :disabled="satData.isAuto2 === false" type="number" name="min2">
-                      <label>min</label>
+                      <label>{{$t('minute')}}</label>
                     </div>
                   </div>
                 </td>
@@ -134,29 +134,29 @@
                   <div class="mp-flex">
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.ore4" class="w-30" :disabled="satData.isAuto3 === false" type="number" name="ore4">
-                      <label>ore</label>
+                      <label>{{$t('hour')}}</label>
                     </div>
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.min4" class="w-30" :disabled="satData.isAuto3 === false" type="number" name="min4">
-                      <label>min</label>
+                      <label>{{$t('minute')}}</label>
                     </div>
                   </div>
                 </td>
                 <td v-if="endProgramMode==1">
                   <div class="flex gap-2 items-center">
                     <input v-model="satData.S5" class="w-30" :disabled="satData.isAuto3 === false" type="number" name="cicli5">
-                    <label>cicli</label>
+                    <label>{{$t('cycles')}}</label>
                   </div>
                 </td>
                 <td name="OrarioFine5" v-if="endProgramMode==0">
                   <div class="mp-flex">
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.Time5H" class="w-30" :disabled="satData.isAuto3 === false" type="number" name="ore2">
-                      <label>ore</label>
+                      <label>{{$t('hour')}}</label>
                     </div>
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.Time5M" class="w-30" :disabled="satData.isAuto3 === false" type="number" name="min2">
-                      <label>min</label>
+                      <label>{{$t('minute')}}</label>
                     </div>
                   </div>
                 </td>
@@ -172,29 +172,29 @@
                   <div class="mp-flex">
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.ore6" class="w-30" :disabled="satData.isAuto4 === false" type="number" name="ore6">
-                      <label>ore</label>
+                      <label>{{$t('hour')}}</label>
                     </div>
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.min6" class="w-30" :disabled="satData.isAuto4 === false" type="number" name="min6">
-                      <label>min</label>
+                      <label>{{$t('minute')}}</label>
                     </div>
                   </div>
                 </td>
                 <td v-if="endProgramMode==1">
                   <div class="flex gap-2 items-center">
                     <input v-model="satData.S7" class="w-30" :disabled="satData.isAuto4 === false" type="number" name="cicli7">
-                    <label>cicli</label>
+                    <label>{{$t('cycles')}}</label>
                   </div>
                 </td>
                 <td name="OrarioFine7" v-if="endProgramMode==0">
                   <div class="mp-flex">
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.Time7H" class="w-30" :disabled="satData.isAuto4 === false" type="number" name="ore2">
-                      <label>ore</label>
+                      <label>{{$t('hour')}}</label>
                     </div>
                     <div class="flex gap-2 items-center td-gap">
                       <input v-model="satData.Time7M" class="w-30" :disabled="satData.isAuto4 === false" type="number" name="min2">
-                      <label>min</label>
+                      <label>{{$t('minute')}}</label>
                     </div>
                   </div>
                 </td>

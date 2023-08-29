@@ -15,7 +15,7 @@
     </div>
     <div class="content">
       <div class="header">
-        <IdroTitle title="Programma" />
+        <IdroTitle :title="$t('program')" />
         <select 
          class="dropdown"
          @change="changeOption($event)">
@@ -32,7 +32,7 @@
             <thead>
               <tr>
                 <th>
-                  <span>Parametro</span>
+                  <span>{{$t('parameter')}}</span>
                 </th>
                 <th>
                   <span>{{$t('action')}}</span>
@@ -42,7 +42,7 @@
             <tbody>
               <tr>
                 <td>
-                  <label for="nome">Nome Programma</label>
+                  <label for="nome">{{$t('programName')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -53,7 +53,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Modalita Programma</label>
+                  <label>{{$t('programMode')}}</label>
                 </td>
                 <td>
                   <span class="flex flex-col gap-1">
@@ -70,7 +70,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Programma Minifert Associato</label>
+                  <label>{{$t('minifertProgram')}}</label>
                 </td>
                 <td>
                   <span>
@@ -90,7 +90,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Tempo {{$t('station')}}</label>
+                  <label></label>
                 </td>
                 <td>
                   <span class="flex flex-col gap-1">
@@ -99,14 +99,14 @@
                         :disabled="programData.functionMode === undefined"
                         name="tempo"
                         id="tempoStazioneMinuti" type="radio" v-model="programData.functionMode" value="1">
-                      <label for="tempoStazioneMinuti">minuti/secondi</label>
+                      <label for="tempoStazioneMinuti">{{$t('minute')}}/{{$t('second')}}</label>
                     </span>
                     <span class="flex gap-2">
                       <input
                         :disabled="programData.functionMode === undefined"
                         name="tempo"
                         id="tempoStazioneOre" type="radio" v-model="programData.functionMode" value="2">
-                      <label for="tempoStazioneOre">ore/minuti</label>
+                      <label for="tempoStazioneOre">{{$t('hour')}}/{{$t('minute')}}</label>
                     </span>
                     <span class="flex gap-2">
                       <input
@@ -120,7 +120,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Cicli o Finestra Temporale</label>
+                  <label>{{$t('cyclesOrTime')}}</label>
                 </td>
                 <td>
                   <span class="flex flex-col gap-1">
@@ -129,21 +129,21 @@
                         :disabled="programData.cicleTimeMode === undefined"
                         name="F3" id="cicliTemporaleCicli" type="radio" 
                         v-model="programData.cicleTimeMode" value="1">
-                      <label for="cicliTemporaleCicli">Cicli</label>
+                      <label for="cicliTemporaleCicli">{{$t('cycles')}}</label>
                     </span>
                     <span class="flex gap-2">
                       <input
                         :disabled="programData.cicleTimeMode === undefined"
                         name="F3" id="cicliTemporaleTempo" type="radio" 
                         v-model="programData.cicleTimeMode" value="0">
-                      <label for="cicliTemporaleTempo">Tempo</label> 
+                      <label for="cicliTemporaleTempo">{{$t('time')}}</label> 
                     </span>
                   </span>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <label>Ritardo Tra Stazioni</label>
+                  <label>{{$t('delayBetweenStation')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -157,7 +157,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Ritardo Tra Cicli</label>
+                  <label>{{$t('delayBetweenCycles')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -171,7 +171,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Modalita Avvio</label>
+                  <label>{{$t('startMode')}}</label>
                 </td>
                 <td>
                   <span class="flex flex-col gap-1">
@@ -179,31 +179,31 @@
                       <input
                         :disabled="programData.pauseWeekMode === undefined"
                         id="giorniselezionati" type="radio" v-model="programData.pauseWeekMode" value="0">
-                      <label for="giorniselezionati" >giorni selezionati</label>
+                      <label for="giorniselezionati" >{{$t('selectedDays')}}</label>
                     </span>
                     <span class="flex gap-2">
                       <input
                         :disabled="programData.pauseWeekMode === undefined"
                         id="giornisaltati" type="radio" v-model="programData.pauseWeekMode" value="1">
-                      <label for="giornisaltati" >giorni saltati</label>
+                      <label for="giornisaltati" >{{$t('skippedDays')}}</label>
                     </span>
                   </span>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <label>Calendario bisettimanale</label>
+                  <label>{{$t('biweeklyCalendar')}}</label>
                 </td>
                 <td v-if="endReload">
                   <div class="biweek-container">
                     <div>
-                      <label>Prima settimana</label>
+                      <label>{{$t('firstWeek')}}</label>
                       <div name="days-container" v-for="giorno in 7" :key="giorno">
                         <input type="checkbox" :disabled="programData.pauseWeekMode!=0" @change="setIrrigationDay($event, (giorno-1))" :checked="biWeekCalendar[giorno-1].status == 1" :value="biWeekCalendar[giorno-1].status" > {{ biWeekCalendar[giorno-1].day }}
                       </div>
                     </div>
                     <div class="week-container">
-                      <label>Seconda settimana</label>
+                      <label>{{$t('firstWeek')}}</label>
                       <div name="days-container" v-for="giorno in 7" :key="giorno" >
                         <input type="checkbox" :disabled="programData.pauseWeekMode!=0" @change="setIrrigationDay($event, (giorno+7)-1)" :checked="biWeekCalendar[(giorno+7)-1].status == 1" :value="biWeekCalendar[(giorno+7)-1].status"> {{ biWeekCalendar[(giorno+7)-1].day }}
                       </div>
@@ -213,7 +213,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Settimana corrente</label>
+                  <label>{{$t('activeWeek')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -223,7 +223,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Giorni Saltati</label>
+                  <label>{{$t('skippedDays')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -233,7 +233,7 @@
               </tr>
               <tr>
                 <td>
-                  <label>Giorni Mancanti</label>
+                  <label>{{$t('daysBeforeStart')}}</label>
                 </td>
                 <td>
                   <span class="flex gap-2 items-center">
@@ -259,8 +259,9 @@ import { storeToRefs } from 'pinia'
 import { defineAsyncComponent,  computed,  onMounted,  ref } from '@vue/runtime-core'
 import MyButton from '@/components/button/BaseButton.vue'
 import { functionsIn } from 'lodash';
-  
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
   //props
   const props = defineProps({
     id: String
@@ -545,8 +546,7 @@ import { functionsIn } from 'lodash';
   }
 
 
-  let daysName = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
-
+  let daysName = [t('monday'), t('tuesday'), t('wednesday'), t('thursday'), t('friday'), t('saturday'), t('sunday'),t('monday'), t('tuesday'), t('wednesday'), t('thursday'), t('friday'), t('saturday'), t('sunday')]
   ///Inizializzo la matrice per il rendering
   const biWeekCalendar= []
   

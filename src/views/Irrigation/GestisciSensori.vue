@@ -15,7 +15,7 @@
   </div>
   <div class="content">
     <div class="header">
-      <IdroTitle :title="title"/>
+      <IdroTitle :title="$t('sensorsManagement')"/>
       <select 
         class="dropdown"
         @change="changeOption($event)">
@@ -30,23 +30,23 @@
       <form @submit.prevent="onSubmit" class="form-container">
         <div class="frame">
           <div class="frame-header">
-            <span class="text-left font-semibold">Settaggio Sensori</span>
+            <span class="text-left font-semibold">{{ $t('sensorsSetting') }}</span>
           </div>
           <div class="form">
             <div class="border-b-4 border-yellow-100 pb-4">
               <div class="field-title">
-                <span  class="w-[360px] text-left font-semibold">Temperatura</span>
+                <span  class="w-[360px] text-left font-semibold">{{ $t('temperature') }}</span>
               </div>
               <div class="field-wrapper">
                 <div class="field">
                   <span>
-                    <label for="temperature-bassa">Bassa <sup>o</sup>C</label>
+                    <label for="temperature-bassa">{{ $t('low') }} <sup>o</sup>C</label>
                   </span>
                   <input v-model="temperaturaBassa" type="number" id="temperature-bassa" disabled>
                 </div>
                 <div class="field">
                   <span>
-                    <label for="temperature-bassa">Alta <sup>o</sup>C</label>
+                    <label for="temperature-bassa">{{ $t('high') }} <sup>o</sup>C</label>
                   </span>
                   <input v-model="temperaturaAlta" type="number" id="temperature-bassa" disabled>
                 </div>
@@ -61,18 +61,18 @@
                   :enableCross="false" />
               </div>
               <div class="field-title">
-                <span  class="w-[360px] text-left font-semibold">Umidita</span>
+                <span  class="w-[360px] text-left font-semibold">{{ $t('humidity') }}</span>
               </div>
               <div class="field-wrapper">
                 <div class="field">
                   <span>
-                    <label for="umidita-bassa">Bassa <sup>o</sup>C</label>
+                    <label for="umidita-bassa">{{ $t('low') }} <sup>o</sup>C</label>
                   </span>
                   <input v-model="umiditaBassa" type="number" id="umidita-bassa" disabled>
                 </div>
                 <div class="field">
                   <span>
-                    <label for="umidita-bassa">Alta <sup>o</sup>C</label>
+                    <label for="umidita-bassa">{{ $t('high') }} <sup>o</sup>C</label>
                   </span>
                   <input v-model="umiditaAlta" type="number" id="umidita-bassa" disabled>
                 </div>
@@ -88,7 +88,7 @@
               </div>
               <div class="field-wrapper">
                 <span class="w-[360px] flex">
-                  <label for="sensora-umidita">Sensore Umidita :</label>
+                  <label for="sensora-umidita">{{ $t('humiditySensorType') }} :</label>
                 </span>
                 <span class="field">
                   <select 
@@ -101,7 +101,7 @@
               </div>
               <div class="field-wrapper">
                 <span class="w-[360px] flex">
-                  <label for="sensora-umidita">Livello Sensore Umidita :</label>
+                  <label for="sensora-umidita">{{ $t('humiditySensorLevel') }} :</label>
                 </span>
                 <span class="field">
                   <select 
@@ -118,7 +118,7 @@
               <div class="field-wrapper">
                 <div class="field">
                   <span>
-                    <label for="water-budget">Bassa <sup>o</sup>C</label>
+                    <label for="water-budget">{{ $t('low') }} <sup>o</sup>C</label>
                   </span>
                   <input 
                     v-model="satData.S7" 
@@ -151,7 +151,7 @@
             <div class="border-b-4 border-yellow-100 py-4">
               <div class="field-wrapper">
                 <span class="w-[360px] text-lg font-bold flex text-left">
-                  <label>Ferma Programma</label>
+                  <label>{{ $t('programStop') }}</label>
                 </span>
                 <span class="field">
                   <span class="flex gap-2">
@@ -159,84 +159,84 @@
                       :disabled="satData.S8 === undefined" 
                       id="temperatura-bassa" type="checkbox" 
                       v-model="satData.S8" value="1">
-                    <label for="temperatura-bassa">Temperatura Bassa</label>
+                    <label for="temperatura-bassa">{{ $t('lowTemperature') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="umidita-bassa" type="checkbox" 
                       v-model="satData.S8" value="2">
-                    <label for="umidita-bassa" >Umidita Bassa</label>
+                    <label for="umidita-bassa" >{{ $t('lowHumidity') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="vento" type="checkbox" 
                       v-model="satData.S8" value="3">
-                    <label for="vento">Vento</label>
+                    <label for="vento">{{ $t('wind') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="radiazione-solare" type="checkbox" 
                       v-model="satData.S8" value="4">
-                    <label for="radiazione-solare" >Radiazione Solare</label>
+                    <label for="radiazione-solare" >{{ $t('solarIntensity') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="primo-ingresso" type="checkbox" 
                       v-model="satData.S8" value="5">
-                    <label for="primo-ingresso" >Primo Ingresso</label>
+                    <label for="primo-ingresso" >{{ $t('firstEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="secondo-ingresso" type="checkbox" 
                       v-model="satData.S8" value="6">
-                    <label for="secondo-ingresso" >Secondo Ingresso</label>
+                    <label for="secondo-ingresso" >{{ $t('secondEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="temperatura-alta" type="checkbox" 
                       v-model="satData.S8" value="7">
-                    <label for="temperatura-alta">Temperatura Alta</label>
+                    <label for="temperatura-alta">{{ $t('highPressure') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="umidita-alta" type="checkbox" 
                       v-model="satData.S8" value="8">
-                    <label for="umidita-alta">Umidita Alta</label>
+                    <label for="umidita-alta">{{ $t('highHumidity') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="Ingresso3" type="checkbox" 
                       v-model="satData.S8" value="9">
-                    <label for="Ingresso3">3' Ingresso</label>
+                    <label for="Ingresso3">{{ $t('thirdEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="Ingresso4" type="checkbox" 
                       v-model="satData.S8" value="10">
-                    <label for="Ingresso4">4'Ingresso</label>
+                    <label for="Ingresso4">{{ $t('fourthEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="pressione-bassa" type="checkbox" 
                       v-model="satData.S8" value="11">
-                    <label for="pressione-bassa">Pressione Bassa</label>
+                    <label for="pressione-bassa">{{ $t('lowPressure') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S8 === undefined" 
                       id="pressione-alta" type="checkbox" 
                       v-model="satData.S8" value="12">
-                    <label for="pressione-alta">Pressione Alta</label>
+                    <label for="pressione-alta">{{ $t('highPressure') }}</label>
                   </span>
                 </span>
               </div>
@@ -244,7 +244,7 @@
             <div class="border-b-4 border-yellow-100 py-4">
               <div class="field-wrapper">
                 <span class="w-[360px] text-lg font-bold flex text-left">
-                  <label>Pausa Programma</label>
+                  <label>{{ $t('programStandBy') }}</label>
                 </span>
                 <span class="field">
                   <span class="flex gap-2">
@@ -252,84 +252,84 @@
                       :disabled="satData.S9 === undefined" 
                       id="temperatura-bassa" type="checkbox" 
                       v-model="satData.S9" value="1">
-                    <label for="temperatura-bassa">Temperatura Bassa</label>
+                    <label for="temperatura-bassa">{{ $t('lowTemperature') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="umidita-bassa" type="checkbox" 
                       v-model="satData.S9" value="2">
-                    <label for="umidita-bassa" >Umidita Bassa</label>
+                    <label for="umidita-bassa" >{{ $t('lowHumidity') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="vento" type="checkbox" 
                       v-model="satData.S9" value="3">
-                    <label for="vento">Vento</label>
+                    <label for="vento">{{ $t('wind') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="radiazione-solare" type="checkbox" 
                       v-model="satData.S9" value="4">
-                    <label for="radiazione-solare" >Radiazione Solare</label>
+                    <label for="radiazione-solare" >{{$t('solarIntensity')}}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="primo-ingresso" type="checkbox" 
                       v-model="satData.S9" value="5">
-                    <label for="primo-ingresso" >Primo Ingresso</label>
+                    <label for="primo-ingresso" >{{$t('firstEntry')}}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="secondo-ingresso" type="checkbox" 
                       v-model="satData.S9" value="6">
-                    <label for="secondo-ingresso" >Secondo Ingresso</label>
+                    <label for="secondo-ingresso" >{{ $t('secondEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="temperatura-alta" type="checkbox" 
                       v-model="satData.S9" value="7">
-                    <label for="temperatura-alta">Temperatura Alta</label>
+                    <label for="temperatura-alta">{{ $t('highPressure') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="umidita-alta" type="checkbox" 
                       v-model="satData.S9" value="8">
-                    <label for="umidita-alta">Umidita Alta</label>
+                    <label for="umidita-alta">{{ $t('highHumidity') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="Ingresso3" type="checkbox" 
                       v-model="satData.S9" value="9">
-                    <label for="Ingresso3">3' Ingresso</label>
+                    <label for="Ingresso3">{{ $t('thirdEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="Ingresso4" type="checkbox" 
                       v-model="satData.S9" value="10">
-                    <label for="Ingresso4">4'Ingresso</label>
+                    <label for="Ingresso4">{{ $t('fourthEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="pressione-bassa" type="checkbox" 
                       v-model="satData.S9" value="11">
-                    <label for="pressione-bassa">Pressione Bassa</label>
+                    <label for="pressione-bassa">{{ $t('lowPressure') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S9 === undefined" 
                       id="pressione-alta" type="checkbox" 
                       v-model="satData.S9" value="12">
-                    <label for="pressione-alta">Pressione Alta</label>
+                    <label for="pressione-alta">{{ $t('highPressure') }}</label>
                   </span>
                 </span>
               </div>
@@ -337,7 +337,7 @@
             <div class="border-b-4 border-yellow-100 py-4">
               <div class="field-wrapper">
                 <span class="w-[360px] text-lg font-bold flex text-left">
-                  <label>Avvia Programma</label>
+                  <label>{{ $t('programStart') }}</label>
                 </span>
                 <span class="field">
                   <span class="flex gap-2">
@@ -345,84 +345,84 @@
                       :disabled="satData.S10 === undefined" 
                       id="temperatura-bassa" type="checkbox" 
                       v-model="satData.S10" value="1">
-                    <label for="temperatura-bassa">Temperatura Bassa</label>
+                    <label for="temperatura-bassa">{{ $t('lowTemperature') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="umidita-bassa" type="checkbox" 
                       v-model="satData.S10" value="2">
-                    <label for="umidita-bassa" >Umidita Bassa</label>
+                    <label for="umidita-bassa" >{{ $t('lowHumidity') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="vento" type="checkbox" 
                       v-model="satData.S10" value="3">
-                    <label for="vento">Vento</label>
+                    <label for="vento">{{ $t('wind') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="radiazione-solare" type="checkbox" 
                       v-model="satData.S10" value="4">
-                    <label for="radiazione-solare" >Radiazione Solare</label>
+                    <label for="radiazione-solare" >{{$t('solarIntensity')}}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="primo-ingresso" type="checkbox" 
                       v-model="satData.S10" value="5">
-                    <label for="primo-ingresso" >Primo Ingresso</label>
+                    <label for="primo-ingresso" >{{$t('firstEntry')}}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="secondo-ingresso" type="checkbox" 
                       v-model="satData.S10" value="6">
-                    <label for="secondo-ingresso" >Secondo Ingresso</label>
+                    <label for="secondo-ingresso" >{{ $t('secondEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="temperatura-alta" type="checkbox" 
                       v-model="satData.S10" value="7">
-                    <label for="temperatura-alta">Temperatura Alta</label>
+                    <label for="temperatura-alta">{{ $t('highPressure') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="umidita-alta" type="checkbox" 
                       v-model="satData.S10" value="8">
-                    <label for="umidita-alta">Umidita Alta</label>
+                    <label for="umidita-alta">{{ $t('highHumidity') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="Ingresso3" type="checkbox" 
                       v-model="satData.S10" value="9">
-                    <label for="Ingresso3">3' Ingresso</label>
+                    <label for="Ingresso3">{{ $t('thirdEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="Ingresso4" type="checkbox" 
                       v-model="satData.S10" value="10">
-                    <label for="Ingresso4">4'Ingresso</label>
+                    <label for="Ingresso4">{{ $t('fourthEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="pressione-bassa" type="checkbox" 
                       v-model="satData.S10" value="11">
-                    <label for="pressione-bassa">Pressione Bassa</label>
+                    <label for="pressione-bassa">{{ $t('lowPressure') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S10 === undefined" 
                       id="pressione-alta" type="checkbox" 
                       v-model="satData.S10" value="12">
-                    <label for="pressione-alta">Pressione Alta</label>
+                    <label for="pressione-alta">{{ $t('highPressure') }}</label>
                   </span>
                 </span>
               </div>
@@ -430,7 +430,7 @@
             <div class="border-b-4 border-yellow-100 py-4">
               <div class="field-wrapper">
                 <span class="w-[360px] text-lg font-bold flex text-left">
-                  <label>Salta Programma</label>
+                  <label>{{ $t('programSkip') }}</label>
                 </span>
                 <span class="field">
                   <span class="flex gap-2">
@@ -438,84 +438,84 @@
                       :disabled="satData.S11 === undefined" 
                       id="temperatura-bassa" type="checkbox" 
                       v-model="satData.S11" value="1">
-                    <label for="temperatura-bassa">Temperatura Bassa</label>
+                    <label for="temperatura-bassa">{{ $t('lowTemperature') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="umidita-bassa" type="checkbox" 
                       v-model="satData.S11" value="2">
-                    <label for="umidita-bassa" >Umidita Bassa</label>
+                    <label for="umidita-bassa" >{{ $t('lowHumidity') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="vento" type="checkbox" 
                       v-model="satData.S11" value="3">
-                    <label for="vento">Vento</label>
+                    <label for="vento">{{ $t('wind') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="radiazione-solare" type="checkbox" 
                       v-model="satData.S11" value="4">
-                    <label for="radiazione-solare" >Radiazione Solare</label>
+                    <label for="radiazione-solare" >{{$t('solarIntensity')}}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="primo-ingresso" type="checkbox" 
                       v-model="satData.S11" value="5">
-                    <label for="primo-ingresso" >Primo Ingresso</label>
+                    <label for="primo-ingresso" >{{$t('firstEntry')}}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="secondo-ingresso" type="checkbox" 
                       v-model="satData.S11" value="6">
-                    <label for="secondo-ingresso" >Secondo Ingresso</label>
+                    <label for="secondo-ingresso" >{{ $t('secondEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="temperatura-alta" type="checkbox" 
                       v-model="satData.S11" value="7">
-                    <label for="temperatura-alta">Temperatura Alta</label>
+                    <label for="temperatura-alta">{{ $t('highPressure') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="umidita-alta" type="checkbox" 
                       v-model="satData.S11" value="8">
-                    <label for="umidita-alta">Umidita Alta</label>
+                    <label for="umidita-alta">{{ $t('highHumidity') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="Ingresso3" type="checkbox" 
                       v-model="satData.S11" value="9">
-                    <label for="Ingresso3">3' Ingresso</label>
+                    <label for="Ingresso3">{{ $t('thirdEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="Ingresso4" type="checkbox" 
                       v-model="satData.S11" value="10">
-                    <label for="Ingresso4">4'Ingresso</label>
+                    <label for="Ingresso4">{{ $t('fourthEntry') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="pressione-bassa" type="checkbox" 
                       v-model="satData.S11" value="11">
-                    <label for="pressione-bassa">Pressione Bassa</label>
+                    <label for="pressione-bassa">{{ $t('lowPressure') }}</label>
                   </span>
                   <span class="flex gap-2">
                     <input 
                       :disabled="satData.S11 === undefined" 
                       id="pressione-alta" type="checkbox" 
                       v-model="satData.S11" value="12">
-                    <label for="pressione-alta">Pressione Alta</label>
+                    <label for="pressione-alta">{{ $t('highPressure') }}</label>
                   </span>
                 </span>
               </div>
@@ -540,7 +540,9 @@ import MyButton from '@/components/button/BaseButton.vue'
 import Toggle from '@/components/button/Toggle.vue'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
   //props
   const props = defineProps({
     id: String
@@ -729,13 +731,13 @@ import 'vue-slider-component/theme/default.css'
   }
 
   const sensoraUmiditaOptions = [
-    {title: 'AIR', value: '0'},
-    { title: 'Sensora Umidita 1', value: '1'}, { title: 'Sensora Umidita 2', value: '2'}, { title: 'Sensora Umidita 3', value: '3'}, { title: 'Sensora Umidita 4', value: '4'}, { title: 'Sensora Umidita 5', value: '5'},
-    { title: 'Sensora Umidita 6', value: '6'}, { title: 'Sensora Umidita 7', value: '7'}, { title: 'Sensora Umidita 8', value: '8'}, { title: 'Sensora Umidita 9', value: '9'}, { title: 'Sensora Umidita 10', value: '10'},
-    { title: 'Sensora Umidita 11', value: '11'}, { title: 'Sensora Umidita 12', value: '12'}, { title: 'Sensora Umidita 13', value: '13'}, { title: 'Sensora Umidita 14', value: '14'}, { title: 'Sensora Umidita 15', value: '15'},
-    { title: 'Sensora Umidita 16', value: '16'}, { title: 'Sensora Umidita 17', value: '17'}, { title: 'Sensora Umidita 18', value: '18'}, { title: 'Sensora Umidita 19', value: '19'}, { title: 'Sensora Umidita 20', value: '20'},
-    { title: 'Sensora Umidita 21', value: '21'}, { title: 'Sensora Umidita 22', value: '22'}, { title: 'Sensora Umidita 23', value: '23'}, { title: 'Sensora Umidita 24', value: '24'}, { title: 'Sensora Umidita 25', value: '25'},
-    { title: 'Sensora Umidita 26', value: '26'}, { title: 'Sensora Umidita 27', value: '27'}, { title: 'Sensora Umidita 28', value: '28'}, { title: 'Sensora Umidita 29', value: '29'}, { title: 'Sensora Umidita 30', value: '30'},
+    {title: t('airSensor'), value: '0'},
+    { title: t('soilSensor') + ' 1', value: '1'}, { title: t('soilSensor') + ' 2', value: '2'}, { title: t('soilSensor') + ' 3', value: '3'}, { title: t('soilSensor') + ' 4', value: '4'}, { title: t('soilSensor') + ' 5', value: '5'},
+    { title: t('soilSensor') + ' 6', value: '6'}, { title: t('soilSensor') + ' 7', value: '7'}, { title: t('soilSensor') + ' 8', value: '8'}, { title: t('soilSensor') + ' 9', value: '9'}, { title: t('soilSensor') + ' 10', value: '10'},
+    { title: t('soilSensor') + ' 11', value: '11'}, { title: t('soilSensor') + ' 12', value: '12'}, { title: t('soilSensor') + ' 13', value: '13'}, { title: t('soilSensor') + ' 14', value: '14'}, { title: t('soilSensor') + ' 15', value: '15'},
+    { title: t('soilSensor') + ' 16', value: '16'}, { title: t('soilSensor') + ' 17', value: '17'}, { title: t('soilSensor') + ' 18', value: '18'}, { title: t('soilSensor') + ' 19', value: '19'}, { title: t('soilSensor') + ' 20', value: '20'},
+    { title: t('soilSensor') + ' 21', value: '21'}, { title: t('soilSensor') + ' 22', value: '22'}, { title: t('soilSensor') + ' 23', value: '23'}, { title: t('soilSensor') + ' 24', value: '24'}, { title: t('soilSensor') + ' 25', value: '25'},
+    { title: t('soilSensor') + ' 26', value: '26'}, { title: t('soilSensor') + ' 27', value: '27'}, { title: t('soilSensor') + ' 28', value: '28'}, { title: t('soilSensor') + ' 29', value: '29'}, { title: t('soilSensor') + ' 30', value: '30'},
   ]
   const livellosensoraUmiditaOptions = [
   { title: '0', value: '0'},{ title: '1', value: '1'}, { title: '2', value: '2'}, { title: '3', value: '3'}, { title: '4', value: '4'}
