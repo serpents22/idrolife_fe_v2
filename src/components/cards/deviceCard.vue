@@ -84,7 +84,7 @@ export default {
           let timeNow = new Date(Date.now())
           this.S8 = new Date((this.dataStore.satStat.S8- 2 * 60 * 60) * 1000)
           let differsTime = Math.floor((timeNow - this.S8) / (1000 * 60))
-          this.content[index].device_time = new Date(this.dataStore.satStat.S8 * 1000).toLocaleString()
+          this.content[index].device_time = new Date((this.dataStore.satStat.S8- 2 * 60 * 60) * 1000).toLocaleString()
           if (differsTime > 2) {
             this.content[index].stato = false
           } else {
