@@ -10,7 +10,7 @@
       :content="newData" />
     <div class="xs-icon-card">
       <img src="@/assets/durata_stazioni.png">
-      <p>{{ $t('stationTime') }}</p>
+      <p>{{ $t('stationTimes') }}</p>
     </div>
   </div>
   <div class="content">
