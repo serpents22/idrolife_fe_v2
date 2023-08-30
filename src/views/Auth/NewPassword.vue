@@ -6,7 +6,7 @@
     :isError="isError"
      @close="closeNotification" />
   <div class="new-password-container">
-    <IdroTitle :title="$('resetPassword')" />
+    <IdroTitle :title="$t('resetPassword')" />
     <div class="menu">
       <Modal>
         <VeeForm :validation-schema="schema" v-slot="{ handleSubmit }" as="div" >

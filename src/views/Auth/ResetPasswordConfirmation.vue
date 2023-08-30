@@ -3,8 +3,8 @@
     <div class="header">
       <img src="@/assets/logo.png" id="logo">
       <span>
-        <h1>LA tua password è stata reimpostata</h1>
-        <h2>Puoi effettuare il login qui
+        <h1>{{$t('passwordReseted')}}</h1>
+        <h2>{{$t('loginHere')}}
           <span class="font-bold">
             <router-link :to="{name: 'LoginForm'}"> {{$t('login')}} </router-link>
           </span>
