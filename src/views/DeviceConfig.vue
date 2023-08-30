@@ -9,7 +9,7 @@
   <sidebar 
     :backOn="true" 
     :noSocial="true" 
-    :isAlarm="alarmState"
+    :isAlarm="devicesStore.deviceData.alarm"
     @alarmList="deviceAlarmToggle"
     />
   <div class="device-container">
@@ -84,8 +84,8 @@
   const devicesStore = useDevicesStore()
   const alarmStore = useAlarmStore()
   const dataStore = useDataStore()
-  const { alarmState } = storeToRefs(useDataStore())
   const { isLoading } = storeToRefs(useDevicesStore())
+  
   const newData = computed(() => {
       return [devicesStore.deviceData]
     })
@@ -97,6 +97,7 @@
       measurement: 'SATSTAT',
       device_code: null
     }
+
   onBeforeMount( async () => {
     await devicesStore.loadDevice(props.id)
     satStatParams.device_code = devicesStore.deviceData.code

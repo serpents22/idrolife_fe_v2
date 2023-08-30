@@ -120,6 +120,7 @@ export default {
 
   unmounted() {
     clearInterval(this.dataInterval)
+    clearInterval(this.dataInterval2)
   },
 
   setup() {

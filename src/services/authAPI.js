@@ -16,8 +16,8 @@ export default {
   signOut() {
     return apiClient.get('logout',config)
   },
-  forgotPassword(data) {
-    return apiClient.post('forgot-password',data)
+  forgotPassword(data,lang) {
+    return apiClient.post(`forgot-password/${lang}`,data)
   },
   newPassword(data,email,signature) {
     return apiClient.post(`reset-password/${email}?signature=${signature}`, data)

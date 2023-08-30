@@ -78,7 +78,7 @@ export const useAuthStore = defineStore('auth', {
 
       this.isLoading = true
       try {
-        const res = await authAPI.forgotPassword(data)
+        const res = await authAPI.forgotPassword(data,localStorage.getItem('locale').toUpperCase())
         this.isLoading = false
         this.status.message = 'Password reset email successfully sent'
       } catch (err) {
