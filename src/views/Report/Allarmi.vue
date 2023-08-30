@@ -19,7 +19,7 @@
       <div class="header">
         <div class="date-filter">
           <DatePicker v-model="startDate" @change="dateFiltering()">{{startDate}}</DatePicker>
-          <label>AL</label>
+          <label> to </label>
           <DatePicker @change="dateFiltering()" v-model="endDate">{{endDate}}</DatePicker>
         </div>
         <div class="search-field">
@@ -72,7 +72,9 @@ import DatePicker from '@/components/input/datePicker.vue'
 import IveButton from '@/components/input/iveButton.vue'
 import { toInteger } from 'lodash'
 // import { Header, Item } from "vue3-easy-data-table";
+import { useI18n } from 'vue-i18n'
 
+const {t} = useI18n()
   //props
   const props = defineProps({
     id: String
@@ -230,11 +232,11 @@ import { toInteger } from 'lodash'
 
   //table headers
   const headers = [
-    { text: "Tipo Allarme", value: "tipoAllarme",sortable: true, width: 160},
-    { text: "Programma Numero", value: "programmaNumero",sortable: true, width: 180},
-    { text: "Stazione Numero", value: "stazioneNumero",sortable: true, width: 160},
-    { text: "Azione Intrapresa", value: "azioneIntrapresa",sortable: true, width: 160},
-    { text: "Date", value: "date",sortable: true, width: 160},
+    { text: t('alarmType'), value: "tipoAllarme",sortable: true, width: 160},
+    { text: t('programNumber'), value: "programmaNumero",sortable: true, width: 180},
+    { text: t('stationsNumber'), value: "stazioneNumero",sortable: true, width: 160},
+    { text: t('action'), value: "azioneIntrapresa",sortable: true, width: 160},
+    { text: "Date Time", value: "date",sortable: true, width: 160},
   ] 
 
 

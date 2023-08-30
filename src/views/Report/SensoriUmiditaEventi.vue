@@ -83,7 +83,9 @@ import IveButton from '@/components/input/iveButton.vue'
 import ApexCharts from "apexcharts";
 import { toInteger } from 'lodash'
 // import { Header, Item } from "vue3-easy-data-table";
+import { useI18n } from 'vue-i18n'
 
+const {t} = useI18n()
   //props
   const props = defineProps({
     id: String
@@ -228,12 +230,12 @@ import { toInteger } from 'lodash'
 
   //table headers
   const headers = [
-    { text: "Date", value: "date",sortable: true, width: 100},
-    { text: "Numero Sensori", value: "numeroSensori",sortable: true, width: 80},
-    { text: "Livello Sensore Umidita 1 ", value: "rh1",sortable: true, width: 100},
-    { text: "Livello Sensore Umidita 2 ", value: "rh2",sortable: true, width: 100},
-    { text: "Livello Sensore Umidita 3 ", value: "rh3",sortable: true, width: 100},
-    { text: "Livello Sensore Umidita 4 ", value: "rh4",sortable: true, width: 100},
+    { text: "Date Time", value: "date",sortable: true, width: 100},
+    { text: t('rhNumber'), value: "numeroSensori",sortable: true, width: 80},
+    { text: t('rhLevel1'), value: "rh1",sortable: true, width: 100},
+    { text: t('rhLevel2'), value: "rh2",sortable: true, width: 100},
+    { text: t('rhLevel3'), value: "rh3",sortable: true, width: 100},
+    { text: t('rhLevel4'), value: "rh4",sortable: true, width: 100},
   ]
     
   async function getHistoryData() {

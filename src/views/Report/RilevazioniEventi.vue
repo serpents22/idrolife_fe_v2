@@ -83,7 +83,9 @@ import IveButton from '@/components/input/iveButton.vue'
 import { toInteger } from 'lodash'
 import ApexCharts from "apexcharts";
 // import { Header, Item } from "vue3-easy-data-table";
+import { useI18n } from 'vue-i18n'
 
+const {t} = useI18n()
   //props
   const props = defineProps({
     id: String
@@ -252,13 +254,13 @@ import ApexCharts from "apexcharts";
   //Table Data
   
   const headers = [
-    { text: "Date", value: "date",sortable: true, width: 100},
-    { text: "Temperatura", value: "temperatura",sortable: true, width: 80},
-    { text: "Umidita", value: "umidita",sortable: true, width: 80},
-    { text: "Radiazione Solare", value: "radiazioneSolare",sortable: true, width: 100},
-    { text: "Velocita Vento", value: "velocitaVento",sortable: true, width: 100},
-    { text: "Direzione Vento", value: "direzioneVento",sortable: true, width: 100},
-    { text: "Pioggia", value: "pioggia",sortable: true, width: 100},
+    { text: "Date Time", value: "date",sortable: true, width: 100},
+    { text: t('temperature'), value: "temperatura",sortable: true, width: 80},
+    { text: t('humidity'), value: "umidita",sortable: true, width: 80},
+    { text: t('solarIrradiation'), value: "radiazioneSolare",sortable: true, width: 100},
+    { text: t('windSpeed'), value: "velocitaVento",sortable: true, width: 100},
+    { text: t('windDirection'), value: "direzioneVento",sortable: true, width: 100},
+    { text: t('rain'), value: "pioggia",sortable: true, width: 100},
   ]
 
 </script>

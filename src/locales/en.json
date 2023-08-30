@@ -65,7 +65,7 @@
     "fertigationParameter":"Fertigation parameters",
     "fertigationEC":"Fertigation EC settings",
     "fertigationRecipes":"Fertigation recipes",
-    "addNewDispenser":"Add new dispenser",
+    "addNewDispenser":"Add a Dispenser",
     "alarms":"Alarms",
     "alarmsList":"List Alarms",
     "eventReports":"Events reports",
@@ -245,5 +245,13 @@
     "totalConsumption": "Total Consumption",
     "latitude": "Latitude",
     "longitude": "longitude",
-    "addEV": "Add EV"
+    "addEV": "Add EV",
+    "alarmType": "Alarm Type",
+    "programNumber": "Program Number",
+    "rhNumber": "RH Number",
+    "rhLevel1": "RH1 Level",
+    "rhLevel2": "RH2 Level",
+    "rhLevel3": "RH3 Level",
+    "rhLevel4": "RH4 Level",
+    "rain": "Rain"
 }

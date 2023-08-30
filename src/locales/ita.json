@@ -65,7 +65,7 @@
     "fertigationParameter":"Parametri Fertirrigazione",
     "fertigationEC":"Impostazioni EC Fertirrigazione",
     "fertigationRecipes":"Ricette Fertirrigazione",
-    "addNewDispenser":"Aggiungi erogatore",
+    "addNewDispenser":"Aggiungi una EV",
     "alarms":"Allarmi",
     "alarmsList":"Lista Allarmi",
     "eventReports":"Rilevazioni Eventi",
@@ -175,7 +175,7 @@
     "startTime": "Start Time",
     "stepNum": "Num. Step",
     "stationsDuration": "Durata Stazioni",
-    "stationsNumber": "Station Number",
+    "stationsNumber": "Stazione Number",
     "irrigationTime": "Irrigation Time",
     "stopStation": "Stop Station",
     "skipStation": "Skip Station N (only if active in a program)",
@@ -245,5 +245,14 @@
     "totalConsumption": "Consumo Totale",
     "latitude": "Latitudine",
     "longitude": "longitudine",
-    "addEV": "Aggiungi EV"
+    "addEV": "Aggiungi EV",
+    "alarmType": "Tipo Allarme",
+    "programNumber": "Programma Numero",
+    "rhNumber": "Numero Sensoru",
+    "rhLevel1": "Livello Sensore Umidita 1",
+    "rhLevel2": "Livello Sensore Umidita 2",
+    "rhLevel3": "Livello Sensore Umidita 3",
+    "rhLevel4": "Livello Sensore Umidita 4",
+    "rain": "Pioggia"
+
 }

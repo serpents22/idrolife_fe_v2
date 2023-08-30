@@ -164,8 +164,10 @@ import IveButton from '@/components/input/iveButton.vue'
 import Indicator from '@/components/Indicator.vue'
 import { toInteger } from 'lodash'
 // import { Header, Item } from "vue3-easy-data-table";
-
-  //props
+import { useI18n } from 'vue-i18n'
+ 
+const {t} = useI18n()
+//props
   const props = defineProps({
     id: String
   })
@@ -321,35 +323,35 @@ import { toInteger } from 'lodash'
   
   //table headers
   const headers = [
-    { text: "Programma Numero", value: "programmaNumero",sortable: true, width: 80},
-    { text: "Stazione Numero", value: "stazioneNumero",sortable: true, width: 80},
-    { text: "Date", value: "date",sortable: true, width: 120},
-    { text: "Durata Irrigazione", value: "durataIrrigazione",sortable: true, width: 80},
-    { text: "Stato Programma", value: "stato",sortable: true, width: 80},
-    { text: "Pompa 1", value: "pompa1",sortable: true, width: 80},
-    { text: "Pompa 2", value: "pompa2",sortable: true, width: 80},
-    { text: "Pompa 3", value: "pompa3",sortable: true, width: 80},
-    { text: "Pompa 4", value: "pompa4",sortable: true, width: 80},
-    { text: "Pompa 5", value: "pompa5",sortable: true, width: 80},
-    { text: "Pompa 6", value: "pompa6",sortable: true, width: 80},
-    { text: "Pompa 7", value: "pompa7",sortable: true, width: 80},
-    { text: "Pompa 8", value: "pompa8",sortable: true, width: 80},
-    { text: "Master 1", value: "master1",sortable: true, width: 80},
-    { text: "Master 2", value: "master2",sortable: true, width: 80},
-    { text: "Master 3", value: "master3",sortable: true, width: 80},
-    { text: "Master 4", value: "master4",sortable: true, width: 80},
-    { text: "Master 5", value: "master5",sortable: true, width: 80},
-    { text: "Master 6", value: "master6",sortable: true, width: 80},
-    { text: "Master 7", value: "master7",sortable: true, width: 80},
-    { text: "Master 8", value: "master8",sortable: true, width: 80},
-    { text: "Contatore 1", value: "contatore1",sortable: true, width: 80},
-    { text: "Contatore 2", value: "contatore2",sortable: true, width: 80},
-    { text: "Contatore 3", value: "contatore3",sortable: true, width: 80},
-    { text: "Contatore 4", value: "contatore4",sortable: true, width: 80},
-    { text: "Contatore 5", value: "contatore5",sortable: true, width: 80},
-    { text: "Contatore 6", value: "contatore6",sortable: true, width: 80},
-    { text: "Contatore 7", value: "contatore7",sortable: true, width: 80},
-    { text: "Contatore 8", value: "contatore8",sortable: true, width: 80}
+    { text: t('programNumber'), value: "programmaNumero",sortable: true, width: 80},
+    { text: t('stationNumber'), value: "stazioneNumero",sortable: true, width: 80},
+    { text: "Date Time", value: "date",sortable: true, width: 120},
+    { text: t('irrigationTime'), value: "durataIrrigazione",sortable: true, width: 80},
+    { text: t('programStatus'), value: "stato",sortable: true, width: 80},
+    { text:  t('pump') +' 1', value: "pompa1",sortable: true, width: 80},
+    { text:  t('pump') +' 2', value: "pompa2",sortable: true, width: 80},
+    { text:  t('pump') +' 3', value: "pompa3",sortable: true, width: 80},
+    { text:  t('pump') +' 4', value: "pompa4",sortable: true, width: 80},
+    { text:  t('pump') +' 5', value: "pompa5",sortable: true, width: 80},
+    { text:  t('pump') +' 6', value: "pompa6",sortable: true, width: 80},
+    { text:  t('pump') +' 7', value: "pompa7",sortable: true, width: 80},
+    { text:  t('pump') +' 8', value: "pompa8",sortable: true, width: 80},
+    { text:  t('master') +' 1', value: "master1",sortable: true, width: 80},
+    { text:  t('master') +' 2', value: "master2",sortable: true, width: 80},
+    { text:  t('master') +' 3', value: "master3",sortable: true, width: 80},
+    { text:  t('master') +' 4', value: "master4",sortable: true, width: 80},
+    { text:  t('master') +' 5', value: "master5",sortable: true, width: 80},
+    { text:  t('master') +' 6', value: "master6",sortable: true, width: 80},
+    { text:  t('master') +' 7', value: "master7",sortable: true, width: 80},
+    { text:  t('master') +' 8', value: "master8",sortable: true, width: 80},
+    { text:  t('counter') +' 1', value: "contatore1",sortable: true, width: 80},
+    { text:  t('counter') +' 2', value: "contatore2",sortable: true, width: 80},
+    { text:  t('counter') +' 3', value: "contatore3",sortable: true, width: 80},
+    { text:  t('counter') +' 4', value: "contatore4",sortable: true, width: 80},
+    { text:  t('counter') +' 5', value: "contatore5",sortable: true, width: 80},
+    { text:  t('counter') +' 6', value: "contatore6",sortable: true, width: 80},
+    { text:  t('counter') +' 7', value: "contatore7",sortable: true, width: 80},
+    { text:  t('counter') +' 8', value: "contatore8",sortable: true, width: 80}
   ]
     
     

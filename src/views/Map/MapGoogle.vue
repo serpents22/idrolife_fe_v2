@@ -26,7 +26,7 @@
     <div class="content">
       <IdroTitle :title="title"/>
       <div class="main">
-        <GoogleMap v-if="allDataReady" :class="{'hide-map' : isExpand}" class="map-style" :api-key="apiKey" style="width: 100%; height: 500px" :center="idrosatMarkerPosition" :zoom="10">
+        <GoogleMap @click="handleMapClick" v-if="allDataReady" :class="{'hide-map' : isExpand}" class="map-style" :api-key="apiKey" style="width: 100%; height: 500px" :center="idrosatMarkerPosition" :zoom="10">
             <CustomMarker v-if="isIdrosatCoordinateValid" :options="{ position: idrosatMarkerPosition, anchorPoint: 'BOTTOM_CENTER' }">
               <div style="text-align: center">
               <img src="../../assets/map/map-idrosat.png" width="50" height="50" style="margin-top: 8px" />
@@ -43,7 +43,7 @@
           </MarkerCluster>
         </GoogleMap>
         <div class="button-wrapper">
-          <IveButton type="button" class="filled__blue mt-6" label="Add new dispenser" @click="toggleMenu"/>
+          <IveButton type="button" class="filled__blue mt-6" :label="$t('addNewDispenser')" @click="toggleMenu"/>
         </div>
       </div>
     </div>
@@ -163,6 +163,14 @@
     console.log(evMarkerPosition.value)
   }
   
+  async function handleMapClick(event) {
+    const clickedLatLng = {
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng(),
+    }
+    console.log('Clicked LatLng:', clickedLatLng)
+  }
+
   onBeforeMount( async () => {
     await devicesStore.loadDevice(props.id)
     await getEvGeo()
