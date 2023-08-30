@@ -86,7 +86,7 @@ export default {
           this.content[index].systemPressure = '-'
         }
       })
-    }, 3000)
+    }, 5000)
 
     this.dataInterval2 = setInterval(async () => {
       this.content.forEach(async (device, index) => {
@@ -113,7 +113,7 @@ export default {
           this.content[index].device_time = '-'
         }
       })
-    }, 3000)
+    }, 5000)
 
   },
 
