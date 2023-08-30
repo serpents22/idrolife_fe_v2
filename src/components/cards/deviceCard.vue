@@ -29,8 +29,8 @@
               <p>{{ impianto.device_time }}</p>
             </span>
             <span class="flex flex-row justify-between">
-              <h2>MAC Address</h2>
-              <p>{{ impianto.macAddress }}</p>
+              <h2>{{$t('systemPressure')}}</h2>
+              <p>{{ impianto.systemPressure }}</p>
             </span>
             <span class="flex flex-row justify-between">
               <h2>{{$t('fwVersion')}}</h2>
@@ -78,6 +78,18 @@ export default {
   async mounted() {
     this.dataInterval = setInterval(async () => {
       this.content.forEach(async (device, index) => {
+        this.meteoStatParams.device_code = device.code
+        await this.dataStore.getLastMeteoStat(this.meteoStatParams)
+        if (this.dataStore.meteoStat !== undefined) { 
+          this.content[index].systemPressure = this.dataStore.meteoStat.M33
+        } else {
+          this.content[index].systemPressure = '-'
+        }
+      })
+    }, 3000)
+
+    this.dataInterval2 = setInterval(async () => {
+      this.content.forEach(async (device, index) => {
         this.satStatParams.device_code = device.code
         await this.dataStore.getLastSatStat(this.satStatParams)
         if (this.dataStore.satStat !== undefined) {
@@ -98,9 +110,11 @@ export default {
         } else {
           this.content[index].alarm = false
           this.content[index].stato = false
+          this.content[index].device_time = '-'
         }
       })
     }, 3000)
+
   },
 
 
@@ -116,7 +130,13 @@ export default {
       measurement: 'SATSTAT',
       device_code: null
     })
+    const meteoStatParams = ref({
+      fields: 'M33',
+      measurement: 'METEOSTAT',
+      device_code: null
+    })
     let dataInterval = null
+    let dataInterval2 = null
     let S8
 
     return {
@@ -124,7 +144,9 @@ export default {
       dataStore,
       satStatParams,
       dataInterval,
+      dataInterval2,
       S8,
+      meteoStatParams
     }
   }
 }
