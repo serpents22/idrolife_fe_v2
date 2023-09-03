@@ -11,14 +11,18 @@
           <div class="modal-inner" v-show="isOpen" ref="target" >
             <div class="modal-content">
             <h1 class="title">{{title}}</h1>
-            <div class="mb-8 overflow-y-scroll h-80 text-[12px] sm:text-base">
-              <span class="grid grid-cols-4 text-start text-white mb-4 font-semibold">
+            <div class="mb-8 overflow-y-scroll h-80 text-[8px] sm:text-base">
+              <span class="grid grid-cols-5 text-start text-white mb-4 font-semibold">
                 <p class="col-span-1 text-center">Code</p>
-                <p class="col-span-3">Description</p>
+                <p class="col-span-1">Program</p>
+                <p class="col-span-1">Station</p>
+                <p class="col-span-2">Description</p>
               </span>
-              <span v-for="alarm in alarmStore.alarmsList" class="grid grid-cols-4 text-start text-white mb-2 border-b border-white">
+              <span v-for="alarm in alarmsList" class="grid grid-cols-5 text-start text-white mb-2 border-b border-white">
                 <p class="col-span-1 text-center">{{ alarm.code }}</p>
-                <p class="col-span-3 mb-2">{{ alarm.description }}</p>
+                <p class="col-span-1 text-center">{{ alarm.program }}</p>
+                <p class="col-span-1 text-center">{{ alarm.station }}</p>
+                <p class="col-span-2 mb-2">{{ alarm.description }}</p>
               </span>
             </div>
             <BaseButton type="button" class="outlined"  :label="resetLabel" @click="onSubmit"/>
@@ -33,7 +37,7 @@
   
 <script setup>
 import BaseButton from '@/components/button/BaseButton.vue'
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useAlarmStore } from '@/stores/alarm/AlarmStore'
  
@@ -43,7 +47,9 @@ import { useAlarmStore } from '@/stores/alarm/AlarmStore'
       id: String,
   })
   const alarmStore = useAlarmStore()
-  console.log(alarmStore.alarmsList)
+  const alarmsList = computed(() => {
+    return alarmStore.alarmsList.filter(item => item.hasOwnProperty('code'));
+  })
   const modalActive = ref(false)
   const resetLabel = ref('RESET')
 
