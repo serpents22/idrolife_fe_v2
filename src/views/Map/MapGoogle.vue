@@ -1,6 +1,4 @@
 <template>
-  <img src="@/assets/map/map-idrosat.png" class="invisible absolute">
-  <img src="@/assets/map/map-ev.png" class="invisible absolute">
   <div class="background"></div>
   <loading :loading="!allDataReady" />
   <alert 
@@ -8,6 +6,24 @@
     :modalActive="!isIdrosatCoordinateValid"
     :isError="true"
      @close="closeNotification" />
+  <RepositionIdrosat
+    :id="props.id"
+    :isOpen="repositionIdrosatModalActive" 
+    @close="idrosatModalToggle" 
+    :title="$t('changeIdrosatCoordinate')" 
+    :latLng="updatedIdrosatCoordinate"
+    @coordinatesChanged="idrosatUpdated"
+    />
+  <ConfigDispenser 
+    :isOpen="configureDispenserModalActive" 
+    @close="dispenserModalToggle" 
+    :title="$t('addEV')" 
+    :evList="availableEV" 
+    :deviceData="devicesStore.deviceData" 
+    :formData="devicesStore.deviceGeo"
+    :latLng="clickedLatLng"
+    @coordinatesChanged="dispenserUpdated"
+    />
   <div class="map-container">
     <sidebar 
       :noSocial="true" 
@@ -26,49 +42,50 @@
     <div class="content">
       <IdroTitle :title="title"/>
       <div class="main">
-        <GoogleMap @click="handleMapClick" v-if="allDataReady" :class="{'hide-map' : isExpand}" class="map-style" :api-key="apiKey" style="width: 100%; height: 500px" :center="idrosatMarkerPosition" :zoom="10">
-            <CustomMarker v-if="isIdrosatCoordinateValid" :options="{ position: idrosatMarkerPosition, anchorPoint: 'BOTTOM_CENTER' }">
-              <div style="text-align: center">
-              <img src="../../assets/map/map-idrosat.png" width="50" height="50" style="margin-top: 8px" />
-            </div>
-          </CustomMarker>
-          <MarkerCluster>
-            <CustomMarker v-for="(marker, index) in evMarkerPosition" :key="index" :options="{ position: { lat: marker.lat, lng: marker.lng }, anchorPoint: 'BOTTOM_CENTER' }">
-              <div class="flex flex-col justify-center items-center">
-                <div class="bg-white flex rounded-sm font-semibold px-4 py-2">{{ marker.serial }}</div>
-                <img v-if="marker.status == '0'" src="../../assets/map/map-evOFF.png" width="50" height="50" style="margin-top: 8px" />
-                <img v-else src="../../assets/map/map-ev.gif" width="50" height="50" style="margin-top: 8px" />
-              </div>
-            </CustomMarker>
-          </MarkerCluster>
-        </GoogleMap>
+        <div ref="mapDiv" class="map-style" />
         <div class="button-wrapper">
-          <IveButton type="button" class="filled__blue mt-6" :label="$t('addNewDispenser')" @click="toggleMenu"/>
+          <div v-if="!changeDispenserCoordinate" class="flex gap-4">
+            <IveButton v-if="!changeIdrosatCoordinate" type="button" class="filled__blue mt-1 sm:mt-6" :label="$t('configureIdrosat')" @click="enableIdrosatConfig"/>
+            <IveButton v-if="changeIdrosatCoordinate" type="button" class="filled__green mt-1 sm:mt-6" :label="$t('update')" @click="idrosatModalToggle"/>
+            <IveButton v-if="changeIdrosatCoordinate" type="button" class="filled__red mt-1 sm:mt-6" :label="$t('cancel')" @click="disableIdrosatConfig"/>
+          </div>
+          <div v-if="!changeIdrosatCoordinate">
+            <IveButton v-if="!changeDispenserCoordinate" type="button" class="filled__blue mt-1 sm:mt-6" :label="$t('configureDispenser')" @click="enableDispenserConfig"/>
+            <IveButton v-if="changeDispenserCoordinate" type="button" class="filled__red mt-1 sm:mt-6" :label="$t('cancel')" @click="disableDispenserConfig"/>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <sideBarVue :isExpand="isExpand" :evList="availableEV" :deviceData="devicesStore.deviceData" :formData="devicesStore.deviceGeo" @close="toggleMenu"/>
 </template>
   
 <script setup>
   import { useDataStore } from '@/stores/DataStore';
   import { useDevicesStore } from '@/stores/DevicesStore'
   import { storeToRefs } from 'pinia'
-  import { defineAsyncComponent,  computed,  reactive,  ref, onBeforeMount } from '@vue/runtime-core'
+  import { defineAsyncComponent,  computed,  onMounted, onUnmounted,  ref, onBeforeMount } from '@vue/runtime-core'
   import IveButton from '@/components/button/BaseButton.vue'
-  import sideBarVue from '@/components/navigation/sideBar.vue'
+  import ConfigDispenser from '@/components/modal/map/ConfigDispenser.vue'
+  import RepositionIdrosat from '@/components/modal/map/RepositionIdrosat.vue'
   //maps
-  import { GoogleMap, MarkerCluster , CustomMarker,InfoWindow   } from "vue3-google-map";
+  import { Loader } from '@googlemaps/js-api-loader'
+
   
   //props
   const props = defineProps({
     id: String
   })
 
-  const isExpand = ref(false)
-  const toggleMenu = () => {
-    isExpand.value = !isExpand.value
+  const changeDispenserCoordinate = ref(false)
+
+  const configureDispenserModalActive = ref(false)
+  function dispenserModalToggle() {
+    configureDispenserModalActive.value = !configureDispenserModalActive.value
+  }
+  const repositionIdrosatModalActive = ref(false)
+
+  function idrosatModalToggle() {
+    repositionIdrosatModalActive.value = !repositionIdrosatModalActive.value
   }
   //asynchronus component
   const deviceCard = defineAsyncComponent(
@@ -118,7 +135,145 @@
   }
 
   //maps
-  const apiKey = 'AIzaSyCB9fyiLG6TFMYEMh7QeTcUA1HT5P09yb0'
+  const loader = new Loader({ apiKey: GOOGLE_MAPS_API_KEY })
+  const mapDiv = ref(null)
+  let map = ref(null)
+  let clickListener = null
+  const idrosatMarker = ref(null)
+  const evMarkers = ref([])
+  const infoWindows = ref([])
+
+  function loadEVMarker() {
+    
+    evMarkers.value.forEach((marker) => {
+      marker.setMap(null)
+    })
+    evMarkers.value = []
+    for (const data of evMarkerPosition.value) {
+      let marker
+      if (data.status == '0') {
+        marker = new google.maps.Marker({
+          position: { lat: data.lat, lng: data.lng },
+          title: data.title,
+          icon: {
+            url: require('../../assets/map/map-evOFF.png'), 
+            scaledSize: new google.maps.Size(50, 50), 
+          } 
+        })
+      } else {
+        marker = new google.maps.Marker({
+          position: { lat: data.lat, lng: data.lng },
+          title: data.title,
+          icon: {
+            url: require('../../assets/map/map-ev.gif'), 
+            scaledSize: new google.maps.Size(50, 50), 
+          } 
+        })
+      }
+      const infoWindow = new google.maps.InfoWindow({
+        content: `<div>${data.serial}</div>`, // HTML content for the info window
+      })
+      evMarkers.value.push(marker)
+      infoWindows.value.push(infoWindow)
+      
+      marker.addListener("click", () => {
+        infoWindows.value.forEach((iw) => iw.close()); // Close all other info windows
+        infoWindow.open(map.value, marker);
+      })
+    }
+    evMarkers.value.forEach((marker) => {
+      marker.setMap(map.value)
+    })
+  }
+  async function initMap() {
+    await loader.load()
+    var mapOptions = {
+      zoom: 14,
+      center: idrosatMarkerPosition.value
+    }
+    map.value = new google.maps.Map(mapDiv.value, mapOptions);
+
+    idrosatMarker.value = new google.maps.Marker({
+      position: idrosatMarkerPosition.value,
+      icon: {
+        url: require('../../assets/map/map-idrosat.png'), 
+        scaledSize: new google.maps.Size(50, 50), 
+      },
+      title:"Hello World!",
+    })
+      
+    idrosatMarker.value.setMap(map.value)
+    loadEVMarker()
+
+  }
+  const changeIdrosatCoordinate = ref(false)
+  const updatedIdrosatCoordinate = ref()
+
+  function enableIdrosatConfig() {
+    changeIdrosatCoordinate.value = !changeIdrosatCoordinate.value
+    if (changeIdrosatCoordinate.value) {
+      updatedIdrosatCoordinate.value = idrosatMarkerPosition.value
+      idrosatMarker.value.setDraggable(true)
+      google.maps.event.addListener(idrosatMarker.value, 'dragend', () => {
+        const newPosition = idrosatMarker.value.getPosition()
+        updatedIdrosatCoordinate.value = {lat : newPosition.lat() , lng: newPosition.lng()}
+        console.log(updatedIdrosatCoordinate.value)
+      })
+    }
+  }
+  async function disableIdrosatConfig() {
+    changeIdrosatCoordinate.value = !changeIdrosatCoordinate.value
+    idrosatMarker.value.setDraggable(false)
+  }
+
+  async function idrosatUpdated() {
+    changeIdrosatCoordinate.value = !changeIdrosatCoordinate.value
+    idrosatMarker.value.setDraggable(false)
+    await devicesStore.loadDevice(props.id)
+    await getIdrosatGeo()
+    idrosatMarker.value.setPosition(idrosatMarkerPosition.value)
+  }
+
+  
+  const clickedLatLng = ref({lat :null, lng: null})
+
+  function enableDispenserConfig() {
+    changeDispenserCoordinate.value = !changeDispenserCoordinate.value
+    google.maps.event.addListener(map.value, 'click', (event) => {
+      if (changeDispenserCoordinate.value == true) {
+        configureDispenserModalActive.value = true
+        clickedLatLng.value = {
+          lat: event.latLng.lat(),
+          lng: event.latLng.lng(),
+        }
+      }
+    })
+  }
+  function disableDispenserConfig() {
+    changeDispenserCoordinate.value = !changeDispenserCoordinate.value
+  }
+
+  async function dispenserUpdated(){
+  disableDispenserConfig()
+   await getEvGeo()
+   initMap()
+  }
+
+  onMounted(async () => {
+    await devicesStore.loadDevice(props.id)
+    await getEvGeo()
+    await getIdrosatGeo()
+    await getAvailableEV()
+    title.value = 'Idrosat: ' + devicesStore.deviceData.name
+    allDataReady.value = true
+    initMap()
+  })
+
+  onUnmounted(async () => {
+    if (clickListener) clickListener.remove()
+  })
+
+  const GOOGLE_MAPS_API_KEY = 'AIzaSyCB9fyiLG6TFMYEMh7QeTcUA1HT5P09yb0'
   const idrosatMarkerPosition = ref({lat: 0, lng: 0})
   const isIdrosatCoordinateValid = ref(true)
   const evMarkerPosition = ref([])
@@ -136,6 +291,7 @@
   }
 
   async function getEvGeo() {
+    evMarkerPosition.value = []
     evConfigParams.value.device_code = devicesStore.deviceData.code
     satStatParams.value.device_code = devicesStore.deviceData.code
     await dataStore.getLastEvConfig(evConfigParams.value)
@@ -160,25 +316,10 @@
       }
       evMarkerPosition.value.push(newObj)
     })
-    console.log(evMarkerPosition.value)
-  }
-  
-  async function handleMapClick(event) {
-    const clickedLatLng = {
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng(),
-    }
-    console.log('Clicked LatLng:', clickedLatLng)
+    console.log('getEVGeo', evMarkerPosition.value)
   }
 
-  onBeforeMount( async () => {
-    await devicesStore.loadDevice(props.id)
-    await getEvGeo()
-    await getIdrosatGeo()
-    await getAvailableEV()
-    title.value = 'Idrosat: ' + devicesStore.deviceData.name
-    allDataReady.value = true
-  })
+
   
   const closeNotification = () => {
     isIdrosatCoordinateValid.value = true
@@ -238,7 +379,7 @@
   }
   
   .button-wrapper {
-    @apply mt-2 flex
+    @apply mt-2 flex gap-4
   }
   
   .hide-map {

@@ -151,12 +151,14 @@ export const useDevicesStore = defineStore('impianto', () => {
       console.log(res)
       status.value.message = 'Device Updated'
       status.value.code = res.data.status
+      status.value.isError = false
       updateDeviceIsLoading.value = false
     } catch (err) {
       console.error(err)
       updateDeviceIsLoading.value = false
       status.value.message = err.response.data.error
       status.value.code = err.response.data.status
+      status.value.isError = true
       return err
     } 
   }

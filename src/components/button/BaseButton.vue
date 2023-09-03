@@ -55,6 +55,16 @@ button {
 .filled__blue:hover {
   @apply bg-[#1363df]/70 
 }
+
+
+.filled__green {
+  @apply bg-[#36AE7C] rounded-md text-white p-2 cursor-pointer text-sm font-medium justify-center items-center text-center
+  transition-colors duration-300 border-solid border-2 border-[#36AE7C]
+}
+
+.filled__green:hover {
+  @apply bg-[#36AE7C]/70 
+}
 .filled__red {
   @apply bg-[#CF0A0A] rounded-md text-white p-2 cursor-pointer text-sm font-medium justify-center items-center text-center
   transition-colors duration-300 border-solid border-2 border-[#CF0A0A]

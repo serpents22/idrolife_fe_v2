@@ -49,7 +49,7 @@
 import router from '@/router'
 import { ref,watch } from 'vue'
 import IveButton from '@/components/button/BaseButton.vue'
-import { useDevicesStore } from '@/stores/DevicesStore';
+import { useDevicesStore } from '@/stores/DevicesStore'
 import { storeToRefs } from 'pinia';
 
 

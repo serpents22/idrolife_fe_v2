@@ -244,7 +244,7 @@
     "instantConsumption": "Instant Consumption",
     "totalConsumption": "Total Consumption",
     "latitude": "Latitude",
-    "longitude": "longitude",
+    "longitude": "Longitude",
     "addEV": "Add EV",
     "alarmType": "Alarm Type",
     "programNumber": "Program Number",
@@ -253,5 +253,9 @@
     "rhLevel2": "RH2 Level",
     "rhLevel3": "RH3 Level",
     "rhLevel4": "RH4 Level",
-    "rain": "Rain"
+    "rain": "Rain",
+    "configureDispenser":"Configure Dispenser",
+    "configureIdrosat":"Reposition Idrosat",
+    "update":"UPDATE"
+
 }
