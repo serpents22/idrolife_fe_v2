@@ -256,6 +256,8 @@
     "rain": "Rain",
     "configureDispenser":"Configure Dispenser",
     "configureIdrosat":"Reposition Idrosat",
-    "update":"UPDATE"
+    "update":"UPDATE",
+    "clickOnMapDispenser":"Click on map to add or reposition dispenser",
+    "clickOnMapIdrosat":"Drag idrosat to reposition"
 
 }

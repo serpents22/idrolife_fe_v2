@@ -256,6 +256,8 @@
     "rain": "Pioggia",
     "configureDispenser":"Configure Dispenser",
     "configureIdrosat":"Aggiorna coordinate Idrosat",
-    "update":"AGGIORNAMENTO"
-
+    "update":"AGGIORNAMENTO",
+    "clickOnMapDispenser":"Clicca sulla mappa per riposizionare EVs",
+    "clickOnMapIdrosat":"Sposta Idrosat per riposizionare su mappa"
+    
 }

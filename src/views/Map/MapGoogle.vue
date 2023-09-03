@@ -42,16 +42,20 @@
     <div class="content">
       <IdroTitle :title="title"/>
       <div class="main">
-        <div ref="mapDiv" class="map-style" />
+        <div ref="mapDiv" class="map-style" /> 
         <div class="button-wrapper">
-          <div v-if="!changeDispenserCoordinate" class="flex gap-4">
+          <div v-if="!changeDispenserCoordinate" class="flex flex-col gap-2 justify-center items-center mt-1 sm:mt-4">
             <IveButton v-if="!changeIdrosatCoordinate" type="button" class="filled__blue mt-1 sm:mt-6" :label="$t('configureIdrosat')" @click="enableIdrosatConfig"/>
-            <IveButton v-if="changeIdrosatCoordinate" type="button" class="filled__green mt-1 sm:mt-6" :label="$t('update')" @click="idrosatModalToggle"/>
-            <IveButton v-if="changeIdrosatCoordinate" type="button" class="filled__red mt-1 sm:mt-6" :label="$t('cancel')" @click="disableIdrosatConfig"/>
+            <h2 class="font-semibold" v-if="changeIdrosatCoordinate">{{ $t('clickOnMapIdrosat') }}</h2>
+            <div v-if="changeIdrosatCoordinate" class="flex gap-4">
+              <IveButton type="button" class="filled__green" :label="$t('update')" @click="idrosatModalToggle"/>
+              <IveButton type="button" class="filled__red" :label="$t('cancel')" @click="disableIdrosatConfig"/>
+            </div>
           </div>
-          <div v-if="!changeIdrosatCoordinate">
-            <IveButton v-if="!changeDispenserCoordinate" type="button" class="filled__blue mt-1 sm:mt-6" :label="$t('configureDispenser')" @click="enableDispenserConfig"/>
-            <IveButton v-if="changeDispenserCoordinate" type="button" class="filled__red mt-1 sm:mt-6" :label="$t('cancel')" @click="disableDispenserConfig"/>
+          <div v-if="!changeIdrosatCoordinate" class="flex flex-col gap-2 justify-center items-center mt-1 sm:mt-4">
+            <IveButton v-if="!changeDispenserCoordinate" type="button" class="filled__blue" :label="$t('configureDispenser')" @click="enableDispenserConfig"/>
+            <h2 class="font-semibold" v-if="changeDispenserCoordinate">{{ $t('clickOnMapDispenser') }}</h2>
+            <IveButton v-if="changeDispenserCoordinate" type="button" class="filled__red" :label="$t('cancel')" @click="disableDispenserConfig"/>
           </div>
         </div>
       </div>
@@ -224,6 +228,7 @@
   async function disableIdrosatConfig() {
     changeIdrosatCoordinate.value = !changeIdrosatCoordinate.value
     idrosatMarker.value.setDraggable(false)
+    idrosatMarker.value.setPosition(idrosatMarkerPosition.value)
   }
 
   async function idrosatUpdated() {
@@ -381,7 +386,7 @@
   }
   
   .button-wrapper {
-    @apply mt-2 flex gap-4
+    @apply mt-2 flex gap-4 justify-center items-end
   }
   
   .hide-map {
