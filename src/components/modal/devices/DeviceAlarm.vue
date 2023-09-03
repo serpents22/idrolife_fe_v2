@@ -14,8 +14,8 @@
             <div class="mb-8 overflow-y-scroll h-80 text-[8px] sm:text-base">
               <span class="grid grid-cols-5 text-start text-white mb-4 font-semibold">
                 <p class="col-span-1 text-center">Code</p>
-                <p class="col-span-1">Program</p>
-                <p class="col-span-1">Station</p>
+                <p class="col-span-1 text-center">Program</p>
+                <p class="col-span-1 text-center">Station</p>
                 <p class="col-span-2">Description</p>
               </span>
               <span v-for="alarm in alarmsList" class="grid grid-cols-5 text-start text-white mb-2 border-b border-white">
