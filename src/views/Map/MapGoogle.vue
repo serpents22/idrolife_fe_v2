@@ -266,7 +266,9 @@
     await getAvailableEV()
     title.value = 'Idrosat: ' + devicesStore.deviceData.name
     allDataReady.value = true
-    initMap()
+    if (allDataReady.value) {
+      initMap()
+    }
   })
 
   onUnmounted(async () => {
