@@ -14,8 +14,8 @@
             <div class="mb-8 overflow-y-scroll h-80 text-[8px] sm:text-base">
               <span class="grid grid-cols-5 text-start text-white mb-4 font-semibold">
                 <p class="col-span-1 text-center">Code</p>
-                <p class="col-span-1 text-center">Program</p>
-                <p class="col-span-1 text-center">Station</p>
+                <p class="col-span-1 text-center">{{ $t('program') }}</p>
+                <p class="col-span-1 text-center">{{ $t('station') }}</p>
                 <p class="col-span-2">Description</p>
               </span>
               <span v-for="alarm in alarmsList" class="grid grid-cols-5 text-start text-white mb-2 border-b border-white">
@@ -113,7 +113,7 @@ import { useAlarmStore } from '@/stores/alarm/AlarmStore'
 .modal-inner {
   background: linear-gradient(45.06deg, #010AD1 -8.2%, #1BF728 108.15%);
   @apply 
-  rounded-[40px] border-2 border-[#FFEE58] max-w-[500px] w-full h-fit p-10 m-auto
+  rounded-[40px] border-2 border-[#FFEE58] sm:w-[600px] w-full h-fit px-4 py-10 sm:p-10 m-auto
 }
 
 /* .modal-content {
