@@ -258,6 +258,7 @@
     "configureIdrosat":"Reposition Idrosat",
     "update":"UPDATE",
     "clickOnMapDispenser":"Click on map to add or reposition dispenser",
-    "clickOnMapIdrosat":"Drag idrosat to reposition"
+    "clickOnMapIdrosat":"Drag idrosat to reposition",
+    "changeIdrosatCoordinate":"Change Idrosat Coordinate"
 
 }

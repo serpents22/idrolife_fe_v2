@@ -287,6 +287,7 @@
    initMap()
   }
 
+  let getEVGeoInterval
   onMounted(async () => {
     await devicesStore.loadDevice(props.id)
     await getEvGeo()
@@ -296,11 +297,16 @@
     allDataReady.value = true
     if (allDataReady.value) {
       initMap()
+      getEVGeoInterval = setInterval(async() => {
+        await getEvGeo()
+        loadEVMarker()
+      }, 5000)
     }
   })
 
   onUnmounted(async () => {
     if (clickListener) clickListener.remove()
+    clearInterval(getEVGeoInterval)
   })
 
   const GOOGLE_MAPS_API_KEY = 'AIzaSyCB9fyiLG6TFMYEMh7QeTcUA1HT5P09yb0'
@@ -344,9 +350,9 @@
         newObj.lat = parseFloat(valve.latitude)
         newObj.lng = parseFloat(valve.longitude)
       }
+      console.log('getEVGeo', newObj.serial ,newObj.status)
       evMarkerPosition.value.push(newObj)
     })
-    console.log('getEVGeo', evMarkerPosition.value)
   }
 
 
@@ -354,6 +360,8 @@
   const closeNotification = () => {
     isIdrosatCoordinateValid.value = true
   }
+
+
   
 </script>
   

@@ -258,6 +258,7 @@
     "configureIdrosat":"Aggiorna coordinate Idrosat",
     "update":"AGGIORNAMENTO",
     "clickOnMapDispenser":"Clicca sulla mappa per riposizionare EVs",
-    "clickOnMapIdrosat":"Sposta Idrosat per riposizionare su mappa"
+    "clickOnMapIdrosat":"Sposta Idrosat per riposizionare su mappa",
+    "changeIdrosatCoordinate":"Cambia le coordinate Idrosat"
     
 }
