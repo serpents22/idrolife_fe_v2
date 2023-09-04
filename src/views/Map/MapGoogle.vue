@@ -155,25 +155,48 @@
     evMarkers.value = []
     for (const data of evMarkerPosition.value) {
       let marker
-      if (data.status == '0') {
-        marker = new google.maps.Marker({
-          position: { lat: data.lat, lng: data.lng },
-          title: data.title,
-          icon: {
-            url: require('../../assets/map/map-evOFF.png'), 
-            scaledSize: new google.maps.Size(50, 50), 
-          } 
-        })
-      } else {
-        marker = new google.maps.Marker({
-          position: { lat: data.lat, lng: data.lng },
-          title: data.title,
-          icon: {
-            url: require('../../assets/map/map-ev.gif'), 
-            scaledSize: new google.maps.Size(50, 50), 
-          } 
-        })
-      }
+      switch (data.status) {
+        case '0':
+          marker = new google.maps.Marker({
+            position: { lat: data.lat, lng: data.lng },
+            title: data.title,
+            icon: {
+              url: require('../../assets/map/map-evOFF.png'), 
+              scaledSize: new google.maps.Size(50, 50), 
+            } 
+          })
+          break;
+        case '1':
+          marker = new google.maps.Marker({
+            position: { lat: data.lat, lng: data.lng },
+            title: data.title,
+            icon: {
+              url: require('../../assets/map/map-ev.gif'), 
+              scaledSize: new google.maps.Size(50, 50), 
+            } 
+          })
+          break;
+        case '2':
+          marker = new google.maps.Marker({
+            position: { lat: data.lat, lng: data.lng },
+            title: data.title,
+            icon: {
+              url: require('../../assets/map/map-evALARM.gif'), 
+              scaledSize: new google.maps.Size(50, 50), 
+            } 
+          })
+          break;
+        default:
+          marker = new google.maps.Marker({
+            position: { lat: data.lat, lng: data.lng },
+            title: data.title,
+            icon: {
+              url: require('../../assets/map/map-evOFF.png'), 
+              scaledSize: new google.maps.Size(50, 50), 
+            } 
+          })
+          break;
+        }
       const infoWindow = new google.maps.InfoWindow({
         content: `<div>${data.serial}</div>`, // HTML content for the info window
       })
