@@ -259,6 +259,24 @@
     "update":"AGGIORNAMENTO",
     "clickOnMapDispenser":"Clicca sulla mappa per riposizionare EVs",
     "clickOnMapIdrosat":"Sposta Idrosat per riposizionare su mappa",
-    "changeIdrosatCoordinate":"Cambia le coordinate Idrosat"
+    "changeIdrosatCoordinate":"Cambia le coordinate Idrosat",
+    "shortCircuit": "Corto circuito",
+    "secondEntrance": "Secondo ingresso",
+    "lossOfWater": "Perdita d'acqua",
+    "highBrightness": "Luminosità alta",
+    "excessiveFlow": "Flusso eccessivo",
+    "openCloseInput": "Ingresso aperto/chiuso (su EV via radio)",
+    "excessiveFlowOnMinifert": "Flusso eccessivo su Minifert",
+    "minifert": "Minifert",
+    "theProgramCannotStart": "Il programma (o la stazione) non può partire",
+    "noNetwork": "Mancanza rete",
+    "lowBattery": "Batteria scarica",
+    "lowFertilizerMinifert": "Basso livello fertilizzante su minifert",
+    "openCircuit": "Circuito aperto (su ICOD)",
+    "fourthEntrance": "Quarto ingresso",
+    "noEvRadioConnection": "Mancanza collegamento EV via radio",
+    "noRepeaterConnection": "Mancanza collegamento repeater",
+    "emergencyKey": "Tasto emergenza",
+    "noAlarm": "Nessun Allarme"
     
 }

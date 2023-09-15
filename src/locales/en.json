@@ -259,6 +259,23 @@
     "update":"UPDATE",
     "clickOnMapDispenser":"Click on map to add or reposition dispenser",
     "clickOnMapIdrosat":"Drag idrosat to reposition",
-    "changeIdrosatCoordinate":"Change Idrosat Coordinate"
-
+    "changeIdrosatCoordinate":"Change Idrosat Coordinate",
+    "shortCircuit": "Short circuit",
+    "secondEntrance": "Second Entry",
+    "lossOfWater": "Loss of water",
+    "highBrightness": "High brightness",
+    "excessiveFlow": "Excessive flow",
+    "openCloseInput": "Open/close input (on EV via radio)",
+    "excessiveFlowOnMinifert": "Excessive flow on Minifert",
+    "minifert": "Minifert",
+    "theProgramCannotStart": "The program (or station) cannot start",
+    "noNetwork": "No network",
+    "lowBattery": "Low battery",
+    "lowFertilizerMinifert": "Low fertilizer level on Minifert",
+    "openCircuit": "Open circuit (ICOD)",
+    "fourthEntrance": "Fourth entrance",
+    "noEvRadioConnection": "No EV radio connection",
+    "noRepeaterConnection": "No repeater connection",
+    "emergencyKey": "Emergency key",
+    "noAlarm": "No Alarm"
 }
