@@ -46,7 +46,11 @@ export default {
         {
           title: 'English',
           value: 'en'
-        } 
+        } ,
+        {
+          title: 'Serbian',
+          value: 'sr'
+        }
       ]
 
       onMounted( async () => {
