@@ -33,8 +33,8 @@
               <p>{{ impianto.systemPressure }}</p>
             </span>
             <span class="flex flex-row justify-between">
-              <h2>{{$t('fwVersion')}}</h2>
-              <p>{{ impianto.firmwareVersion }}</p>
+              <h2>{{$t('instantConsumption')}}</h2>
+              <p>{{ impianto.consumption }}</p>
             </span>
             <span class="flex flex-row justify-between">
               <h2>{{$t('activeProg')}}</h2>
