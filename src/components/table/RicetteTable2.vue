@@ -234,11 +234,11 @@ const { t } = useI18n();
     fertData.value.F109 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10109)]
     fertData.value.F110 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10110)]
     fertData.value.F113hour = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10113)].split('.')[0]
-    fertData.value.F113min = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10113)].split('.')[0]
-    fertData.value.F113sec = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10113)].split('.')[0]
+    fertData.value.F113min = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10113)].split('.')[1]
+    fertData.value.F113sec = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10113)].split('.')[2]
     fertData.value.F09hour = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
-    fertData.value.F09min = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
-    fertData.value.F09sec = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
+    fertData.value.F09min = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[1]
+    fertData.value.F09sec = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[2]
   }
 
   const postData = ref({
@@ -268,7 +268,8 @@ const { t } = useI18n();
     postData.value.payload['F' + (((optionValue.value - 1) * 1000) + 10108)] = String(fertData.value.F108)
     postData.value.payload['F' + (((optionValue.value - 1) * 1000) + 10109)] = String(fertData.value.F109)
     postData.value.payload['F' + (((optionValue.value - 1) * 1000) + 10110)] = String(fertData.value.F110)
-    postData.value.payload['F' + (((optionValue.value - 1) * 1000) + 10113)] = String(fertData.value.F113)
+    postData.value.payload['F' + (((optionValue.value - 1) * 1000) + 10113)] = String(fertData.value.F113hour+'.'+fertData.value.F113min+'.'+fertData.value.F113sec)
+    postData.value.payload['F' + (((optionValue.value - 1) * 1000) + 10009)] = String(fertData.value.F09hour+'.'+fertData.value.F09min+'.'+fertData.value.F09sec)
     
     dataStore.postControl(fertParams.value.device_code,postData.value)
     console.log(postData.value)
