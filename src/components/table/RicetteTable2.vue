@@ -121,12 +121,39 @@
         </tr>
         <tr>
           <td>
-            <label>{{$t('systemRinse')}}</label>
+            <label>{{$t('prewash')}}</label>
           </td>
-          <td>
+          <td class="flex gap-4">
             <span class="flex gap-2 items-center">
-              <input :disabled="fertData.F113 === undefined" v-model="fertData.F113" type="number" name="risciacquo">
+              <input class="w-16" :disabled="fertData.F09hour === undefined" v-model="fertData.F09hour" type="number" name="risciacquo">
+              <p>{{$t('hour')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F09min === undefined" v-model="fertData.F09min" type="number" name="risciacquo">
               <p>{{$t('minute')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F09sec === undefined" v-model="fertData.F09sec" type="number" name="risciacquo">
+              <p>{{$t('second')}}</p>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>{{$t('flushing')}}</label>
+          </td>
+          <td class="flex gap-4">
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F113hour === undefined" v-model="fertData.F113hour" type="number" name="risciacquo">
+              <p>{{$t('hour')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F113min === undefined" v-model="fertData.F113min" type="number" name="risciacquo">
+              <p>{{$t('minute')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F113sec === undefined" v-model="fertData.F113sec" type="number" name="risciacquo">
+              <p>{{$t('second')}}</p>
             </span>
           </td>
         </tr>
@@ -187,7 +214,7 @@ const { t } = useI18n();
   const optionValue = ref(1)
   const tabs = ref(['1','2','3','4','5','6','7','8'])
   const fertParams = ref({
-    fields: 'F10100,F10101,F10102,F10103,F10104,F10105,F10106,F10107,F10108,F10109,F10110,F10113',
+    fields: 'F10100,F10101,F10102,F10103,F10104,F10105,F10106,F10107,F10108,F10109,F10110,F10113,F10009',
     measurement: 'FERTPRGCONFIG1',
     device_code: null
   })
@@ -206,7 +233,12 @@ const { t } = useI18n();
     fertData.value.F108 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10108)]
     fertData.value.F109 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10109)]
     fertData.value.F110 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10110)]
-    fertData.value.F113 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10113)]
+    fertData.value.F113hour = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10113)].split('.')[0]
+    fertData.value.F113min = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10113)].split('.')[0]
+    fertData.value.F113sec = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10113)].split('.')[0]
+    fertData.value.F09hour = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
+    fertData.value.F09min = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
+    fertData.value.F09sec = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
   }
 
   const postData = ref({

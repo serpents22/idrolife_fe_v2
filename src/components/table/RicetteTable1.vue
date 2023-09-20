@@ -121,12 +121,39 @@
         </tr>
         <tr>
           <td>
-            <label>{{$t('systemRinse')}}</label>
+            <label>{{$t('prewash')}}</label>
           </td>
-          <td>
+          <td class="flex gap-4">
             <span class="flex gap-2 items-center">
-              <input :disabled="fertData.F63 === undefined" v-model="fertData.F63" type="number" name="risciacquo">
+              <input class="w-16" :disabled="fertData.F09hour === undefined" v-model="fertData.F09hour" type="number" name="risciacquo">
+              <p>{{$t('hour')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F09min === undefined" v-model="fertData.F09min" type="number" name="risciacquo">
               <p>{{$t('minute')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F09sec === undefined" v-model="fertData.F09sec" type="number" name="risciacquo">
+              <p>{{$t('second')}}</p>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>{{$t('flushing')}}</label>
+          </td>
+          <td class="flex gap-4">
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F63hour === undefined" v-model="fertData.F63hour" type="number" name="risciacquo">
+              <p>{{$t('hour')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F63min === undefined" v-model="fertData.F63min" type="number" name="risciacquo">
+              <p>{{$t('minute')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F63sec === undefined" v-model="fertData.F63sec" type="number" name="risciacquo">
+              <p>{{$t('second')}}</p>
             </span>
           </td>
         </tr>
@@ -187,7 +214,7 @@ const { t } = useI18n();
   const optionValue = ref(1)
   const tabs = ref(['1','2','3','4','5','6','7','8'])
   const fertParams = ref({
-    fields: 'F10050,F10051,F10052,F10053,F10054,F10055,F10056,F10057,F10058,F10059,F10060,F10063',
+    fields: 'F10050,F10051,F10052,F10053,F10054,F10055,F10056,F10057,F10058,F10059,F10060,F10063,F10009',
     measurement: 'FERTPRGCONFIG1',
     device_code: null
   })
@@ -205,7 +232,12 @@ const { t } = useI18n();
     fertData.value.F58 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10058)]
     fertData.value.F59 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10059)]
     fertData.value.F60 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10060)]
-    fertData.value.F63 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10063)]
+    fertData.value.F63hour = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10063)].split('.')[0]
+    fertData.value.F63min = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10063)].split('.')[0]
+    fertData.value.F63sec = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10063)].split('.')[0]
+    fertData.value.F09hour = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
+    fertData.value.F09min = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
+    fertData.value.F09sec = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
   }
 
   const postData = ref({

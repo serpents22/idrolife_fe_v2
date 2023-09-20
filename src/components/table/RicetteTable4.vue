@@ -121,12 +121,39 @@
         </tr>
         <tr>
           <td>
-            <label>{{$t('systemRinse')}}</label>
+            <label>{{$t('prewash')}}</label>
           </td>
-          <td>
+          <td class="flex gap-4">
             <span class="flex gap-2 items-center">
-              <input :disabled="fertData.F213 === undefined" v-model="fertData.F213" type="number" name="risciacquo">
+              <input class="w-16" :disabled="fertData.F09hour === undefined" v-model="fertData.F09hour" type="number" name="risciacquo">
+              <p>{{$t('hour')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F09min === undefined" v-model="fertData.F09min" type="number" name="risciacquo">
               <p>{{$t('minute')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F09sec === undefined" v-model="fertData.F09sec" type="number" name="risciacquo">
+              <p>{{$t('second')}}</p>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>{{$t('flushing')}}</label>
+          </td>
+          <td class="flex gap-4">
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F213hour === undefined" v-model="fertData.F213hour" type="number" name="risciacquo">
+              <p>{{$t('hour')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F213min === undefined" v-model="fertData.F213min" type="number" name="risciacquo">
+              <p>{{$t('minute')}}</p>
+            </span>
+            <span class="flex gap-2 items-center">
+              <input class="w-16" :disabled="fertData.F213sec === undefined" v-model="fertData.F213sec" type="number" name="risciacquo">
+              <p>{{$t('second')}}</p>
             </span>
           </td>
         </tr>
@@ -186,7 +213,7 @@ const { t } = useI18n();
     })
 
   const fertParams = ref({
-    fields: 'F10200,F10201,F10202,F10203,F10204,F10205,F10206,F10207,F10208,F10209,F10210,F10213',
+    fields: 'F10200,F10201,F10202,F10203,F10204,F10205,F10206,F10207,F10208,F10209,F10210,F10213,F10009',
     measurement: 'FERTPRGCONFIG1',
     device_code: null
   })
@@ -207,7 +234,12 @@ const { t } = useI18n();
     fertData.value.F208 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10208)]
     fertData.value.F209 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10209)]
     fertData.value.F210 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10210)]
-    fertData.value.F213 = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10213)]
+    fertData.value.F213hour = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10213)].split('.')[0]
+    fertData.value.F213min = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10213)].split('.')[0]
+    fertData.value.F213sec = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10213)].split('.')[0]
+    fertData.value.F09hour = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
+    fertData.value.F09min = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
+    fertData.value.F09sec = dataStore.fertConfig === undefined ? undefined : dataStore.fertConfig['F' + (((optionValue.value - 1) * 1000) + 10009)].split('.')[0]
   }
 
   const postData = ref({

@@ -277,5 +277,7 @@
     "noEvRadioConnection": "No EV radio connection",
     "noRepeaterConnection": "No repeater connection",
     "emergencyKey": "Emergency key",
-    "noAlarm": "No Alarm"
+    "noAlarm": "No Alarm",
+    "flushing": "Flushing",
+    "prewash": "Prewash"
 }

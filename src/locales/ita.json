@@ -277,6 +277,9 @@
     "noEvRadioConnection": "Mancanza collegamento EV via radio",
     "noRepeaterConnection": "Mancanza collegamento repeater",
     "emergencyKey": "Tasto emergenza",
-    "noAlarm": "Nessun Allarme"
+    "noAlarm": "Nessun Allarme",
+    "flushing": "Acqua dopo",
+    "prewash": "Acqua prima"
+
     
 }

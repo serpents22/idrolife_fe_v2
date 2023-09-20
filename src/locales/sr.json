@@ -277,5 +277,7 @@
     "noEvRadioConnection": "Nema EV radio veze",
     "noRepeaterConnection": "Nema veze sa repetitorom",
     "emergenciKei": "Ključ za hitne slučajeve",
-    "noAlarm":"Nema alarma"
+    "noAlarm":"Nema alarma",
+    "flushing": "Ispiranje",
+    "prewash": "Pretpranje"
 }
