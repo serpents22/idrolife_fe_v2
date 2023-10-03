@@ -30,6 +30,7 @@ import StatoStazione from '@/views/Irrigation/StatoStazione.vue'
 import StatoIdrosat from '@/views/Irrigation/StatoIdrosat.vue'
 import DurataStazione from '@/views/Irrigation/DurataStazione.vue'
 import GestisciSensori from '@/views/Irrigation/GestisciSensori.vue'
+import EVConfiguration from '@/views/Irrigation/EVConfiguration.vue'
 
 import AddDevice from '@/views/AddDevice.vue'
 import FerrigationView from '@/views/Ferrigation/FerrigationView.vue'
@@ -81,6 +82,7 @@ const routes = [
   { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/flussi', name: 'Flussi', component: Flussi, props: true, meta: { requiresAuth:true } },
   { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/orario', name: 'Orario', component: Orario, props: true, meta: { requiresAuth:true } },
   { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/generali', name: 'Generali', component: Generali, props: true, meta: { requiresAuth:true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/evconfig', name: 'EVConfiguration', component: EVConfiguration, props: true, meta: { requiresAuth:true } },
   { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/avanzata', name: 'Avanzata', component: Avanzata, props: true, meta: { requiresAuth:true } },
   { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/stazioni', name: 'Stazioni', component: Stazioni, props: true, meta: { requiresAuth:true } },
   { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule', name: 'IrrigationSchedule', component: IrrigationSchedule, props: true, meta: { requiresAuth:true } },
