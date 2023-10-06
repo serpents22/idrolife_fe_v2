@@ -1,4 +1,5 @@
 <template>
+<loading :loading="allLoading" />
 <div class="avvio-container">
   <sidebar 
     :noSocial="true" 
@@ -27,9 +28,12 @@
                 <label for="radiazione-solare">{{$t('stationsNumber')}} :</label>
               </span>
               <span class="flex w-full gap-2 items-center">
-                <input 
-                  class="w-full" type="number" name="radiazione-solare"
-                  v-model="satData.stazione" >
+                
+                <select name="stationNumber" class="select-option" v-model="satData.stazione">
+                  <option value="0" selected>0</option>
+                  <option v-for="station in stationData" :value="station.stationNumber">{{ station.stationNumber }}</option>
+                </select>
+                <p>{{ groupData[satData.stazione-1] }}</p>
               </span>
             </div>
             <div class="field-wrapper flex-col sm:flex-row ">
@@ -139,6 +143,22 @@ import toggle from '@/components/button/Toggle.vue'
     measurement: 'SATSTAT',
     device_code: null
   })
+
+  let allLoading = true
+
+  const evConfFields = [...Array(1152)].map( (_, index) => `S${2000 + index}` ).join(',');
+  const evConfigParams = ref({
+    fields: evConfFields,
+    measurement: 'EVCONFIG',
+    device_code: null
+  })
+
+  const grConfFields = [...Array(1152)].map( (_, index) => `S${6000 + index}` ).join(',');
+  const grConfigParams = ref({
+    fields: grConfFields,
+    measurement: 'GROUPCONFIG',
+    device_code: null
+  })
   const satData = ref({
     stazione: 0,
     ore: 0,
@@ -210,13 +230,62 @@ import toggle from '@/components/button/Toggle.vue'
       dataStore.postControl(satConfigParams.value.device_code,postData.value)
     }
   }
+  const stationData = ref([])
+
+  function fillStationData() {
+    let evIndex = 2000    
+    let i = 0
+    stationData.value = []
+    for (let iFor = 0; iFor < dataStore.evConfigLength / 5; iFor++) {
+      if (dataStore.evConfig.hasOwnProperty('S' + evIndex)) {
+        if (dataStore.evConfig['S' + evIndex] !== "FFFFFF") {
+          let mainDataObj = {
+            id: i,
+            stationNumber: i+1,
+            ev: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + evIndex], 
+            stazione: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (evIndex+2)], 
+            pompa: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (evIndex+3)], 
+            masterv: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (evIndex+4)], 
+          }
+          stationData.value.push(mainDataObj)
+          i++
+        }
+      } else {
+        //i--
+      }
+      evIndex += 6
+    }
+    console.log(stationData.value)
+  }
+
+  const groupData = ref([])
+  function fillGroupData() {
+    let evIndex = 6000    
+    let i = 0
+    groupData.value = []
+    for (let iFor = 0; iFor < dataStore.groupDataLength ; iFor++) {
+      if (dataStore.groupData.hasOwnProperty('S' + evIndex)) {
+        groupData.value.push(dataStore.groupData['S' + evIndex])
+        i++
+      }
+      evIndex += 1
+    }
+    console.log(groupData.value)
+  }
 
   onMounted( async () => {
     await deviceStore.loadDevice(props.id)    
     satConfigParams.value.device_code = deviceStore.deviceData.code
+    grConfigParams.value.device_code = deviceStore.deviceData.code 
+    evConfigParams.value.device_code = deviceStore.deviceData.code
     title.value = 'Idrosat:' + deviceStore.deviceData.name
+    await dataStore.getLastEvConfig(evConfigParams.value) 
+    fillStationData()
+    await dataStore.getLastGroupData(grConfigParams.value) 
+    fillGroupData()
     await dataStore.getLastSatConfig(satConfigParams.value)
     fillSatData()
+    allLoading = false
   })
 
 
@@ -243,6 +312,11 @@ import toggle from '@/components/button/Toggle.vue'
 
 <style scoped>
 
+.select-option {
+  @apply  px-3 py-2
+          rounded-lg border bg-white
+          text-[14px]
+} 
 .avvio-container {
   @apply 
     relative flex flex-col 
