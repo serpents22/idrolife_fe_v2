@@ -31,7 +31,7 @@
                 
                 <select name="stationNumber" class="select-option" v-model="satData.stazione">
                   <option value="0" selected>0</option>
-                  <option v-for="station in stationData" :value="station.stationNumber">{{ station.stationNumber }}</option>
+                  <option v-for="station in stationData" :value="station.stazione">{{ station.stazione }}</option>
                 </select>
                 <p>{{ groupData[satData.stazione-1] }}</p>
               </span>
