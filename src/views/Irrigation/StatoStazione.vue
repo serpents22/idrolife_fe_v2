@@ -133,8 +133,8 @@ const {t} = useI18n()
     for (let i = 0; i < dataStore.evConfigLength / 5; i++) {
       if (dataStore.evConfig.hasOwnProperty('S' + EVCONFIG_START_ADDRESS)) {
         if (dataStore.evConfig['S' + EVCONFIG_START_ADDRESS] !== "FFFFFF") {
-          console.log('S'+EVCONFIG_START_ADDRESS)
-          console.log(index)
+          // console.log('S'+EVCONFIG_START_ADDRESS)
+          // console.log(index)
           let mainDataObj = {
             id: String(index++),
             ev: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + EVCONFIG_START_ADDRESS], 
@@ -152,7 +152,7 @@ const {t} = useI18n()
     return r;
     }, {});
     stazioneList.value = Object.keys(groupedStazioneList.value)
-    console.log(stazioneList.value)
+    // console.log(stazioneList.value)
   }
 
   async function fillStatoData() {
@@ -160,11 +160,12 @@ const {t} = useI18n()
     let stazioneActive
     let azioneStartAddress = 40100
     await dataStore.getLastSatStat(satStatParams.value)   
-    stazioneActive = dataStore.satStat === undefined ? 0 : dataStore.satStat.S18
+    stazioneActive = dataStore.satStat === undefined ? 0 : dataStore.satStat.S18.split(',')
     for (let i = 0; i < (stazioneList.value.length); i++) {
       let tmpStato = stazioneActive.includes(stazioneList.value[i]) ? true : false
-      
-      let tmpAzioneTempo = dataStore.satStat['S' + (azioneStartAddress + i)] === undefined ? undefined : dataStore.satStat['S' + (azioneStartAddress + i)].split(',')
+
+      // let tmpAzioneTempo = dataStore.satStat['S' + (azioneStartAddress + i)] === undefined ? undefined : dataStore.satStat['S' + (azioneStartAddress + i)].split(',')
+      let tmpAzioneTempo = dataStore.satStat['S' + (azioneStartAddress + parseInt(stazioneList.value[i])-1)].split(',')
       console.log(tmpAzioneTempo)
       let tmpAzione
       let tmpTempo
@@ -187,7 +188,7 @@ const {t} = useI18n()
       }
       statoList.value.push(newObj)
     }
-    console.log(statoList.value)
+    console.log('station status', statoList.value)
   }
 
   function fillSatData() {
@@ -201,7 +202,7 @@ const {t} = useI18n()
       } 
       satData.value.push(newObj)
     }
-    console.log(satData.value)
+    // console.log(satData.value)
   }
 
   async function getLastData() {
