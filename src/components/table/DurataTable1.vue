@@ -752,7 +752,7 @@ const { t } = useI18n();
 
     for(step = 0; step < programSteps; step++){
       orderRegister='S' + (base_reg + Number( 200 + step));
-      let stationId = dataStore.evStation[orderRegister].split(',')[0];
+      let stationId = dataStore.evStation[orderRegister]?.split(',')[0];
       
       if(stationId > 0){
         var flowMode=getFlowValueByStep(step);
