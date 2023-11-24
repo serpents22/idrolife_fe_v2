@@ -450,6 +450,12 @@ const { t } = useI18n();
       } 
       evIndex += 6
     }
+
+    var TmpEvGroups = [];
+    TmpEvGroups = Array.from(new Map(evGroups.map(item => [item['group'], item])).values());
+    evGroups = TmpEvGroups;
+
+    console.log("evData: ", evData.value.length, "evGroups: ", evGroups.length)
   }
 
   function groupingTableData() { 
