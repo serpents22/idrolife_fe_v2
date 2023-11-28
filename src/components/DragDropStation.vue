@@ -49,7 +49,7 @@ const props = defineProps({
 })
 
 function getFormattedItemCell(arr, id) {
-    let item = props.solenoidList.find(x => x.index == id)
+    let item = arr.find(x => x.index == id)
     return item ? `${item.index}: ${item.title}` : 'OFF'
 }
 
