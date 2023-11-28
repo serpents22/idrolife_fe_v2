@@ -21,7 +21,6 @@
 
 <script setup>
 import DragDropStation from '@/components/DragDropStation.vue'
-import Accordion from '@/components/Accordion.vue'
 import IveButton from '@/components/button/BaseButton.vue'
 import { useDevicesStore } from '@/stores/DevicesStore'
 import { useDataStore } from '@/stores/DataStore';

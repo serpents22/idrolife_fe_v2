@@ -1,6 +1,7 @@
 <template>
     <div class="card-container">
-        <div v-for="(tData, index) in data" :key="index" v-show="tData.length > 0 && tData[0].stazione !== '0'" class="card">
+        <div v-for="(tData, index) in data" :key="index" v-show="tData.length > 0 && tData[0].stazione !== '0'"
+            class="card">
             <div class="card-title">
                 <p class="stationId">{{ $t('station') }} {{ tData[0].stazione }}</p>
                 <p>{{ tData[0].group }}</p>
@@ -17,7 +18,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in tData" :key="index" class="h-10 hover:h-14 transition-height duration-300 ease-in-out">
+                        <tr v-for="(item, index) in tData" :key="index"
+                            class="h-10 hover:h-14 transition-height duration-300 ease-in-out">
                             <td class="itemCell w-10 hover:bg-blue-50 hover:cursor-not-allowed">{{ index + 1 }}</td>
                             <td class="itemCell">{{ getFormattedItemCell(props.solenoidList, item.id) }}</td>
                             <td class="itemCell">{{ getFormattedItemCell(props.pumpList, item.pompa) }}</td>
@@ -25,9 +27,9 @@
                         </tr>
                     </tbody>
                 </table>
-                </div>
             </div>
         </div>
+    </div>
 </template>
 
 <script setup>
@@ -60,22 +62,18 @@ function getFormattedItemCell(arr, id) {
 }
 
 .card {
-    background-color: white;
-    border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    padding: 10px;
-    margin: 10px;
-    width: 400px;
+
+    @apply w-[400px] m-2 p-3 bg-white rounded-lg;
 }
 
 .card-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 10px;
     border-bottom: 1px solid #e2e8f0;
 
-    @apply font-medium;
+    @apply font-medium pb-2;
 }
 
 .dropdown {
@@ -83,12 +81,11 @@ function getFormattedItemCell(arr, id) {
 }
 
 .itemCell {
-    @apply w-1/4 rounded-sm bg-blue-50 hover:bg-blue-200 cursor-default transition-colors duration-300 ease-in-out hover:cursor-grabbing;
+    @apply w-[100px] rounded-sm bg-blue-50 hover:bg-blue-200 cursor-default transition-colors duration-300 ease-in-out hover:cursor-grabbing;
 }
 
 .stationId {
     border-radius: 3px;
     @apply text-xs py-1 px-2 bg-gray-200 rounded-sm;
 }
-
 </style>
