@@ -130,6 +130,7 @@ const {t} = useI18n()
     let EVCONFIG_START_ADDRESS = 2000
     await dataStore.getLastEvConfig(evConfigParams.value)
     let index = 1
+    console.log('count', dataStore.evConfigLength)
     for (let i = 0; i < dataStore.evConfigLength / 5; i++) {
       if (dataStore.evConfig.hasOwnProperty('S' + EVCONFIG_START_ADDRESS)) {
         if (dataStore.evConfig['S' + EVCONFIG_START_ADDRESS] !== "FFFFFF") {
@@ -142,11 +143,15 @@ const {t} = useI18n()
             pompa: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (EVCONFIG_START_ADDRESS+3)], 
             masterv: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (EVCONFIG_START_ADDRESS+4)], 
           }
+
+          console.log("appending", mainDataObj)
           tmpStazioneList.value.push(mainDataObj)
         }
       } 
       EVCONFIG_START_ADDRESS += 6
     }
+    console.log('station list', tmpStazioneList.value)
+
     groupedStazioneList.value = tmpStazioneList.value.reduce((r, a) => {
       r[a.stazione] = [...r[a.stazione] || [], a];
     return r;
@@ -160,12 +165,13 @@ const {t} = useI18n()
     let stazioneActive
     let azioneStartAddress = 40100
     await dataStore.getLastSatStat(satStatParams.value)   
-    stazioneActive = dataStore.satStat === undefined ? 0 : dataStore.satStat.S18.split(',')
+    stazioneActive = dataStore.satStat === undefined ? 0 : dataStore.satStat.S18?.split(',')
     for (let i = 0; i < (stazioneList.value.length); i++) {
       let tmpStato = stazioneActive.includes(stazioneList.value[i]) ? true : false
+      console.log(stazioneActive, "includes", stazioneList.value[i], tmpStato)
 
       // let tmpAzioneTempo = dataStore.satStat['S' + (azioneStartAddress + i)] === undefined ? undefined : dataStore.satStat['S' + (azioneStartAddress + i)].split(',')
-      let tmpAzioneTempo = dataStore.satStat['S' + (azioneStartAddress + parseInt(stazioneList.value[i])-1)].split(',')
+      let tmpAzioneTempo = dataStore.satStat['S' + (azioneStartAddress + parseInt(stazioneList.value[i])-1)]?.split(',')
       console.log(tmpAzioneTempo)
       let tmpAzione
       let tmpTempo

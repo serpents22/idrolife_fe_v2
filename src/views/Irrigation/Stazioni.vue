@@ -12,8 +12,8 @@
       <IdroTitle :title="title" />
       <h2 class="title">{{ $t('stationsManagement') }}</h2>
       <div class="main">
-        <DragDropStation :id="props.id" :deviceCode="deviceCode" :data="groupedTableData" :solenoidList="solenoidList"
-          :pumpList="pumpList" :masterList="mvList" />
+        <DragDropStation :id="props.id" :deviceCode="deviceCode" :data="dataByStation" :rawData="tableData"
+          :pumpList="pumpList" :masterList="mvList" :unassignedEvs="unassignedEvs" />
       </div>
     </div>
   </div>
@@ -74,13 +74,23 @@ const grConfigParams = ref({
 const tableData = ref([])
 const deviceCode = ref()
 const groupedTableData = ref([])
-const solenoidList = ref([])
 const pumpList = ref([])
 const mvList = ref([])
 
+const dataByStation = computed(() => {
+  // group the tableData by stazione
+  return tableData.value.reduce((r, a) => {
+    r[a.stazione] = [...r[a.stazione] || [], a];
+    return r;
+  }, {});
+})
+
+const unassignedEvs = computed(() => {
+  return tableData.value.filter(x => x.stazione == 0)
+})
+
 function fillTableData() {
   tableData.value = []
-  solenoidList.value = []
   pumpList.value = []
   mvList.value = []
   let evIndex = 2000
@@ -94,20 +104,18 @@ function fillTableData() {
         var groupIndex = Number(dataStore.evConfig['S' + (evIndex + 2)]);
         if (groupIndex == 0) groupIndex = 1;
         var groupRegister = groupIndex + 6000 - 1;
+
         let mainDataObj = {
-          id: String(i + 1),
+          id: ((evIndex - 2000) / 6) + 1,
           ev: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + evIndex],
           stazione: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (evIndex + 2)],
           pompa: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (evIndex + 3)],
           masterv: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (evIndex + 4)],
           group: dataStore.groupData === undefined ? 'errore gruppo' : dataStore.groupData["S" + groupRegister]
         }
+
         tableData.value.push(mainDataObj)
-        let solenoidOption = {
-          index: ((evIndex - 2000) / 6) + 1,
-          title: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + evIndex]
-        }
-        solenoidList.value.push(solenoidOption)
+
         i++
       }
     } else {
@@ -150,8 +158,6 @@ function fillTableData() {
     }
     mvIndex += 1
   }
-
-  console.log('dataStore.groupData', dataStore.groupData.length)
 }
 
 function groupingTableData() {
