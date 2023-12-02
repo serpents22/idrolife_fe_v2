@@ -1,9 +1,9 @@
 <template>
     <div class="absolute w-screen">
         <div class="fixed top-[20%] right-0 grid gap-3 font-medium z-10">
-            <p class="listButton" @click="showEvList = !showEvList">{{  $t('ev')  }}</p>
-            <p class="listButton" @click="showPumpList = !showPumpList">{{  $t('pump')  }}</p>
-            <p class="listButton" @click="showMasterList = !showMasterList">{{  $t('evMaster')  }}</p>
+            <p class="listButton" @click="showList('ev')">{{  $t('ev')  }}</p>
+            <p class="listButton" @click="showList('pump')">{{  $t('pump')  }}</p>
+            <p class="listButton" @click="showList('master')">{{  $t('evMaster')  }}</p>
             <p class="listButton bg-blue-500 text-white" @click="saveData()">{{  $t('save')  }}</p>
         </div>
 
@@ -30,7 +30,7 @@
                         class="itemCell"
                         @dragenter.prevent @dragover.prevent
                         :draggable="true" 
-                        @dragstart="startDrag($event, 'ev', '0', item.id, item.id)" 
+                        @dragstart="startDrag($event, 'ev', '0', item.id, item.id, item.ev)" 
                         @dragend="endDrag()">
                         <span>{{ getFormattedItemCell('ev', item.id) }}</span>
                     </div>
@@ -61,7 +61,7 @@
                         class="itemCell" 
                         @dragenter.prevent @dragover.prevent
                         :draggable="true" 
-                        @dragstart="startDrag('pump', '0', item.index, item.id)" 
+                        @dragstart="startDrag($event, 'pump', '0', item.index, item.id)" 
                         @dragend="endDrag()">
                         <span>{{ getFormattedItemCell('pump', item.index) }}</span>
                     </div>
@@ -111,7 +111,7 @@
                 </div>
                 <div v-if="selectedGroupItem?.stazione == tData[0].stazione" class="flex flex-row gap-1 justify-center items-center">
                     <input type="text" class="border p-1 text-xs" v-model="tData[0].group">
-                    <IveButton @click="saveName(tData[0])" class="filled__blue !text-xs h-[24px]" :label="$t('save')" :loading="postControlIsLoading"/>
+                    <IveButton @click="saveName(tData)" class="filled__blue !text-xs h-[24px]" :label="$t('save')" :loading="postControlIsLoading"/>
                 </div>
             </div>
 
@@ -132,7 +132,7 @@
                                 class="itemCell" 
                                 :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', undefined].includes(draggedCellType)}" 
                                 :draggable="tData[0].stazione > 0" 
-                                @drop="onDrop($event, 'ev', item.stazione, item)"
+                                @drop="onDrop('ev', item.stazione, item)"
                                 @dragstart="startDrag($event, 'ev', item.stazione, item.id, item.id)" 
                                 @dragend="endDrag()">
                                     {{ getFormattedItemCell('ev', item.id) }}
@@ -141,7 +141,7 @@
                                 class="itemCell" 
                                 :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'pump', cannotDrop: tData[0].stazione > 0 && !['pump', undefined].includes(draggedCellType)}" 
                                 :draggable="tData[0].stazione > 0" 
-                                @drop="onDrop($event, 'pump', item.stazione, item)"
+                                @drop="onDrop('pump', item.stazione, item)"
                                 @dragstart="startDrag($event, 'pump', item.stazione, item.pompa, item.id)" 
                                 @dragend="endDrag()">
                                 {{ getFormattedItemCell('pump', item.pompa) }}</td>
@@ -149,10 +149,29 @@
                                 class="itemCell" 
                                 :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'master', cannotDrop: tData[0].stazione > 0 && !['master', undefined].includes(draggedCellType)}" 
                                 :draggable="tData[0].stazione > 0" 
-                                @drop="onDrop($event, 'master', item.stazione, item)"
+                                @drop="onDrop('master', item.stazione, item)"
                                 @dragstart="startDrag($event, 'master', item.stazione, item.masterv, item.id)" 
                                 @dragend="endDrag()">
                             {{ getFormattedItemCell('master', item.masterv) }}</td>
+                        </tr>
+
+                        <!-- empty row placeholder for index and ev cell -->
+                        <tr
+                            @dragenter.prevent @dragover.prevent
+                            @drop="addRowToExistingGroup(tData[0].stazione, tData[0].group, draggedCell.id)"
+                            :class="{
+                                    'invisible': !draggedCell || draggedCellType != 'ev' || draggedStazione == tData[0].stazione
+                                }" >
+                            <td 
+                                class="itemCell w-10 hover:cursor-not-allowed transition-height duration-200 ease-in-out"
+                                :class="{
+                                    '!h-0': !draggedCell || draggedCellType != 'ev' || draggedStazione == tData[0].stazione
+                                }" />
+                            <td 
+                                class="itemCell transition-height duration-200 ease-in-out canDrop" 
+                                :class="{
+                                    '!h-0': !draggedCell || draggedCellType != 'ev' || draggedStazione == tData[0].stazione
+                                }" />
                         </tr>
                     </tbody>
                 </table>
@@ -200,24 +219,30 @@ const postData = ref({
     payload: {}
 })
 
+const postGroupData = ref({
+    command: 'GROUPCONFIG',
+    payload: {}
+})
+
 function editName(tDataItem) {
     isEditingName.value = true
     selectedGroupItem.value = tDataItem
 }
 
-function saveName(tDataItem) {
-    const postGroupData = ref({
-        command: 'GROUPCONFIG',
-        payload: {}
-    })
+function saveName(tData) {
+    postGroupData.value.payload = {}
+    var stationId = Number(tData[0].stazione)
+    var groupName = String(tData[0].group)
 
-    var stationID = Number(tDataItem.stazione)
-    var groupName = String(tDataItem.group)
-    postGroupData.value.payload['S' + Number(6000 + stationID - 1)] = groupName
+    setGroupName(stationId, groupName, tData)
+
+    postGroupData.value.payload['S' + Number(6000 + stationId - 1)] = groupName
     dataStore.postControl(props.deviceCode, postGroupData.value)
 
-    isEditingName.value = false
-    selectedGroupItem.value = null
+    if (isEditingName.value) {
+        isEditingName.value = false
+        selectedGroupItem.value = null
+    }
 }
 
 function getFormattedItemCell(type, id) {
@@ -240,32 +265,57 @@ function getFormattedItemCell(type, id) {
     }
 }
 
-function startDrag(event, cellType, stazione, id, rowId) {
+function showList(listType) {
+    switch (listType) {
+        case 'ev':
+            showEvList.value = true
+            showPumpList.value = false
+            showMasterList.value = false
+            break;
+        case 'pump':
+            showEvList.value = false
+            showPumpList.value = true
+            showMasterList.value = false
+            break;
+        case 'master':
+            showEvList.value = false
+            showPumpList.value = false
+            showMasterList.value = true
+            break;
+        default:
+            break;
+    }
+}
+
+function setGroupName(stationId, groupName, groupData){      
+    for(var i=0; i < groupData.length; i++){
+        groupData[i].group = groupName
+        groupData[i].stazione = stationId
+    }
+   
+    return;
+}
+
+function startDrag(event, cellType, stazione, id, rowId, serial) {
     event.dataTransfer.dropEffect = "move"
     event.dataTransfer.effectAllowed = "move"
 
     switch (cellType) {
         case 'ev':
             if (!showEvList.value) { // list not opened yet
-                showEvList.value = true
-                showPumpList.value = false
-                showMasterList.value = false
+                showList('ev')
                 openedListProgrammaticaly.value = true
             }
             break;
         case 'pump':
             if (!showPumpList.value) {
-                showEvList.value = false
-                showPumpList.value = true
-                showMasterList.value = false
+                showList('pump')
                 openedListProgrammaticaly.value = true
             }
             break;
         case 'master':
             if (!showMasterList.value) {
-                showEvList.value = false
-                showPumpList.value = false
-                showMasterList.value = true
+                showList('master')
                 openedListProgrammaticaly.value = true
             }
             break;
@@ -273,7 +323,7 @@ function startDrag(event, cellType, stazione, id, rowId) {
             break;
     }
 
-    draggedCell.value = { id, rowId, stazione, cellType }
+    draggedCell.value = { id, rowId, stazione, cellType, serial }
 }
 
 function endDrag() {
@@ -291,7 +341,7 @@ function endDrag() {
     }
 }
 
-function onDrop(event, currentCellType, currentStazione, currentItem) {
+function onDrop(currentCellType, currentStazione, currentItem) {
 
     let draggedId = draggedCell.value.id
     let draggedCellType = draggedCell.value.cellType
@@ -396,6 +446,13 @@ function moveCellToList(currentCellType) {
     }
 }
 
+// id is used to calculate the address of the new row
+function addRowToExistingGroup(stationId, group, id) {
+    const item = props.rawData.find(x => x.id == id)
+    item.stazione = stationId
+    item.group = group
+}
+
 function saveData() {
     postData.value.payload = {}
     props.rawData.forEach((valve) => {
@@ -460,7 +517,7 @@ function saveData() {
 }
 
 .listButton {
-    @apply bg-green-400 p-4 rounded-s-lg shadow-lg cursor-pointer hover:bg-green-300 hover:shadow-xl active:bg-red-500 transition-all duration-200 ease-in-out;
+    @apply bg-green-400 p-4 rounded-s-lg shadow-lg cursor-pointer hover:bg-green-300 hover:shadow-xl transition-all duration-200 ease-in-out;
 }
 
 .stationId {
@@ -501,6 +558,10 @@ function saveData() {
 .modal {
   background: linear-gradient(45.06deg, #010AD1 -8.2%, #1BF728 108.15%);
   border: 2px solid #FFEE58;
+}
+
+.hidden .itemCell {
+    @apply !h-0;
 }
 
 </style>
