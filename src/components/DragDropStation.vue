@@ -1,6 +1,6 @@
 <template>
     <div class="absolute w-screen">
-        <div class="fixed right-0 grid gap-3 font-medium">
+        <div class="fixed right-0 grid gap-3 font-medium z-10">
             <p class="listButton" @click="showEvList = !showEvList">{{  $t('ev')  }}</p>
             <p class="listButton" @click="showPumpList = !showPumpList">{{  $t('pump')  }}</p>
             <p class="listButton" @click="showMasterList = !showMasterList">{{  $t('evMaster')  }}</p>
@@ -15,7 +15,14 @@
                 </div>
 
                 <div class="modalListBody">
-                    <div v-for="(item, index) in props.unassignedEvs" :key="index" class="itemCell justify-self-center">
+                    <div 
+                        v-for="(item, index) in props.unassignedEvs" 
+                        :key="index" 
+                        class="itemCell justify-self-center"
+                        @dragenter.prevent @dragover.prevent
+                        :draggable="true" 
+                        @dragstart="startDrag($event, 'ev', '0', item.id, item.id)" 
+                        @dragend="endDrag()">
                         <span>{{ getFormattedItemCell('ev', item.id) }}</span>
                     </div>
                 </div>
@@ -31,7 +38,14 @@
                 </div>
 
                 <div class="modalListBody">
-                    <div v-for="(item, index) in props.pumpList" :key="index" class="itemCell justify-self-center">
+                    <div 
+                        v-for="(item, index) in props.pumpList" 
+                        :key="index" 
+                        class="itemCell justify-self-center" 
+                        @dragenter.prevent @dragover.prevent
+                        :draggable="true" 
+                        @dragstart="startDrag($event, 'pump', '0', item.index, item.id)" 
+                        @dragend="endDrag()">
                         <span>{{ getFormattedItemCell('pump', item.index) }}</span>
                     </div>
                 </div>
@@ -47,7 +61,14 @@
                 </div>
 
                 <div class="modalListBody">
-                    <div v-for="(item, index) in props.masterList" :key="index" class="itemCell justify-self-center">
+                    <div                      
+                        v-for="(item, index) in props.masterList" 
+                        :key="index" 
+                        class="itemCell justify-self-center" 
+                        @dragenter.prevent @dragover.prevent
+                        :draggable="true" 
+                        @dragstart="startDrag($event, 'master', '0', item.index, item.id)" 
+                        @dragend="endDrag()">
                         <span>{{ getFormattedItemCell('master', item.index) }}</span>
                     </div>
                 </div>
@@ -58,9 +79,16 @@
     <div class="card-container">
         <div v-for="(tData, index) in data" :key="index" v-show="tData.length > 0 && tData[0].stazione != 0"
             class="card">
-            <div class="card-title">
+            <div class="card-title text-xs">
                 <p class="stationId">{{ $t('station') }} {{ tData[0].stazione }}</p>
-                <p>{{ tData[0].group }}</p>
+                <div class="flex flex-row gap-1 justify-center items-center cursor-pointer" v-if="selectedGroupItem?.stazione != tData[0].stazione" @click="editName(tData[0])">
+                    <p>{{ tData[0].group }}</p>
+                    <img src="@/assets/material_edit.png" id="editName" class="w-4 h-4">
+                </div>
+                <div v-if="selectedGroupItem?.stazione == tData[0].stazione" class="flex flex-row gap-1 justify-center items-center">
+                    <input type="text" class="border p-1 text-xs" v-model="tData[0].group">
+                    <IveButton @click="saveName(tData[0])" class="filled__blue !text-xs h-[24px]" :label="$t('save')" :loading="postControlIsLoading"/>
+                </div>
             </div>
 
             <div class="card-body py-3">
@@ -80,8 +108,8 @@
                                 class="itemCell" 
                                 :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', null].includes(draggedCellType)}" 
                                 :draggable="tData[0].stazione > 0" 
-                                @drop="onDrop($event, 'ev', item)"
-                                @dragstart="startDrag($event, 'ev', item)" 
+                                @drop="onDrop($event, 'ev', item.stazione, item)"
+                                @dragstart="startDrag($event, 'ev', item.stazione, item.id, item.id)" 
                                 @dragend="endDrag()">
                                     {{ getFormattedItemCell('ev', item.id) }}
                             </td>
@@ -89,16 +117,16 @@
                                 class="itemCell" 
                                 :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'pump', cannotDrop: tData[0].stazione > 0 && !['pump', null].includes(draggedCellType)}" 
                                 :draggable="tData[0].stazione > 0" 
-                                @drop="onDrop($event, 'pump', item)"
-                                @dragstart="startDrag($event, 'pump', item)" 
+                                @drop="onDrop($event, 'pump', item.stazione, item)"
+                                @dragstart="startDrag($event, 'pump', item.stazione, item.pompa, item.id)" 
                                 @dragend="endDrag()">
                                 {{ getFormattedItemCell('pump', item.pompa) }}</td>
                             <td
                                 class="itemCell" 
                                 :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'master', cannotDrop: tData[0].stazione > 0 && !['master', null].includes(draggedCellType)}" 
                                 :draggable="tData[0].stazione > 0" 
-                                @drop="onDrop($event, 'master', item)"
-                                @dragstart="startDrag($event, 'master', item)" 
+                                @drop="onDrop($event, 'master', item.stazione, item)"
+                                @dragstart="startDrag($event, 'master', item.stazione, item.masterv, item.id)" 
                                 @dragend="endDrag()">
                             {{ getFormattedItemCell('master', item.masterv) }}</td>
                         </tr>
@@ -111,6 +139,7 @@
 
 <script setup>
 import { ref } from '@vue/reactivity';
+import IveButton from '@/components/button/BaseButton.vue';
 import { useDataStore } from '@/stores/DataStore';
 import { storeToRefs } from 'pinia'
 
@@ -126,10 +155,36 @@ const props = defineProps({
     unassignedEvs: null,
 })
 
+const dataStore = useDataStore()
+const { postControlIsLoading } = storeToRefs(useDataStore())
+
 const draggedCellType = ref(null)
 const showEvList = ref(false)
 const showPumpList = ref(false)
 const showMasterList = ref(false)
+
+const isEditingName = ref(false)
+const selectedGroupItem = ref(null)
+
+function editName(tDataItem) {
+    isEditingName.value = true
+    selectedGroupItem.value = tDataItem
+}
+
+function saveName(tDataItem) {
+    const postGroupData = ref({
+        command: 'GROUPCONFIG',
+        payload: {}
+    })
+
+    var stationID = Number(tDataItem.stazione)
+    var groupName = String(tDataItem.group)
+    postGroupData.value.payload['S' + Number(6000 + stationID - 1)] = groupName
+    dataStore.postControl(props.deviceCode, postGroupData.value)
+
+    isEditingName.value = false
+    selectedGroupItem.value = null
+}
 
 function getFormattedItemCell(type, id) {
     // type: ev, pump, master
@@ -151,12 +206,14 @@ function getFormattedItemCell(type, id) {
     }
 }
 
-function startDrag(event, cellType, item) {
+function startDrag(event, cellType, stazione, id, rowId) {
     event.dataTransfer.dropEffect = "move"
     event.dataTransfer.effectAllowed = "move"
 
-    event.dataTransfer.setData("item", JSON.stringify(item))
+    event.dataTransfer.setData("id", id)
+    event.dataTransfer.setData("stazione", stazione)
     event.dataTransfer.setData("cellType", cellType)
+    event.dataTransfer.setData("rowId", rowId)
 
     draggedCellType.value = cellType
 }
@@ -165,11 +222,17 @@ function endDrag() {
     draggedCellType.value = null
 }
 
-function onDrop(event, currentCellType, currentItem) {
-    let draggedItem = JSON.parse(event.dataTransfer.getData("item"))
+function onDrop(event, currentCellType, currentStazione, currentItem) {
+    let draggedId = event.dataTransfer.getData("id")
     let draggedCellType = event.dataTransfer.getData("cellType")
+    let draggedStazione = event.dataTransfer.getData("stazione")
+    let draggedRowId = event.dataTransfer.getData("rowId")
 
-    if (currentItem.stazione == 0) {
+    console.log("dragged", 'id', draggedId, 'cellType', draggedCellType, 'stazione', draggedStazione)
+    console.log('current item', currentItem)
+
+
+    if (currentStazione == 0) {
         console.log("current item is disabled", currentItem)
         return
     }
@@ -179,30 +242,53 @@ function onDrop(event, currentCellType, currentItem) {
         return
     }
 
-    if (draggedItem.id == currentItem.id) {
-        console.log("dragged and current item are the same", draggedItem.id, currentItem.id)
+    let currentId // id by cellType
+    let cellKey
+    switch (currentCellType) {
+        case 'ev':
+           cellKey = 'id'
+            break;
+        case 'pump':
+            cellKey = 'pompa'
+            break;
+        case 'master':
+            cellKey = 'masterv'
+            break;
+        default:
+            break;
+    }
+
+    currentId = currentItem[cellKey]
+    console.log("current id", currentId)
+
+    if (draggedId == currentId ) {
+        console.log("dragged and current item are the same", draggedId, currentId)
         return
     }
 
-    console.log("old data", props.data)
+    let fromList = draggedStazione == 0
+    let fromPumpList = fromList && draggedCellType == 'pump'
+    let fromMasterList = fromList && draggedCellType == 'master'
 
-    // swap the currentItem and draggedItem position in the array and change the stazione of each item to the new props.data stazione accordingly
-    let draggedItemIndex = props.data[draggedItem.stazione].findIndex(x => x.id == draggedItem.id)
-    let currentItemIndex = props.data[currentItem.stazione].findIndex(x => x.id == currentItem.id)
+    let tempCurrentItem = { ...currentItem }
+    let draggedItem = props.rawData.find(x => x.id == draggedRowId)
+
+    // set the current cell to the dragged item
+    currentItem[cellKey] = draggedId
     
-    let tempCurrentItem = props.data[currentItem.stazione][currentItemIndex]
-
-    currentItem = draggedItem
-    draggedItem = tempCurrentItem
-    tempCurrentItem = currentItem
+    // set current cell ev value to dragged item ev value
+    if (currentCellType == 'ev') {
+        currentItem.ev = draggedItem.ev
+    }
     
-    currentItem.stazione = draggedItem.stazione
-    draggedItem.stazione = tempCurrentItem.stazione
- 
-    props.data[currentItem.stazione][currentItemIndex] = currentItem
-    props.data[draggedItem.stazione][draggedItemIndex] = draggedItem
+    // set dragged cell value to current item value
+    if (!fromPumpList && !fromMasterList) {
+        draggedItem[cellKey] = tempCurrentItem[cellKey]
 
-    console.log("new data", props.data)
+        if (draggedCellType == 'ev') {
+            draggedItem.ev = tempCurrentItem.ev
+        }
+    }
 }
 
 </script>
