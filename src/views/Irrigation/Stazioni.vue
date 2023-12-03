@@ -24,7 +24,8 @@
           :availableGroup="availableGroup"
           :unassignedEvs="unassignedEvs"
           :newGroups="newGroups"
-          :loadData="loadData" />
+          :loadData="loadData"
+          @reset="onReset()" />
 
         <Accordion v-if="mode == 'accordion'"
           :id="props.id"
@@ -137,6 +138,10 @@ const availableGroup = computed(() => {
 const unassignedEvs = computed(() => {
   return tableData.value.filter(x => x.stazione == 0)
 })
+
+function onReset() {
+  newGroups.value = []
+}
 
 function fillTableData() {
   tableData.value = []

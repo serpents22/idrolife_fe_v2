@@ -277,6 +277,7 @@ const props = defineProps({
     loadData: Function
 })
 
+const emit = defineEmits(['reset'])
 const dataStore = useDataStore()
 const { postControlIsLoading } = storeToRefs(useDataStore())
 
@@ -547,7 +548,10 @@ function addRowToNewGroup(group, id) {
 async function reset() {
     isEditing.value = false
     isLoading.value = true
+
+    emit('reset')
     await props.loadData()
+
     isLoading.value = false
 }
 
