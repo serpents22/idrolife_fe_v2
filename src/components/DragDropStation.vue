@@ -126,12 +126,14 @@
                         </tr>
                     </thead>
                     <tbody :class="{'cursor-grabbing': draggedCellType != null}">
-                        <tr v-for="(item, index) in tData" :key="index" @dragenter.prevent @dragover.prevent>
+                        <tr v-for="(item, index) in tData" :key="index">
                             <td class="itemCell w-10 hover:cursor-not-allowed">{{ index + 1 }}</td>
                             <td
                                 class="itemCell" 
                                 :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', undefined].includes(draggedCellType)}" 
                                 :draggable="tData[0].stazione > 0" 
+                                v-on:dragenter="draggedCellType == 'ev' ? $event.preventDefault() : null"
+                                v-on:dragover="draggedCellType == 'ev' ? $event.preventDefault() : null"
                                 @drop="onDrop('ev', item.stazione, item)"
                                 @dragstart="startDrag($event, 'ev', item.stazione, item.id, item.id)" 
                                 @dragend="endDrag()">
@@ -141,6 +143,8 @@
                                 class="itemCell" 
                                 :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'pump', cannotDrop: tData[0].stazione > 0 && !['pump', undefined].includes(draggedCellType)}" 
                                 :draggable="tData[0].stazione > 0" 
+                                v-on:dragenter="draggedCellType == 'pump' ? $event.preventDefault() : null"
+                                v-on:dragover="draggedCellType == 'pump' ? $event.preventDefault() : null"
                                 @drop="onDrop('pump', item.stazione, item)"
                                 @dragstart="startDrag($event, 'pump', item.stazione, item.pompa, item.id)" 
                                 @dragend="endDrag()">
@@ -149,6 +153,8 @@
                                 class="itemCell" 
                                 :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'master', cannotDrop: tData[0].stazione > 0 && !['master', undefined].includes(draggedCellType)}" 
                                 :draggable="tData[0].stazione > 0" 
+                                v-on:dragenter="draggedCellType == 'master' ? $event.preventDefault() : null"
+                                v-on:dragover="draggedCellType == 'master' ? $event.preventDefault() : null"
                                 @drop="onDrop('master', item.stazione, item)"
                                 @dragstart="startDrag($event, 'master', item.stazione, item.masterv, item.id)" 
                                 @dragend="endDrag()">
@@ -377,10 +383,6 @@ function onDrop(currentCellType, currentStazione, currentItem) {
     if (draggedId == currentId ) {
         return
     }
-
-    let currentItemIndex = props.rawData.findIndex(x => x.id == currentId)
-    let draggedItemIndex = props.rawData.findIndex(x => x.id == draggedId)
-    console.log('before', props.rawData[currentItemIndex], props.rawData[draggedItemIndex])
 
     let fromList = draggedStazione == 0
     let fromPumpList = fromList && draggedCellType == 'pump'
