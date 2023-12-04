@@ -1,4 +1,10 @@
 <template>
+    <alert 
+    :message ="modalMessage"
+    :modalActive="modalActive"
+    :isError="isError"
+     @close="closeNotification" />
+
     <div class="absolute w-screen">
         <div class="fixed top-[20%] right-0 grid gap-3 font-medium z-10">
             <p class="listButton" @click="showList('ev')">{{  $t('ev')  }}</p>
@@ -115,10 +121,10 @@
             <div class="bg-white flex flex-row justify-center items-center space-x-4 rounded px-4 py-2 w-fit">
                 <h2 class="text-sm">{{ $t('stationsManagement') }}</h2>
 
-                <IveButton v-if="!isEditing" @click="isEditing = !isEditing" class="filled__blue w-20 text-xs" :label="$t('edit')" :loading="isLoading" />
+                <IveButton v-if="!isEditing" @click="isEditing = !isEditing" class="filled__blue w-fit text-xs" :label="$t('edit')" :loading="isLoading" />
                 <div v-else class="flex flex-row space-x-2">
-                    <IveButton @click="reset()" class="filled w-20 text-xs" :label="$t('cancel')" :loading="isLoading" />
-                    <IveButton @click="saveData()" class="filled__blue w-20 text-xs" :label="$t('save')" :loading="isLoading" />
+                    <IveButton @click="shouldReset ? reset() : confirmReset()" class="filled w-fit text-xs" :label="$t(shouldReset ? 'dataLost' : 'cancel')" :loading="isLoading" />
+                    <IveButton @click="saveData()" class="filled__blue w-fit text-xs" :label="$t('save')" :loading="isLoading" />
                 </div>
             </div>
         </div>
@@ -277,12 +283,17 @@ const props = defineProps({
     loadData: Function
 })
 
-const emit = defineEmits(['reset'])
+const emit = defineEmits(['reset', 'save'])
 const dataStore = useDataStore()
 const { postControlIsLoading } = storeToRefs(useDataStore())
 
 const isLoading = ref(false)
 const isEditing = ref(false)
+const shouldReset = ref(false)
+
+const isError = ref(false)
+const modalActive = ref(false)
+const modalMessage = ref('')
 
 // groups
 const selectedGroup = ref('')
@@ -545,7 +556,12 @@ function addRowToNewGroup(group, id) {
     props.newGroups.splice(index, 1)
 }
 
+function confirmReset() {
+    shouldReset.value = true
+}
+
 async function reset() {
+    shouldReset.value = false
     isEditing.value = false
     isLoading.value = true
 
@@ -555,7 +571,7 @@ async function reset() {
     isLoading.value = false
 }
 
-function saveData() {
+async function saveData() {
     isEditing.value = false
     isLoading.value = true
     postData.value.payload = {}
@@ -571,8 +587,25 @@ function saveData() {
         // postData.value.payload['S' + (2005 + ((localId - 1) * 6))] = 0
     })
 
-    dataStore.postControl(props.deviceCode, postData.value)
+    const error = await dataStore.postControl(props.deviceCode, postData.value) // this return error object if error
+
+    if (error) {
+        // modalMessage.value = error.message
+        modalMessage.value = 'Failed to save data'
+        isError.value = true
+    } else {
+        await props.loadData()
+        modalMessage.value = 'Data saved successfully'
+        isError.value = false
+    }
+
     isLoading.value = false
+    modalActive.value = true
+    setTimeout(closeNotification, 3000)
+}
+
+const closeNotification = () => {
+    modalActive.value = false
 }
 
 function addGroup() {
