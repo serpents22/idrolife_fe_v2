@@ -101,18 +101,8 @@
 
     <div class="space-y-4">
 
-        <div class="flex flex-row space-x-4 justify-between">
-            <div v-if="isEditing" class="flex flex-row justify-center items-center space-x-4">
-                <select class="dropdown text-xs" v-model="selectedGroup">
-                    <option value="" disabled>{{ $t('group') }}</option>
-                    <option v-for="({ address, title }) in props.availableGroup" :value="address">{{ title }}</option>
-                </select>
-
-                <IveButton @click="addGroup()" class="filled__blue text-xs w-fit py-3" :label="$t('addGroup')" :loading="isLoading" />
-            </div>
-            <div v-else />
-
-            <div class="bg-white flex flex-row justify-center items-center space-x-4 rounded px-4 py-2 w-fit">
+        <div class="flex flex-col gap-4 lg:flex-row space-x-4 justify-between">
+            <div class="bg-white flex flex-row justify-between items-center space-x-4 rounded px-4 py-2 w-full">
                 <h2 class="text-sm">{{ $t('stationsManagement') }}</h2>
 
                 <IveButton v-if="!isEditing" @click="isEditing = !isEditing" class="filled__blue w-20 text-xs" :label="$t('edit')" :loading="isLoading" />
@@ -121,6 +111,18 @@
                     <IveButton @click="saveData()" class="filled__blue w-20 text-xs" :label="$t('save')" :loading="isLoading" />
                 </div>
             </div>
+
+            <div v-if="isEditing" class="flex flex-row justify-center items-center space-x-4">
+                <select class="dropdown text-xs" v-model="selectedGroup">
+                    <option value="" disabled>{{ $t('group') }}</option>
+                    <option v-for="({ address, title }) in props.availableGroup" :value="address">{{ title }}</option>
+                </select>
+
+                <IveButton @click="addGroup()" class="filled__blue text-xs w-fit py-3" :label="$t('addGroup')" :loading="isLoading" />
+            </div>
+            <!-- <div v-else /> -->
+
+
         </div>
 
         <div class="card-container">
@@ -589,7 +591,7 @@ function addGroup() {
 
 <style scoped>
 .card-container {
-    @apply grid grid-cols-2 2xl:grid-cols-3 gap-4;
+    @apply grid lg:grid-cols-1 2xl:grid-cols-3 gap-4;
 }
 
 .card {
