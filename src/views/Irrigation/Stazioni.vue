@@ -9,9 +9,9 @@
       </div>
     </div>
     <div class="content">
-      <IdroTitle :title="title" />
+      <IdroTitle class="hidden md:flex" :title="title" />
 
-      <div class="main">
+      <div class="main mt-4">
         <!-- <IveButton class="filled__blue mb-2" @click="mode = mode == 'dragdrop' ? 'accordion' : 'dragdrop'" :label="'Change mode'" /> -->
         <DragDropStation 
           v-if="mode == 'dragdrop'" 
@@ -249,7 +249,7 @@ async function loadData() {
 }
 
 .main {
-  @apply flex flex-col w-full items-center relative h-[300px] sm:h-full overflow-auto sm:overflow-visible
+  @apply flex flex-col w-full items-center relative h-full
 }
 
 .device-container {

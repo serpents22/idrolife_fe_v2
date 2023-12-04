@@ -6,7 +6,7 @@
      @close="closeNotification" />
 
     <div class="absolute w-screen">
-        <div class="fixed top-[20%] right-0 grid gap-3 font-medium z-10">
+        <div class="fixed top-[20%] right-0 hidden md:grid gap-3 font-medium z-10">
             <p class="listButton" @click="showList('ev')">{{  $t('ev')  }}</p>
             <p class="listButton" @click="showList('pump')">{{  $t('pump')  }}</p>
             <p class="listButton" @click="showList('master')">{{  $t('evMaster')  }}</p>
@@ -29,6 +29,26 @@
                     v-on:dragenter="draggedCell && draggedStazione != 0 && draggedCellType == 'ev' ? $event.preventDefault() : null"
                     v-on:dragover="draggedCell && draggedStazione != 0 && draggedCellType == 'ev' ? $event.preventDefault() : null"
                     @drop="moveCellToList('ev')">
+                    <div 
+                        v-for="(item, index) in props.unassignedEvs" 
+                        :key="index" 
+                        class="itemCell"
+                        @dragenter.prevent @dragover.prevent
+                        :draggable="isEditing" 
+                        @dragstart="startDrag($event, 'ev', '0', item.id, item.id, item.ev)" 
+                        @dragend="endDrag()">
+                        <span>{{ getFormattedItemCell('ev', item.id) }}</span>
+                    </div>
+                    <div 
+                        v-for="(item, index) in props.unassignedEvs" 
+                        :key="index" 
+                        class="itemCell"
+                        @dragenter.prevent @dragover.prevent
+                        :draggable="isEditing" 
+                        @dragstart="startDrag($event, 'ev', '0', item.id, item.id, item.ev)" 
+                        @dragend="endDrag()">
+                        <span>{{ getFormattedItemCell('ev', item.id) }}</span>
+                    </div>
                     <div 
                         v-for="(item, index) in props.unassignedEvs" 
                         :key="index" 
@@ -105,8 +125,9 @@
         </div>
     </div>
 
-    <div class="space-y-4">
+    <div class="space-y-4 h-[50vh] md:h-full">
 
+        <!-- header row, edit button -->
         <div class="flex flex-col gap-4 lg:flex-row space-x-4 justify-between">
             <div class="bg-white flex flex-row justify-between items-center space-x-4 rounded px-4 py-2 w-full">
                 <h2 class="text-sm">{{ $t('stationsManagement') }}</h2>
@@ -127,11 +148,9 @@
                 <IveButton @click="addGroup()" class="filled__blue text-xs w-fit py-3" :label="$t('addGroup')" :loading="isLoading" />
             </div>
             <!-- <div v-else /> -->
-
-
         </div>
 
-        <div class="card-container">
+        <div class="card-container h-5/6 overflow-auto">
             <div v-for="(group, index) in props.newGroups" :key="index" v-if="isEditing" class="card">
                 <div class="card-title text-xs">
                     <p class="stationId">{{ $t('station') }} {{ group.stazione }}</p>
@@ -262,6 +281,12 @@
                 </div>
             </div>
         </div>
+
+        <div class="flex flex-row space-x-4 md:hidden">
+            <IveButton class="text-xs filled green" @click="showList('ev')" :label="$t('ev')" />
+            <IveButton class="text-xs filled green" @click="showList('pump')" :label="$t('pump')" />
+            <IveButton class="text-xs filled green" @click="showList('master')" :label="$t('evMaster')" />
+        </div>
     </div>
 </template>
 
@@ -304,7 +329,7 @@ const selectedGroup = ref('')
 const isEditingName = ref(false)
 const editedNameStation = ref(null)
 
-const showEvList = ref(false)
+const showEvList = ref(!false)
 const showPumpList = ref(false)
 const showMasterList = ref(false)
 
@@ -368,19 +393,19 @@ function getFormattedItemCell(type, id) {
 function showList(listType) {
     switch (listType) {
         case 'ev':
-            showEvList.value = true
+            showEvList.value = !showEvList.value
             showPumpList.value = false
             showMasterList.value = false
             break;
         case 'pump':
             showEvList.value = false
-            showPumpList.value = true
+            showPumpList.value = !showPumpList.value
             showMasterList.value = false
             break;
         case 'master':
             showEvList.value = false
             showPumpList.value = false
-            showMasterList.value = true
+            showMasterList.value = !showMasterList.value
             break;
         default:
             break;
@@ -628,7 +653,7 @@ function addGroup() {
 
 <style scoped>
 .card-container {
-    @apply grid lg:grid-cols-1 2xl:grid-cols-3 gap-4;
+    @apply grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4;
 }
 
 .card {
@@ -690,12 +715,15 @@ function addGroup() {
 }
 
 .modalListContainer {
-    @apply fixed right-0 z-10 w-1/5 h-full p-4;
+    @apply 
+    fixed p-4 z-10 bottom-0 w-full h-[250px]
+    md:right-0 md:w-1/5 md:h-full md:bottom-auto
 }
 
 .modalList {
-    @apply bg-white shadow-lg h-1/2 rounded-2xl py-6 px-4
-    flex flex-col;
+    @apply
+     flex flex-col bg-white shadow-2xl rounded-2xl py-6 px-4 h-full
+     md:h-1/2
 }
 
 .modalListHeader {
