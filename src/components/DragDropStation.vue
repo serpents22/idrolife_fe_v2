@@ -39,26 +39,6 @@
                         @dragend="endDrag()">
                         <span>{{ getFormattedItemCell('ev', item.id) }}</span>
                     </div>
-                    <div 
-                        v-for="(item, index) in props.unassignedEvs" 
-                        :key="index" 
-                        class="itemCell"
-                        @dragenter.prevent @dragover.prevent
-                        :draggable="isEditing" 
-                        @dragstart="startDrag($event, 'ev', '0', item.id, item.id, item.ev)" 
-                        @dragend="endDrag()">
-                        <span>{{ getFormattedItemCell('ev', item.id) }}</span>
-                    </div>
-                    <div 
-                        v-for="(item, index) in props.unassignedEvs" 
-                        :key="index" 
-                        class="itemCell"
-                        @dragenter.prevent @dragover.prevent
-                        :draggable="isEditing" 
-                        @dragstart="startDrag($event, 'ev', '0', item.id, item.id, item.ev)" 
-                        @dragend="endDrag()">
-                        <span>{{ getFormattedItemCell('ev', item.id) }}</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -422,8 +402,10 @@ function setGroupName(stationId, groupName, groupData){
 }
 
 function startDrag(event, cellType, stazione, id, rowId, serial) {
-    event.dataTransfer.dropEffect = "move"
-    event.dataTransfer.effectAllowed = "move"
+    if (event?.dataTransfer) {
+        event.dataTransfer.dropEffect = "move"
+        event.dataTransfer.effectAllowed = "move"
+    }
 
     switch (cellType) {
         case 'ev':
@@ -688,7 +670,8 @@ function addGroup() {
     bg-gray-100
     transition-colors
     duration-100
-    ease-in;
+    ease-in
+    select-none;
 
     cursor: v-bind('isEditing ? "pointer" : "default"');
 }
