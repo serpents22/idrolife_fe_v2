@@ -217,21 +217,20 @@
                                 <draggable 
                                     :list="[item.id]"
                                     group="ev"
-                                    :itemKey="x => x"
-                                    @change="log"
+                                    :itemKey="String(index)"
                                     :disabled="!isEditing || tData[0].stazione == 0" 
-                                    :move="(_, originalEvent) => startDrag(originalEvent, 'ev', item.stazione, item.id, item.id)"
                                     @start="event => startDrag(event, 'ev', item.stazione, item.id, item.id)"
-                                    @end="endDrag"
+                                    :move="(event, _) => onMobileMove(event)"
+                                    @end="onMobileEnd"
                                     tag="td"
                                     class="itemCell"
-                                    :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', undefined].includes(draggedCellType)}" 
+                                    dragClass="itemCell"
+                                    data-cell-type="ev"
+                                    :data-row="JSON.stringify(item)"
+                                    :options="{animation:150}"
                                 >
                                     <template #item="{element}">
-                                        <span 
-                                            class="itemCell"
-                                            :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', undefined].includes(draggedCellType)}" 
-                                        >
+                                        <span class="itemCell" :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', undefined].includes(draggedCellType)}" >
                                             {{ getFormattedItemCell('ev', element) }}
                                         </span>
                                     </template>
@@ -241,7 +240,6 @@
                                     :list="[item.pompa]"
                                     group="pump"
                                     :itemKey="x => x"
-                                    @change="log"
                                     :disabled="!isEditing || tData[0].stazione == 0" 
                                     :move="(_, originalEvent) => startDrag(originalEvent, 'pump', item.stazione, item.pompa, item.id)"
                                     @start="event => startDrag(event, 'pump', item.stazione, item.pompa, item.id)"
@@ -262,7 +260,6 @@
                                     :list="[item.masterv]"
                                     group="master"
                                     :itemKey="x => x"
-                                    @change="log"
                                     :disabled="!isEditing || tData[0].stazione == 0" 
                                     :move="(_, originalEvent) => startDrag(originalEvent, 'master', item.stazione, item.masterv, item.id)"
                                     @start="event => startDrag(event, 'master', item.stazione, item.masterv, item.id)"
@@ -405,7 +402,7 @@ const props = defineProps({
     loadData: Function
 })
 
-const emit = defineEmits(['reset', 'save'])
+const emit = defineEmits(['reset'])
 const dataStore = useDataStore()
 const { postControlIsLoading } = storeToRefs(useDataStore())
 
@@ -432,6 +429,10 @@ const draggedCell = ref(null)
 const draggedCellType = computed(() => draggedCell.value?.cellType)
 const draggedStazione = computed(() => draggedCell.value?.stazione)
 const openedListProgrammaticaly = ref(false)
+
+// store data for mobile view
+const currentCellType = ref(null)
+const currentRowData = ref(null)
 
 const postData = ref({
     command: 'EVCONFIG',
@@ -517,7 +518,6 @@ function setGroupName(stationId, groupName, groupData){
 }
 
 function startDrag(event, cellType, stazione, id, rowId, serial) {
-    console.log('startDrag', event, cellType, stazione, id, rowId, serial)
     if (event?.dataTransfer) {
         event.dataTransfer.dropEffect = "move"
         event.dataTransfer.effectAllowed = "move"
@@ -549,8 +549,33 @@ function startDrag(event, cellType, stazione, id, rowId, serial) {
     draggedCell.value = { id, rowId, stazione, cellType, serial }
 }
 
+function onMobileMove(event) {
+    const { from, to } = event;
+
+    if (from.getAttribute('data-cell-type') != to.getAttribute('data-cell-type')) {
+        return false; // cancel move
+    }
+
+    currentCellType.value = to.getAttribute('data-cell-type')
+    currentRowData.value = JSON.parse(to.getAttribute('data-row'))
+
+    return false; // disable sort
+}
+
+function onMobileEnd() {
+    if (!currentCellType.value || !currentRowData.value) {
+        endDrag()
+        return
+    }
+
+    onDrop(currentCellType.value, currentRowData.value.stazione, currentRowData.value)
+    endDrag()
+}
+
 function endDrag() {
     draggedCell.value = null
+    currentCellType.value = null
+    currentRowData.value = null
 
     // if list is opened programmaticaly, close it after certain delay
     if (openedListProgrammaticaly.value) {
@@ -565,11 +590,18 @@ function endDrag() {
 }
 
 function onDrop(currentCellType, currentStazione, currentItem) {
-
     let draggedId = draggedCell.value.id
     let draggedCellType = draggedCell.value.cellType
     let draggedStazione = draggedCell.value.stazione
     let draggedRowId = draggedCell.value.rowId
+    
+    let fromList = draggedStazione == 0
+    let fromPumpList = fromList && draggedCellType == 'pump'
+    let fromMasterList = fromList && draggedCellType == 'master'
+    let isEvCell = currentCellType == 'ev'
+
+    let tempCurrentItem = { ...currentItem }
+    let draggedItem = { ...props.rawData.find(x => x.id == draggedRowId) }
 
     if (currentStazione == 0) {
         return
@@ -601,19 +633,14 @@ function onDrop(currentCellType, currentStazione, currentItem) {
         return
     }
 
-    let fromList = draggedStazione == 0
-    let fromPumpList = fromList && draggedCellType == 'pump'
-    let fromMasterList = fromList && draggedCellType == 'master'
-    let isEvCell = currentCellType == 'ev'
+    let currentItemIndex = props.rawData.findIndex(x => x.id == currentItem.id)
+    let draggedItemIndex = props.rawData.findIndex(x => x.id == draggedItem.id)
 
-    let tempCurrentItem = { ...currentItem }
-    let draggedItem = props.rawData.find(x => x.id == draggedRowId)
-    
     // set current cell ev value to dragged item ev value
     if (isEvCell) {
         currentItem.ev = draggedItem.ev
     }
-    
+
     currentItem[cellKey] = draggedId
     
     // set dragged cell value to current item value
@@ -624,6 +651,10 @@ function onDrop(currentCellType, currentStazione, currentItem) {
         
         draggedItem[cellKey] = tempCurrentItem[cellKey]
     }
+
+    props.rawData[currentItemIndex] = currentItem
+    props.rawData[draggedItemIndex] = draggedItem
+    
 }
 
 function moveCellToList(currentCellType) {
@@ -747,9 +778,6 @@ function addGroup() {
     selectedGroup.value = ''
 }
 
-function log(event)  {
-    console.log('log', event)
-}
 
 </script>
 
@@ -781,7 +809,7 @@ function log(event)  {
 
 .itemCell {
     @apply
-    w-[100px]
+    w-[80px]
     h-[40px]
     text-center
     text-xs
