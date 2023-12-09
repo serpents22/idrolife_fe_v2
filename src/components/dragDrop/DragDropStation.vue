@@ -214,27 +214,18 @@
                             <tr v-for="(item, index) in tData" :key="index">
                                 <td class="itemCell w-10 hover:cursor-not-allowed">{{ index + 1 }}</td>
 
-                                <draggable 
-                                    :list="[item.id]"
-                                    group="ev"
-                                    :itemKey="String(index)"
-                                    :disabled="!isEditing || tData[0].stazione == 0" 
-                                    @start="event => startDrag(event, 'ev', item.stazione, item.id, item.id)"
-                                    :move="(event, _) => onMobileMove(event)"
-                                    @end="onMobileEnd"
-                                    tag="td"
-                                    class="itemCell"
-                                    dragClass="itemCell"
-                                    data-cell-type="ev"
-                                    :data-row="JSON.stringify(item)"
-                                    :options="{animation:150}"
-                                >
-                                    <template #item="{element}">
-                                        <span class="itemCell" :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', undefined].includes(draggedCellType)}" >
-                                            {{ getFormattedItemCell('ev', element) }}
-                                        </span>
-                                    </template>
-                                </draggable>
+                                <DragDropCell 
+                                    :cell="'ev'"
+                                    :item="item"
+                                    :index="index"
+                                    :isEditing="isEditing"
+                                    :tData="tData"
+                                    :getFormattedItemCell="getFormattedItemCell"
+                                    :draggedCellType="draggedCellType"
+                                    @start-drag="event => startDrag(event, 'ev', item.stazione, item.id, item.id)"
+                                    @mobile-move="onMobileMove"
+                                    @mobile-end="onMobileEnd"
+                                />
 
                                 <draggable 
                                     :list="[item.pompa]"
@@ -387,6 +378,7 @@ import IveButton from '@/components/button/BaseButton.vue';
 import { useDataStore } from '@/stores/DataStore';
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue';
+import DragDropCell from '@/components/dragDrop/DragDropCell.vue';
 import draggable from 'vuedraggable'
 
 const props = defineProps({
@@ -807,7 +799,7 @@ function addGroup() {
     @apply pl-2 rounded w-20 sm:w-60 py-2 sm:py-3 cursor-pointer
 }
 
-.itemCell {
+::v-deep(.itemCell) {
     @apply
     w-[80px]
     h-[40px]
@@ -824,15 +816,15 @@ function addGroup() {
     cursor: v-bind('isEditing ? "pointer" : "default"');
 }
 
-.itemCell > span {
+::v-deep(.itemCell > span) {
     @apply flex flex-col justify-center items-center h-full;
 }
 
-.canDrop {
+::v-deep(.canDrop) {
     @apply bg-green-300;
 }
 
-.cannotDrop {
+::v-deep(.cannotDrop) {
     @apply bg-red-300;
 }
 
@@ -874,7 +866,7 @@ function addGroup() {
     flex-grow;
 }
 
-.modalListBody .itemCell {
+::v-deep(.modalListBody .itemCell) {
     @apply justify-self-center;
 }
 
