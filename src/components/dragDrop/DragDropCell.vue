@@ -9,14 +9,14 @@
       @end="onMobileEnd"
       tag="td"
       class="itemCell"
-      :class="{canDrop: item.stazione > 0 && draggedCellType == cell, cannotDrop: item.stazione > 0 && ![cell, undefined].includes(draggedCellType)}"
+      :class="{canDrop, cannotDrop}"
       dragClass="itemCell"
       :data-cell-type="cell"
       :data-row="JSON.stringify(item)"
-      :options="{animation:150}"
+      :options="{ animation: 150 }"
     >
       <template #item="{element}">
-        <span class="itemCell" :class="{canDrop: item.stazione > 0 && draggedCellType == cell, cannotDrop: item.stazione > 0 && ![cell, undefined].includes(draggedCellType)}" >
+        <span class="itemCell" :class="{canDrop, cannotDrop}" >
           {{ getFormattedItemCell(cell, element) }}
         </span>
       </template>
@@ -57,8 +57,10 @@ import draggable from 'vuedraggable'
     }
   })
 
-  const value = computed(() => props.item[props.getCellKey(props.cell)])
   const emit = defineEmits(['start-drag', 'mobile-move', 'mobile-end'])
+  const value = computed(() => props.item[props.getCellKey(props.cell)])
+  const canDrop = computed(() => props.item.stazione > 0 && props.draggedCellType == props.cell)
+  const cannotDrop = computed(() => props.item.stazione > 0 && ![props.cell, undefined].includes(props.draggedCellType))
 
   const startDrag = event => {
     const { cell, item: { stazione, id } } = props
