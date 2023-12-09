@@ -178,94 +178,11 @@
                 </div>
             </div>
 
-            <!-- view for mobile -->
-            <div v-for="(tData, index) in data" 
-                :key="index"
-                v-show="tData.length > 0 && tData[0].stazione != 0" 
-                class="card md:hidden"
-                :class="{
-                    'hidden': tData[0].stazione == 0,
-                }"
-            >
-                <div class="card-title text-xs">
-                    <p class="stationId">{{ $t('station') }} {{ tData[0].stazione }}</p>
-                    <div class="flex flex-row gap-1 justify-center items-center cursor-pointer" v-if="editedNameStation != tData[0].stazione" @click="editName(tData[0].stazione)">
-                        <p>{{ tData[0].group }}</p>
-                        <img src="@/assets/material_edit.png" id="editName" class="w-4 h-4">
-                    </div>
-                    <div v-if="editedNameStation == tData[0].stazione" class="flex flex-row gap-1 justify-center items-center w-2/3">
-                        <input type="text" class="border p-1 text-xs w-full" v-model="tData[0].group">
-                        <IveButton @click="saveName(tData[0].stazione, tData[0].group, tData)" class="filled__blue !text-xs w-[fit-content]" :label="$t('save')" :loading="postControlIsLoading"/>
-                    </div>
-                </div>
-
-                <div class="card-body py-3">
-                    <table class="w-full text-xs border-separate border-spacing-2">
-                        <thead class="font-semibold">
-                            <tr>
-                                <th />
-                                <th>{{ $t('ev') }}</th>
-                                <th>{{ $t('pump') }}</th>
-                                <th>{{ $t('evMaster') }}</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr v-for="(item, index) in tData" :key="index">
-                                <td class="itemCell w-10 hover:cursor-not-allowed">{{ index + 1 }}</td>
-
-                                <DragDropCell 
-                                    cell="ev"
-                                    :item="item"
-                                    :index="index"
-                                    :isEditing="isEditing"
-                                    :getFormattedItemCell="getFormattedItemCell"
-                                    :getCellKey="getCellKey"
-                                    :draggedCellType="draggedCellType"
-                                    @start-drag="startDrag"
-                                    @mobile-move="onMobileMove"
-                                    @mobile-end="onMobileEnd"
-                                />
-
-                                <DragDropCell 
-                                    cell="pump"
-                                    :item="item"
-                                    :index="index"
-                                    :isEditing="isEditing"
-                                    :getFormattedItemCell="getFormattedItemCell"
-                                    :getCellKey="getCellKey"
-                                    :draggedCellType="draggedCellType"
-                                    @start-drag="startDrag"
-                                    @mobile-move="onMobileMove"
-                                    @mobile-end="onMobileEnd"
-                                />
-
-                                <DragDropCell 
-                                    cell="master"
-                                    :item="item"
-                                    :index="index"
-                                    :isEditing="isEditing"
-                                    :getFormattedItemCell="getFormattedItemCell"
-                                    :getCellKey="getCellKey"
-                                    :draggedCellType="draggedCellType"
-                                    @start-drag="startDrag"
-                                    @mobile-move="onMobileMove"
-                                    @mobile-end="onMobileEnd"
-                                />
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
             <!-- view for larger device than mobile -->
             <div v-for="(tData, index) in data" 
                 :key="index" 
                 v-show="tData.length > 0 && tData[0].stazione != 0" 
-                class="card hidden"
-                :class="{
-                    'md:block': tData[0].stazione != 0,
-                }"
+                class="card"
             >
                 <div class="card-title text-xs">
                     <p class="stationId">{{ $t('station') }} {{ tData[0].stazione }}</p>
@@ -293,37 +210,50 @@
                             <tr v-for="(item, index) in tData" :key="index">
                                 <td class="itemCell w-10 hover:cursor-not-allowed">{{ index + 1 }}</td>
 
-                                <td
-                                    class="itemCell"  
-                                    :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', undefined].includes(draggedCellType)}" 
-                                    :draggable="isEditing && tData[0].stazione > 0" 
-                                    v-on:dragenter="draggedCellType == 'ev' ? $event.preventDefault() : null"
-                                    v-on:dragover="draggedCellType == 'ev' ? $event.preventDefault() : null"
-                                    @drop="onDrop('ev', item.stazione, item)"
-                                    @dragstart="startDrag($event, 'ev', item.stazione, item.id, item.id)" 
-                                    @dragend="endDrag()">
-                                        {{ getFormattedItemCell('ev', item.id) }}
-                                </td>
-                                <td
-                                    class="itemCell" 
-                                    :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'pump', cannotDrop: tData[0].stazione > 0 && !['pump', undefined].includes(draggedCellType)}" 
-                                    :draggable="isEditing && tData[0].stazione > 0" 
-                                    v-on:dragenter="draggedCellType == 'pump' ? $event.preventDefault() : null"
-                                    v-on:dragover="draggedCellType == 'pump' ? $event.preventDefault() : null"
-                                    @drop="onDrop('pump', item.stazione, item)"
-                                    @dragstart="startDrag($event, 'pump', item.stazione, item.pompa, item.id)" 
-                                    @dragend="endDrag()">
-                                    {{ getFormattedItemCell('pump', item.pompa) }}</td>
-                                <td
-                                    class="itemCell" 
-                                    :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'master', cannotDrop: tData[0].stazione > 0 && !['master', undefined].includes(draggedCellType)}" 
-                                    :draggable="isEditing && tData[0].stazione > 0" 
-                                    v-on:dragenter="draggedCellType == 'master' ? $event.preventDefault() : null"
-                                    v-on:dragover="draggedCellType == 'master' ? $event.preventDefault() : null"
-                                    @drop="onDrop('master', item.stazione, item)"
-                                    @dragstart="startDrag($event, 'master', item.stazione, item.masterv, item.id)" 
-                                    @dragend="endDrag()">
-                                {{ getFormattedItemCell('master', item.masterv) }}</td>
+                                <DragDropCell 
+                                    cell="ev"
+                                    :item="item"
+                                    :index="index"
+                                    :isEditing="isEditing"
+                                    :getFormattedItemCell="getFormattedItemCell"
+                                    :getCellKey="getCellKey"
+                                    :draggedCellType="draggedCellType"
+                                    @start-drag="startDrag"
+                                    @mobile-move="onMobileMove"
+                                    @mobile-end="onMobileEnd"
+                                    @drop="onDrop"
+                                    @end-drag="endDrag"
+                                />
+
+                                <DragDropCell 
+                                    cell="pump"
+                                    :item="item"
+                                    :index="index"
+                                    :isEditing="isEditing"
+                                    :getFormattedItemCell="getFormattedItemCell"
+                                    :getCellKey="getCellKey"
+                                    :draggedCellType="draggedCellType"
+                                    @start-drag="startDrag"
+                                    @mobile-move="onMobileMove"
+                                    @mobile-end="onMobileEnd"
+                                    @drop="onDrop"
+                                    @end-drag="endDrag"
+                                />
+
+                                <DragDropCell 
+                                    cell="master"
+                                    :item="item"
+                                    :index="index"
+                                    :isEditing="isEditing"
+                                    :getFormattedItemCell="getFormattedItemCell"
+                                    :getCellKey="getCellKey"
+                                    :draggedCellType="draggedCellType"
+                                    @start-drag="startDrag"
+                                    @mobile-move="onMobileMove"
+                                    @mobile-end="onMobileEnd"
+                                    @drop="onDrop"
+                                    @end-drag="endDrag"
+                                />
                             </tr>
 
                             <!-- empty row placeholder for index and ev cell -->
@@ -786,7 +716,6 @@ function addGroup() {
     @apply
     w-[80px]
     h-[40px]
-    text-center
     text-xs
     justify-center
     rounded
