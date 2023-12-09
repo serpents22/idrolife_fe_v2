@@ -20,10 +20,7 @@
                     <p @click="showEvList = !showEvList">Close</p>
                 </div>
 
-                <draggable
-                    group="ev"
-                    :list="[]"
-                    itemKey="evList" 
+                <div
                     class="modalListBody"
                     :class="{
                         canDrop: draggedCell && draggedStazione != 0 && draggedCellType == 'ev',
@@ -32,22 +29,23 @@
                     data-cell-type="ev"
                     data-action="moveCellToList"
                 >
-                    <template #item="{element}">
-                        {{ element}}
-                    </template>
-                    <template #footer>
-                        <div v-for="(item, index) in props.unassignedEvs" 
-                            :key="index" 
-                            class="itemCell"
-                            @dragenter.prevent @dragover.prevent
-                            :draggable="isEditing" 
-                            @dragstart="startDrag($event, 'ev', '0', item.id, item.id, item.ev)" 
-                            @dragend="endDrag()"
-                        >
-                            <span>{{ getFormattedItemCell('ev', item.id) }}</span>
-                        </div>
-                    </template>
-                </draggable>
+                    <div v-for="(item, index) in props.unassignedEvs">
+                        <DragDropCell 
+                            cell="ev"
+                            :item="item"
+                            :index="'ev-list-' + index"
+                            :isEditing="isEditing"
+                            :getFormattedItemCell="getFormattedItemCell"
+                            :getCellKey="getCellKey"
+                            :draggedCellType="draggedCellType"
+                            @start-drag="startDrag"
+                            @mobile-move="onMobileMove"
+                            @mobile-end="onMobileEnd"
+                            @drop="onDrop"
+                            @end-drag="endDrag"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -67,19 +65,24 @@
                     }" 
                     v-on:dragenter="draggedCell && draggedStazione != 0 && draggedCellType == 'pump' ? $event.preventDefault() : null"
                     v-on:dragover="draggedCell && draggedStazione != 0 && draggedCellType == 'pump' ? $event.preventDefault() : null"
-                    @drop="moveCellToList('pump')"
                     data-cell-list="pump"
                 >
-                    <div 
-                        v-for="(item, index) in props.pumpList" 
-                        :key="index" 
-                        class="itemCell" 
-                        @dragenter.prevent @dragover.prevent
-                        :draggable="isEditing" 
-                        @dragstart="startDrag($event, 'pump', '0', item.index, item.id)" 
-                        @dragend="endDrag()">
-                        <span>{{ getFormattedItemCell('pump', item.index) }}</span>
-                    </div>
+                    <DragDropCell 
+                        v-for="(item, index) in props.pumpList"
+                        cell="pump"
+                        :item="item"
+                        :index="'pump-list-' + index"
+                        :isEditing="isEditing"
+                        :getFormattedItemCell="getFormattedItemCell"
+                        :getCellKey="getCellKey"
+                        :draggedCellType="draggedCellType"
+                        :itemIndexAsValue="true"
+                        @start-drag="startDrag"
+                        @mobile-move="onMobileMove"
+                        @mobile-end="onMobileEnd"
+                        @drop="onDrop"
+                        @end-drag="endDrag"
+                    />
                 </div>
             </div>
         </div>
@@ -92,7 +95,7 @@
                     <p @click="showMasterList = !showMasterList">Close</p>
                 </div>
 
-                <div
+                <div 
                     class="modalListBody"
                     :class="{
                         canDrop: draggedCell && draggedStazione != 0 && draggedCellType == 'master',
@@ -100,18 +103,24 @@
                     }" 
                     v-on:dragenter="draggedCell && draggedStazione != 0 && draggedCellType == 'master' ? $event.preventDefault() : null"
                     v-on:dragover="draggedCell && draggedStazione != 0 && draggedCellType == 'master' ? $event.preventDefault() : null"
-                    @drop="moveCellToList('master')"
                     data-cell-list="master"
                 >
-                    <div                      
-                        v-for="(item, index) in props.masterList" 
-                        :key="index" 
-                        class="itemCell"
-                        :draggable="isEditing"
-                        @dragstart="startDrag($event, 'master', '0', item.index, item.id)" 
-                        @dragend="endDrag()">
-                        <span>{{ getFormattedItemCell('master', item.index) }}</span>
-                    </div>
+                    <DragDropCell 
+                        v-for="(item, index) in props.masterList"
+                        cell="master"
+                        :item="item"
+                        :index="'master-list-' + index"
+                        :isEditing="isEditing"
+                        :getFormattedItemCell="getFormattedItemCell"
+                        :getCellKey="getCellKey"
+                        :draggedCellType="draggedCellType"
+                        :itemIndexAsValue="true"
+                        @start-drag="startDrag"
+                        @mobile-move="onMobileMove"
+                        @mobile-end="onMobileEnd"
+                        @drop="onDrop"
+                        @end-drag="endDrag"
+                    />
                 </div>
             </div>
         </div>
@@ -225,7 +234,7 @@
                                 <DragDropCell 
                                     cell="ev"
                                     :item="item"
-                                    :index="index"
+                                    :index="'ev-card-' + index"
                                     :isEditing="isEditing"
                                     :getFormattedItemCell="getFormattedItemCell"
                                     :getCellKey="getCellKey"
@@ -240,7 +249,7 @@
                                 <DragDropCell 
                                     cell="pump"
                                     :item="item"
-                                    :index="index"
+                                    :index="'pump-card-' + index"
                                     :isEditing="isEditing"
                                     :getFormattedItemCell="getFormattedItemCell"
                                     :getCellKey="getCellKey"
@@ -255,7 +264,7 @@
                                 <DragDropCell 
                                     cell="master"
                                     :item="item"
-                                    :index="index"
+                                    :index="'master-card-' + index"
                                     :isEditing="isEditing"
                                     :getFormattedItemCell="getFormattedItemCell"
                                     :getCellKey="getCellKey"
@@ -460,8 +469,18 @@ function startDrag(event, cellType, stazione, id, rowId, serial) {
         event.dataTransfer.effectAllowed = "move"
     }
 
-    openedListProgrammaticaly.value = true
-    showList(cellType)
+    const showListState = {
+        'ev': showEvList.value,
+        'pump': showPumpList.value,
+        'master': showMasterList.value
+    }
+
+    // only show list if it's not opened yet
+    if (!showListState[cellType]) {
+        openedListProgrammaticaly.value = true
+        showList(cellType)
+    }
+
     draggedCell.value = { id, rowId, stazione, cellType, serial }
 }
 

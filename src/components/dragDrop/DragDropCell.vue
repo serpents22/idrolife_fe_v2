@@ -21,18 +21,6 @@
         </span>
       </template>
     </draggable>
-
-    <!-- <td
-      class="itemCell hidden md:table-cell"  
-      :class="{canDrop, cannotDrop}" 
-      :draggable="canDrag" 
-      v-on:dragenter="draggedCellType == cell ? $event.preventDefault() : null"
-      v-on:dragover="draggedCellType == cell ? $event.preventDefault() : null"
-      @drop="onDrop"
-      @dragstart="startDrag" 
-      @dragend="endDrag">
-          {{ getFormattedItemCell(cell, item.id) }}
-    </td> -->
   </template>
   
 <script setup>
@@ -49,7 +37,7 @@
       required: true
     },
     index: {
-      type: Number,
+      type: String,
       required: true
     },
     isEditing: {
@@ -66,16 +54,27 @@
     },
     draggedCellType: {
       type: String
+    },
+    itemIndexAsValue: {
+      type: Boolean,
+      default: false
     }
   })
 
   const emit = defineEmits(['start-drag', 'mobile-move', 'mobile-end', 'drop', 'end-drag'])
-  const value = computed(() => props.item[props.getCellKey(props.cell)])
-  const canDrag = computed(() => props.isEditing && props.item.stazione > 0)
+  const value = computed(() => {
+    if (props.itemIndexAsValue) {
+      return props.item.index
+    }
+
+    return props.item[props.getCellKey(props.cell)]
+  })
+  const canDrag = computed(() => props.isEditing)
   const canDrop = computed(() => props.item.stazione > 0 && props.draggedCellType == props.cell)
   const cannotDrop = computed(() => props.item.stazione > 0 && ![props.cell, undefined].includes(props.draggedCellType))
 
   const startDrag = event => {
+    console.log(props.item)
     const { cell, item: { stazione, id } } = props
     emit('start-drag', event, cell, stazione, value.value, id)
   }
