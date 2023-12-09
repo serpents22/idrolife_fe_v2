@@ -138,9 +138,9 @@
                         <p>{{ group.title }}</p>
                         <img src="@/assets/material_edit.png" id="editName" class="w-4 h-4">
                     </div>
-                    <div v-if="editedNameStation == group.stazione" class="flex flex-row gap-1 justify-center items-center">
-                        <input type="text" class="border p-1 text-xs" v-model="group.title">
-                        <IveButton @click="saveName(group.stazione, group.title)" class="filled__blue !text-xs h-[24px]" :label="$t('save')" :loading="postControlIsLoading"/>
+                    <div v-if="editedNameStation == group.stazione" class="flex flex-row gap-1 justify-center items-center w-2/3">
+                        <input type="text" class="border p-1 text-xs w-full" v-model="group.title">
+                        <IveButton @click="saveName(group.stazione, group.title)" class="filled__blue !text-xs h-[24px] w-[fit-content]" :label="$t('save')" :loading="postControlIsLoading"/>
                     </div>
                 </div>
 
@@ -193,9 +193,9 @@
                         <p>{{ tData[0].group }}</p>
                         <img src="@/assets/material_edit.png" id="editName" class="w-4 h-4">
                     </div>
-                    <div v-if="editedNameStation == tData[0].stazione" class="flex flex-row gap-1 justify-center items-center">
-                        <input type="text" class="border p-1 text-xs" v-model="tData[0].group">
-                        <IveButton @click="saveName(tData[0].stazione, tData[0].group, tData)" class="filled__blue !text-xs h-[24px]" :label="$t('save')" :loading="postControlIsLoading"/>
+                    <div v-if="editedNameStation == tData[0].stazione" class="flex flex-row gap-1 justify-center items-center w-2/3">
+                        <input type="text" class="border p-1 text-xs w-full" v-model="tData[0].group">
+                        <IveButton @click="saveName(tData[0].stazione, tData[0].group, tData)" class="filled__blue !text-xs w-[fit-content]" :label="$t('save')" :loading="postControlIsLoading"/>
                     </div>
                 </div>
 
@@ -296,9 +296,9 @@
                         <p>{{ tData[0].group }}</p>
                         <img src="@/assets/material_edit.png" id="editName" class="w-4 h-4">
                     </div>
-                    <div v-if="editedNameStation == tData[0].stazione" class="flex flex-row gap-1 justify-center items-center">
-                        <input type="text" class="border p-1 text-xs" v-model="tData[0].group">
-                        <IveButton @click="saveName(tData[0].stazione, tData[0].group, tData)" class="filled__blue !text-xs h-[24px]" :label="$t('save')" :loading="postControlIsLoading"/>
+                    <div v-if="editedNameStation == tData[0].stazione" class="flex flex-row gap-1 justify-center items-center w-2/3">
+                        <input type="text" class="border p-1 text-xs w-full" v-model="tData[0].group">
+                        <IveButton @click="saveName(tData[0].stazione, tData[0].group, tData)" class="filled__blue !text-xs h-[24px] w-[fit-content]" :label="$t('save')" :loading="postControlIsLoading"/>
                     </div>
                 </div>
 
@@ -800,7 +800,7 @@ function addGroup() {
     align-items: center;
     border-bottom: 1px solid #e2e8f0;
 
-    @apply font-medium pb-2;
+    @apply font-medium pb-2 gap-4;
 }
 
 .dropdown {
