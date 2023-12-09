@@ -74,7 +74,6 @@
   const cannotDrop = computed(() => props.item.stazione > 0 && ![props.cell, undefined].includes(props.draggedCellType))
 
   const startDrag = event => {
-    console.log(props.item)
     const { cell, item: { stazione, id } } = props
     emit('start-drag', event, cell, stazione, value.value, id)
   }

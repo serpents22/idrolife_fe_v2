@@ -20,7 +20,10 @@
                     <p @click="showEvList = !showEvList">Close</p>
                 </div>
 
-                <div
+                <draggable
+                    group="ev"
+                    :list="props.unassignedEvs"
+                    itemKey="ev-list"
                     class="modalListBody"
                     :class="{
                         canDrop: draggedCell && draggedStazione != 0 && draggedCellType == 'ev',
@@ -29,7 +32,7 @@
                     data-cell-type="ev"
                     data-action="moveCellToList"
                 >
-                    <div v-for="(item, index) in props.unassignedEvs">
+                    <template #item="{element: item, index}">
                         <DragDropCell 
                             cell="ev"
                             :item="item"
@@ -41,11 +44,9 @@
                             @start-drag="startDrag"
                             @mobile-move="onMobileMove"
                             @mobile-end="onMobileEnd"
-                            @drop="onDrop"
-                            @end-drag="endDrag"
                         />
-                    </div>
-                </div>
+                    </template>
+                </draggable>
             </div>
         </div>
 
@@ -57,33 +58,34 @@
                     <p @click="showPumpList = !showPumpList">Close</p>
                 </div>
 
-                <div 
+                <draggable
+                    group="pump"
+                    :list="props.pumpList"
+                    itemKey="pump-list"
                     class="modalListBody"
                     :class="{
                         canDrop: draggedCell && draggedStazione != 0 && draggedCellType == 'pump',
                         cannotDrop: draggedCell && draggedStazione != 0 && draggedCellType != 'pump'
-                    }" 
-                    v-on:dragenter="draggedCell && draggedStazione != 0 && draggedCellType == 'pump' ? $event.preventDefault() : null"
-                    v-on:dragover="draggedCell && draggedStazione != 0 && draggedCellType == 'pump' ? $event.preventDefault() : null"
-                    data-cell-list="pump"
+                    }"
+                    data-cell-type="pump"
+                    data-action="moveCellToList"
                 >
-                    <DragDropCell 
-                        v-for="(item, index) in props.pumpList"
-                        cell="pump"
-                        :item="item"
-                        :index="'pump-list-' + index"
-                        :isEditing="isEditing"
-                        :getFormattedItemCell="getFormattedItemCell"
-                        :getCellKey="getCellKey"
-                        :draggedCellType="draggedCellType"
-                        :itemIndexAsValue="true"
-                        @start-drag="startDrag"
-                        @mobile-move="onMobileMove"
-                        @mobile-end="onMobileEnd"
-                        @drop="onDrop"
-                        @end-drag="endDrag"
-                    />
-                </div>
+                    <template #item="{element: item, index}">
+                        <DragDropCell 
+                            cell="pump"
+                            :item="item"
+                            :index="'pump-list-' + index"
+                            :isEditing="isEditing"
+                            :getFormattedItemCell="getFormattedItemCell"
+                            :getCellKey="getCellKey"
+                            :draggedCellType="draggedCellType"
+                            :itemIndexAsValue="true"
+                            @start-drag="startDrag"
+                            @mobile-move="onMobileMove"
+                            @mobile-end="onMobileEnd"
+                        />
+                    </template>
+                </draggable>
             </div>
         </div>
 
@@ -95,33 +97,34 @@
                     <p @click="showMasterList = !showMasterList">Close</p>
                 </div>
 
-                <div 
+                <draggable
+                    group="master"
+                    :list="props.masterList"
+                    itemKey="master-list"
                     class="modalListBody"
                     :class="{
                         canDrop: draggedCell && draggedStazione != 0 && draggedCellType == 'master',
                         cannotDrop: draggedCell && draggedStazione != 0 && draggedCellType != 'master'
-                    }" 
-                    v-on:dragenter="draggedCell && draggedStazione != 0 && draggedCellType == 'master' ? $event.preventDefault() : null"
-                    v-on:dragover="draggedCell && draggedStazione != 0 && draggedCellType == 'master' ? $event.preventDefault() : null"
-                    data-cell-list="master"
+                    }"
+                    data-cell-type="master"
+                    data-action="moveCellToList"
                 >
-                    <DragDropCell 
-                        v-for="(item, index) in props.masterList"
-                        cell="master"
-                        :item="item"
-                        :index="'master-list-' + index"
-                        :isEditing="isEditing"
-                        :getFormattedItemCell="getFormattedItemCell"
-                        :getCellKey="getCellKey"
-                        :draggedCellType="draggedCellType"
-                        :itemIndexAsValue="true"
-                        @start-drag="startDrag"
-                        @mobile-move="onMobileMove"
-                        @mobile-end="onMobileEnd"
-                        @drop="onDrop"
-                        @end-drag="endDrag"
-                    />
-                </div>
+                    <template #item="{element: item, index}">
+                        <DragDropCell 
+                            cell="master"
+                            :item="item"
+                            :index="'master-list-' + index"
+                            :isEditing="isEditing"
+                            :getFormattedItemCell="getFormattedItemCell"
+                            :getCellKey="getCellKey"
+                            :draggedCellType="draggedCellType"
+                            :itemIndexAsValue="true"
+                            @start-drag="startDrag"
+                            @mobile-move="onMobileMove"
+                            @mobile-end="onMobileEnd"
+                        />
+                    </template>
+                </draggable>
             </div>
         </div>
     </div>
@@ -199,7 +202,6 @@
                 </div>
             </div>
 
-            <!-- view for larger device than mobile -->
             <div v-for="(tData, index) in data" 
                 :key="index" 
                 v-show="tData.length > 0 && tData[0].stazione != 0" 
@@ -242,8 +244,6 @@
                                     @start-drag="startDrag"
                                     @mobile-move="onMobileMove"
                                     @mobile-end="onMobileEnd"
-                                    @drop="onDrop"
-                                    @end-drag="endDrag"
                                 />
 
                                 <DragDropCell 
@@ -257,8 +257,6 @@
                                     @start-drag="startDrag"
                                     @mobile-move="onMobileMove"
                                     @mobile-end="onMobileEnd"
-                                    @drop="onDrop"
-                                    @end-drag="endDrag"
                                 />
 
                                 <DragDropCell 
@@ -272,8 +270,6 @@
                                     @start-drag="startDrag"
                                     @mobile-move="onMobileMove"
                                     @mobile-end="onMobileEnd"
-                                    @drop="onDrop"
-                                    @end-drag="endDrag"
                                 />
                             </tr>
 
@@ -493,6 +489,7 @@ function onMobileMove(event) {
     const fromCellType = from.getAttribute('data-cell-type')
     const toCellType = to.getAttribute('data-cell-type')
     const toRow = JSON.parse(to.getAttribute('data-row'))
+    const action = to.getAttribute('data-action')
 
     // cell type must be the same
     if (fromCellType != toCellType) {
@@ -507,8 +504,7 @@ function onMobileMove(event) {
     newRow.value = JSON.parse(to.getAttribute('data-new'))
 
     // moving cell to list
-    const cellList = to.getAttribute('data-action') == 'moveCellToList'
-    if (cellList) {
+    if (action  == 'moveCellToList') {
         dragAction.value = 'moveCellToList'
     }
 
@@ -518,6 +514,7 @@ function onMobileMove(event) {
 function onMobileEnd() {
     // stopped on new row
     if (newRow.value) {
+        console.log('stopped on new row', newRow.value)
         addRowToExistingGroup(newRow.value.stazione, newRow.value.group, draggedCell.value.id)
         endDrag()
         return
@@ -525,6 +522,7 @@ function onMobileEnd() {
 
     // stopped on list
     if (dragAction.value == 'moveCellToList') {
+        console.log('stopped on list', currentCellType.value)
         moveCellToList(currentCellType.value)
         endDrag()
         return
@@ -625,10 +623,10 @@ function getCellKey(cellType) {
 }
 
 function moveCellToList(currentCellType) {
-    console.log('moveCellToList', currentCellType)
     let draggedCellType = draggedCell.value.cellType
     let draggedStazione = draggedCell.value.stazione
     let draggedRowId = draggedCell.value.rowId
+    console.log('moveCellToList', currentCellType, draggedCellType, draggedStazione, draggedRowId)
 
     // cancel if moving from list to list
     if (draggedStazione == 0) {
@@ -668,8 +666,11 @@ function addRowToNewGroup(group, id) {
     item.group = group.title
     item.stazione = group.stazione
 
-    const index = props.newGroups.findIndex(x => x.address == group.address)
-    props.newGroups.splice(index, 1)
+    const index = props.rawData.findIndex(x => x.id == id)
+    props.rawData[index] = item
+
+    const groupIndex = props.newGroups.findIndex(x => x.address == group.address)
+    props.newGroups.splice(groupIndex, 1)
 }
 
 function confirmReset() {
