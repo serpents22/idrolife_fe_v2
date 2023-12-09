@@ -257,22 +257,33 @@
                             </tr>
 
                             <!-- empty row placeholder for index and ev cell -->
-                            <tr
-                                @dragenter.prevent @dragover.prevent
-                                @drop="addRowToExistingGroup(tData[0].stazione, tData[0].group, draggedCell.id)"
+                            <tr 
                                 :class="{
-                                        'invisible': !draggedCell || draggedCellType != 'ev' || draggedStazione == tData[0].stazione
-                                    }" >
+                                    'invisible': !draggedCell || draggedCellType != 'ev' || draggedStazione == tData[0].stazione
+                                }" 
+                            >
                                 <td 
                                     class="itemCell w-10 hover:cursor-not-allowed transition-height duration-200 ease-in-out"
                                     :class="{
                                         '!h-0': !draggedCell || draggedCellType != 'ev' || draggedStazione == tData[0].stazione
                                     }" />
-                                <td 
+                                
+                                <draggable
+                                    :list="[]"
+                                    group="ev"
+                                    :itemKey="index"
+                                    tag="td" 
                                     class="itemCell transition-height duration-200 ease-in-out canDrop" 
                                     :class="{
                                         '!h-0': !draggedCell || draggedCellType != 'ev' || draggedStazione == tData[0].stazione
-                                    }" />
+                                    }"
+                                    data-cell-type="ev"
+                                    :data-new="JSON.stringify({ group: tData[0].group, stazione: tData[0].stazione })"
+                                >
+                                    <template #item="{element}">
+                                        {{ element }}
+                                    </template>
+                                </draggable>
                             </tr>
                         </tbody>
                     </table>
@@ -341,6 +352,7 @@ const openedListProgrammaticaly = ref(false)
 // store data for mobile view
 const currentCellType = ref(null)
 const currentRowData = ref(null)
+const newRow = ref(null)
 
 const postData = ref({
     command: 'EVCONFIG',
@@ -458,18 +470,30 @@ function startDrag(event, cellType, stazione, id, rowId, serial) {
 
 function onMobileMove(event) {
     const { from, to } = event;
+    const fromCellType = from.getAttribute('data-cell-type')
+    const toCellType = to.getAttribute('data-cell-type')
+    const toRow = JSON.parse(to.getAttribute('data-row'))
 
-    if (from.getAttribute('data-cell-type') != to.getAttribute('data-cell-type')) {
+    // cell type must be the same
+    if (fromCellType != toCellType) {
         return false; // cancel move
     }
 
-    currentCellType.value = to.getAttribute('data-cell-type')
-    currentRowData.value = JSON.parse(to.getAttribute('data-row'))
+    currentCellType.value = toCellType
+    currentRowData.value = toRow
+    newRow.value = JSON.parse(to.getAttribute('data-new'))
 
     return false; // disable sort
 }
 
 function onMobileEnd() {
+    // stopped on new row
+    if (newRow.value) {
+        addRowToExistingGroup(newRow.value.stazione, newRow.value.group, draggedCell.value.id)
+        endDrag()
+        return
+    }
+
     if (!currentCellType.value || !currentRowData.value) {
         endDrag()
         return
@@ -603,9 +627,12 @@ function moveCellToList(currentCellType) {
 
 // id is used to calculate the address of the new row
 function addRowToExistingGroup(stationId, group, id) {
-    const item = props.rawData.find(x => x.id == id)
+    const item = {...props.rawData.find(x => x.id == id)}
     item.stazione = stationId
     item.group = group
+
+    const index = props.rawData.findIndex(x => x.id == id)
+    props.rawData[index] = item
 }
 
 function addRowToNewGroup(group, id) {

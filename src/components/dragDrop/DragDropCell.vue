@@ -8,7 +8,7 @@
       :move="onMobileMove"
       @end="onMobileEnd"
       tag="td"
-      class="itemCell md:hidden"
+      class="itemCell"
       :class="{canDrop, cannotDrop}"
       dragClass="itemCell"
       :data-cell-type="cell"
@@ -22,7 +22,7 @@
       </template>
     </draggable>
 
-    <td
+    <!-- <td
       class="itemCell hidden md:table-cell"  
       :class="{canDrop, cannotDrop}" 
       :draggable="canDrag" 
@@ -32,7 +32,7 @@
       @dragstart="startDrag" 
       @dragend="endDrag">
           {{ getFormattedItemCell(cell, item.id) }}
-    </td>
+    </td> -->
   </template>
   
 <script setup>
