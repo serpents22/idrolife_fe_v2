@@ -178,8 +178,15 @@
                 </div>
             </div>
 
-            <div v-for="(tData, index) in data" :key="index" v-show="tData.length > 0 && tData[0].stazione != 0"
-                class="card">
+            <!-- view for mobile -->
+            <div v-for="(tData, index) in data" 
+                :key="index"
+                v-show="tData.length > 0 && tData[0].stazione != 0" 
+                class="card md:hidden"
+                :class="{
+                    'hidden': tData[0].stazione == 0,
+                }"
+            >
                 <div class="card-title text-xs">
                     <p class="stationId">{{ $t('station') }} {{ tData[0].stazione }}</p>
                     <div class="flex flex-row gap-1 justify-center items-center cursor-pointer" v-if="editedNameStation != tData[0].stazione" @click="editName(tData[0].stazione)">
@@ -202,11 +209,118 @@
                                 <th>{{ $t('evMaster') }}</th>
                             </tr>
                         </thead>
-                        <tbody :class="{'cursor-grabbing': draggedCellType != null}">
+
+                        <tbody>
                             <tr v-for="(item, index) in tData" :key="index">
                                 <td class="itemCell w-10 hover:cursor-not-allowed">{{ index + 1 }}</td>
+
+                                <draggable 
+                                    :list="[item.id]"
+                                    group="ev"
+                                    :itemKey="x => x"
+                                    @change="log"
+                                    :disabled="!isEditing || tData[0].stazione == 0" 
+                                    :move="(_, originalEvent) => startDrag(originalEvent, 'ev', item.stazione, item.id, item.id)"
+                                    @start="event => startDrag(event, 'ev', item.stazione, item.id, item.id)"
+                                    @end="endDrag"
+                                    tag="td"
+                                    class="itemCell"
+                                    :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', undefined].includes(draggedCellType)}" 
+                                >
+                                    <template #item="{element}">
+                                        <span 
+                                            class="itemCell"
+                                            :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', undefined].includes(draggedCellType)}" 
+                                        >
+                                            {{ getFormattedItemCell('ev', element) }}
+                                        </span>
+                                    </template>
+                                </draggable>
+
+                                <draggable 
+                                    :list="[item.pompa]"
+                                    group="pump"
+                                    :itemKey="x => x"
+                                    @change="log"
+                                    :disabled="!isEditing || tData[0].stazione == 0" 
+                                    :move="(_, originalEvent) => startDrag(originalEvent, 'pump', item.stazione, item.pompa, item.id)"
+                                    @start="event => startDrag(event, 'pump', item.stazione, item.pompa, item.id)"
+                                    @end="endDrag"
+                                    tag="td"
+                                    class="itemCell"
+                                    :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'pump', cannotDrop: tData[0].stazione > 0 && !['pump', undefined].includes(draggedCellType)}" 
+                                >
+                                    <template #item="{element}">
+                                        <span 
+                                            class="itemCell"
+                                            :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'pump', cannotDrop: tData[0].stazione > 0 && !['pump', undefined].includes(draggedCellType)}" 
+                                        >{{ getFormattedItemCell('pump', element) }}</span>
+                                    </template>
+                                </draggable>
+
+                                <draggable 
+                                    :list="[item.masterv]"
+                                    group="master"
+                                    :itemKey="x => x"
+                                    @change="log"
+                                    :disabled="!isEditing || tData[0].stazione == 0" 
+                                    :move="(_, originalEvent) => startDrag(originalEvent, 'master', item.stazione, item.masterv, item.id)"
+                                    @start="event => startDrag(event, 'master', item.stazione, item.masterv, item.id)"
+                                    @end="endDrag"
+                                    tag="td"
+                                    class="itemCell"
+                                    :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'master', cannotDrop: tData[0].stazione > 0 && !['master', undefined].includes(draggedCellType)}"
+                                >
+                                    <template #item="{element}">
+                                        <span
+                                            class="itemCell"
+                                            :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'master', cannotDrop: tData[0].stazione > 0 && !['master', undefined].includes(draggedCellType)}" 
+                                        >{{ getFormattedItemCell('master', element) }}</span>
+                                    </template>
+                                </draggable>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- view for larger device than mobile -->
+            <div v-for="(tData, index) in data" 
+                :key="index" 
+                v-show="tData.length > 0 && tData[0].stazione != 0" 
+                class="card hidden"
+                :class="{
+                    'md:block': tData[0].stazione != 0,
+                }"
+            >
+                <div class="card-title text-xs">
+                    <p class="stationId">{{ $t('station') }} {{ tData[0].stazione }}</p>
+                    <div class="flex flex-row gap-1 justify-center items-center cursor-pointer" v-if="editedNameStation != tData[0].stazione" @click="editName(tData[0].stazione)">
+                        <p>{{ tData[0].group }}</p>
+                        <img src="@/assets/material_edit.png" id="editName" class="w-4 h-4">
+                    </div>
+                    <div v-if="editedNameStation == tData[0].stazione" class="flex flex-row gap-1 justify-center items-center">
+                        <input type="text" class="border p-1 text-xs" v-model="tData[0].group">
+                        <IveButton @click="saveName(tData[0].stazione, tData[0].group, tData)" class="filled__blue !text-xs h-[24px]" :label="$t('save')" :loading="postControlIsLoading"/>
+                    </div>
+                </div>
+
+                <div class="card-body py-3">
+                    <table class="w-full text-xs border-separate border-spacing-2">
+                        <thead class="font-semibold">
+                            <tr>
+                                <th />
+                                <th>{{ $t('ev') }}</th>
+                                <th>{{ $t('pump') }}</th>
+                                <th>{{ $t('evMaster') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in tData" :key="index">
+                                <td class="itemCell w-10 hover:cursor-not-allowed">{{ index + 1 }}</td>
+
                                 <td
-                                    class="itemCell" 
+                                    class="itemCell"  
                                     :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'ev', cannotDrop: tData[0].stazione > 0 && !['ev', undefined].includes(draggedCellType)}" 
                                     :draggable="isEditing && tData[0].stazione > 0" 
                                     v-on:dragenter="draggedCellType == 'ev' ? $event.preventDefault() : null"
@@ -276,6 +390,7 @@ import IveButton from '@/components/button/BaseButton.vue';
 import { useDataStore } from '@/stores/DataStore';
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue';
+import draggable from 'vuedraggable'
 
 const props = defineProps({
     id: String,
@@ -309,7 +424,7 @@ const selectedGroup = ref('')
 const isEditingName = ref(false)
 const editedNameStation = ref(null)
 
-const showEvList = ref(!false)
+const showEvList = ref(false)
 const showPumpList = ref(false)
 const showMasterList = ref(false)
 
@@ -402,6 +517,7 @@ function setGroupName(stationId, groupName, groupData){
 }
 
 function startDrag(event, cellType, stazione, id, rowId, serial) {
+    console.log('startDrag', event, cellType, stazione, id, rowId, serial)
     if (event?.dataTransfer) {
         event.dataTransfer.dropEffect = "move"
         event.dataTransfer.effectAllowed = "move"
@@ -631,6 +747,10 @@ function addGroup() {
     selectedGroup.value = ''
 }
 
+function log(event)  {
+    console.log('log', event)
+}
+
 </script>
 
 <style scoped>
@@ -733,10 +853,6 @@ function addGroup() {
 .modal {
   background: linear-gradient(45.06deg, #010AD1 -8.2%, #1BF728 108.15%);
   border: 2px solid #FFEE58;
-}
-
-.hidden .itemCell {
-    @apply !h-0;
 }
 
 </style>
