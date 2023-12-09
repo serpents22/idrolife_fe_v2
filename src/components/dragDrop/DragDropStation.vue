@@ -20,26 +20,34 @@
                     <p @click="showEvList = !showEvList">Close</p>
                 </div>
 
-                <div 
+                <draggable
+                    group="ev"
+                    :list="[]"
+                    itemKey="evList" 
                     class="modalListBody"
                     :class="{
                         canDrop: draggedCell && draggedStazione != 0 && draggedCellType == 'ev',
                         cannotDrop: draggedCell && draggedStazione != 0 && draggedCellType != 'ev'
-                    }" 
-                    v-on:dragenter="draggedCell && draggedStazione != 0 && draggedCellType == 'ev' ? $event.preventDefault() : null"
-                    v-on:dragover="draggedCell && draggedStazione != 0 && draggedCellType == 'ev' ? $event.preventDefault() : null"
-                    @drop="moveCellToList('ev')">
-                    <div 
-                        v-for="(item, index) in props.unassignedEvs" 
-                        :key="index" 
-                        class="itemCell"
-                        @dragenter.prevent @dragover.prevent
-                        :draggable="isEditing" 
-                        @dragstart="startDrag($event, 'ev', '0', item.id, item.id, item.ev)" 
-                        @dragend="endDrag()">
-                        <span>{{ getFormattedItemCell('ev', item.id) }}</span>
-                    </div>
-                </div>
+                    }"
+                    data-cell-type="ev"
+                    data-action="moveCellToList"
+                >
+                    <template #item="{element}">
+                        {{ element}}
+                    </template>
+                    <template #footer>
+                        <div v-for="(item, index) in props.unassignedEvs" 
+                            :key="index" 
+                            class="itemCell"
+                            @dragenter.prevent @dragover.prevent
+                            :draggable="isEditing" 
+                            @dragstart="startDrag($event, 'ev', '0', item.id, item.id, item.ev)" 
+                            @dragend="endDrag()"
+                        >
+                            <span>{{ getFormattedItemCell('ev', item.id) }}</span>
+                        </div>
+                    </template>
+                </draggable>
             </div>
         </div>
 
@@ -59,7 +67,9 @@
                     }" 
                     v-on:dragenter="draggedCell && draggedStazione != 0 && draggedCellType == 'pump' ? $event.preventDefault() : null"
                     v-on:dragover="draggedCell && draggedStazione != 0 && draggedCellType == 'pump' ? $event.preventDefault() : null"
-                    @drop="moveCellToList('pump')">
+                    @drop="moveCellToList('pump')"
+                    data-cell-list="pump"
+                >
                     <div 
                         v-for="(item, index) in props.pumpList" 
                         :key="index" 
@@ -90,7 +100,9 @@
                     }" 
                     v-on:dragenter="draggedCell && draggedStazione != 0 && draggedCellType == 'master' ? $event.preventDefault() : null"
                     v-on:dragover="draggedCell && draggedStazione != 0 && draggedCellType == 'master' ? $event.preventDefault() : null"
-                    @drop="moveCellToList('master')">
+                    @drop="moveCellToList('master')"
+                    data-cell-list="master"
+                >
                     <div                      
                         v-for="(item, index) in props.masterList" 
                         :key="index" 
@@ -353,6 +365,7 @@ const openedListProgrammaticaly = ref(false)
 const currentCellType = ref(null)
 const currentRowData = ref(null)
 const newRow = ref(null)
+const dragAction = ref(null)
 
 const postData = ref({
     command: 'EVCONFIG',
@@ -447,12 +460,9 @@ function startDrag(event, cellType, stazione, id, rowId, serial) {
         event.dataTransfer.effectAllowed = "move"
     }
 
+    openedListProgrammaticaly.value = true
+    showList(cellType)
     draggedCell.value = { id, rowId, stazione, cellType, serial }
-
-    if (!isMobileDevice()) {
-        openedListProgrammaticaly.value = true
-        showList(cellType)
-    }
 }
 
 function isMobileDevice() {
@@ -467,12 +477,21 @@ function onMobileMove(event) {
 
     // cell type must be the same
     if (fromCellType != toCellType) {
+        console.log('cell type must be the same', fromCellType, toCellType)
         return false; // cancel move
     }
 
     currentCellType.value = toCellType
     currentRowData.value = toRow
+
+    // adding new row to existing group
     newRow.value = JSON.parse(to.getAttribute('data-new'))
+
+    // moving cell to list
+    const cellList = to.getAttribute('data-action') == 'moveCellToList'
+    if (cellList) {
+        dragAction.value = 'moveCellToList'
+    }
 
     return false; // disable sort
 }
@@ -481,6 +500,13 @@ function onMobileEnd() {
     // stopped on new row
     if (newRow.value) {
         addRowToExistingGroup(newRow.value.stazione, newRow.value.group, draggedCell.value.id)
+        endDrag()
+        return
+    }
+
+    // stopped on list
+    if (dragAction.value == 'moveCellToList') {
+        moveCellToList(currentCellType.value)
         endDrag()
         return
     }
@@ -495,6 +521,8 @@ function onMobileEnd() {
 }
 
 function endDrag() {
+    dragAction.value = null
+    newRow.value = null
     draggedCell.value = null
     currentCellType.value = null
     currentRowData.value = null
@@ -578,6 +606,7 @@ function getCellKey(cellType) {
 }
 
 function moveCellToList(currentCellType) {
+    console.log('moveCellToList', currentCellType)
     let draggedCellType = draggedCell.value.cellType
     let draggedStazione = draggedCell.value.stazione
     let draggedRowId = draggedCell.value.rowId
@@ -591,29 +620,18 @@ function moveCellToList(currentCellType) {
         return
     }
 
-    let draggedItem = props.rawData.find(x => x.id == draggedRowId)
+    let draggedItem = {...props.rawData.find(x => x.id == draggedRowId)}
     let isEvCell = currentCellType == 'ev'
-
-    let cellKey
-    switch (currentCellType) {
-        case 'ev':
-           cellKey = 'id'
-            break;
-        case 'pump':
-            cellKey = 'pompa'
-            break;
-        case 'master':
-            cellKey = 'masterv'
-            break;
-        default:
-            break;
-    }
 
     if (isEvCell) { // remove row from group
         draggedItem.stazione = 0
     } else {
+        let cellKey = getCellKey(currentCellType)
         draggedItem[cellKey] = 0
     }
+
+    const index = props.rawData.findIndex(x => x.id == draggedRowId)
+    props.rawData[index] = draggedItem
 }
 
 // id is used to calculate the address of the new row
