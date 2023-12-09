@@ -1,6 +1,6 @@
 <template>
     <draggable 
-      :list="[item.id]"
+      :list="[value]"
       :group="cell"
       :itemKey="String(index)"
       :disabled="!isEditing || item.stazione == 0" 
@@ -24,7 +24,8 @@
   </template>
   
 <script setup>
-  import draggable from 'vuedraggable'
+  import { computed } from 'vue';
+import draggable from 'vuedraggable'
   
   const props = defineProps({
     cell: {
@@ -47,21 +48,26 @@
       type: Function,
       required: true
     },
-    draggedCellType: {
-      type: String,
+    getCellKey: {
+      type: Function,
       required: true
+    },
+    draggedCellType: {
+      type: String
     }
   })
 
+  const value = computed(() => props.item[props.getCellKey(props.cell)])
   const emit = defineEmits(['start-drag', 'mobile-move', 'mobile-end'])
 
   const startDrag = event => {
-    emit('start-drag', event)
+    const { cell, item: { stazione, id } } = props
+    emit('start-drag', event, cell, stazione, value.value, id)
   }
 
   const onMobileMove = event => {
     emit('mobile-move', event)
-    return false
+    return false // needed to make target list hidden
   }
 
   const onMobileEnd = () => {

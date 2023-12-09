@@ -215,57 +215,43 @@
                                 <td class="itemCell w-10 hover:cursor-not-allowed">{{ index + 1 }}</td>
 
                                 <DragDropCell 
-                                    :cell="'ev'"
+                                    cell="ev"
                                     :item="item"
                                     :index="index"
                                     :isEditing="isEditing"
-                                    :tData="tData"
                                     :getFormattedItemCell="getFormattedItemCell"
+                                    :getCellKey="getCellKey"
                                     :draggedCellType="draggedCellType"
-                                    @start-drag="event => startDrag(event, 'ev', item.stazione, item.id, item.id)"
+                                    @start-drag="startDrag"
                                     @mobile-move="onMobileMove"
                                     @mobile-end="onMobileEnd"
                                 />
 
-                                <draggable 
-                                    :list="[item.pompa]"
-                                    group="pump"
-                                    :itemKey="x => x"
-                                    :disabled="!isEditing || tData[0].stazione == 0" 
-                                    :move="(_, originalEvent) => startDrag(originalEvent, 'pump', item.stazione, item.pompa, item.id)"
-                                    @start="event => startDrag(event, 'pump', item.stazione, item.pompa, item.id)"
-                                    @end="endDrag"
-                                    tag="td"
-                                    class="itemCell"
-                                    :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'pump', cannotDrop: tData[0].stazione > 0 && !['pump', undefined].includes(draggedCellType)}" 
-                                >
-                                    <template #item="{element}">
-                                        <span 
-                                            class="itemCell"
-                                            :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'pump', cannotDrop: tData[0].stazione > 0 && !['pump', undefined].includes(draggedCellType)}" 
-                                        >{{ getFormattedItemCell('pump', element) }}</span>
-                                    </template>
-                                </draggable>
+                                <DragDropCell 
+                                    cell="pump"
+                                    :item="item"
+                                    :index="index"
+                                    :isEditing="isEditing"
+                                    :getFormattedItemCell="getFormattedItemCell"
+                                    :getCellKey="getCellKey"
+                                    :draggedCellType="draggedCellType"
+                                    @start-drag="startDrag"
+                                    @mobile-move="onMobileMove"
+                                    @mobile-end="onMobileEnd"
+                                />
 
-                                <draggable 
-                                    :list="[item.masterv]"
-                                    group="master"
-                                    :itemKey="x => x"
-                                    :disabled="!isEditing || tData[0].stazione == 0" 
-                                    :move="(_, originalEvent) => startDrag(originalEvent, 'master', item.stazione, item.masterv, item.id)"
-                                    @start="event => startDrag(event, 'master', item.stazione, item.masterv, item.id)"
-                                    @end="endDrag"
-                                    tag="td"
-                                    class="itemCell"
-                                    :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'master', cannotDrop: tData[0].stazione > 0 && !['master', undefined].includes(draggedCellType)}"
-                                >
-                                    <template #item="{element}">
-                                        <span
-                                            class="itemCell"
-                                            :class="{canDrop: tData[0].stazione > 0 && draggedCellType == 'master', cannotDrop: tData[0].stazione > 0 && !['master', undefined].includes(draggedCellType)}" 
-                                        >{{ getFormattedItemCell('master', element) }}</span>
-                                    </template>
-                                </draggable>
+                                <DragDropCell 
+                                    cell="master"
+                                    :item="item"
+                                    :index="index"
+                                    :isEditing="isEditing"
+                                    :getFormattedItemCell="getFormattedItemCell"
+                                    :getCellKey="getCellKey"
+                                    :draggedCellType="draggedCellType"
+                                    @start-drag="startDrag"
+                                    @mobile-move="onMobileMove"
+                                    @mobile-end="onMobileEnd"
+                                />
                             </tr>
                         </tbody>
                     </table>
@@ -466,7 +452,6 @@ function getFormattedItemCell(type, id) {
         case 'ev':
             item = props.rawData.find(x => x.id == id)
             return item ? `${item.id}: ${item.ev}` : 'OFF'
-            return item
         case 'pump':
             item = props.pumpList.find(x => x.index == id)
             return item ? `${item.index}: ${item.title}` : 'OFF'
@@ -603,23 +588,8 @@ function onDrop(currentCellType, currentStazione, currentItem) {
         return
     }
 
-    let currentId // id by cellType
-    let cellKey
-    switch (currentCellType) {
-        case 'ev':
-           cellKey = 'id'
-            break;
-        case 'pump':
-            cellKey = 'pompa'
-            break;
-        case 'master':
-            cellKey = 'masterv'
-            break;
-        default:
-            break;
-    }
-
-    currentId = currentItem[cellKey]
+    let cellKey = getCellKey(currentCellType)
+    let currentId = currentItem[cellKey]
 
     if (draggedId == currentId ) {
         return
@@ -647,6 +617,19 @@ function onDrop(currentCellType, currentStazione, currentItem) {
     props.rawData[currentItemIndex] = currentItem
     props.rawData[draggedItemIndex] = draggedItem
     
+}
+
+function getCellKey(cellType) {
+    switch (cellType) {
+        case 'ev':
+            return 'id'
+        case 'pump':
+            return 'pompa'
+        case 'master':
+            return 'masterv'
+        default:
+            throw new Error('Invalid cell type: ' + cellType)
+    }
 }
 
 function moveCellToList(currentCellType) {
