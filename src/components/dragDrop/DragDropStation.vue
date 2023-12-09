@@ -105,14 +105,14 @@
         </div>
     </div>
 
-    <div class="space-y-4 h-[50vh] md:h-full">
+    <div class="flex flex-col space-y-4 h-[60vh] md:h-full" :class="{'h-[85vh]': isEditing}">
 
         <!-- header row, edit button -->
         <div class="flex flex-col gap-4 lg:flex-row space-x-4 justify-between">
             <div class="bg-white flex flex-row justify-between items-center space-x-4 rounded px-4 py-2 w-full">
                 <h2 class="text-sm">{{ $t('stationsManagement') }}</h2>
 
-                <IveButton v-if="!isEditing" @click="isEditing = !isEditing" class="filled__blue w-fit text-xs" :label="$t('edit')" :loading="isLoading" />
+                <IveButton v-if="!isEditing" @click="toggleEdit()" class="filled__blue w-fit text-xs" :label="$t('edit')" :loading="isLoading" />
                 <div v-else class="flex flex-row space-x-2">
                     <IveButton @click="shouldReset ? reset() : confirmReset()" class="filled w-fit text-xs" :label="$t(shouldReset ? 'dataLost' : 'cancel')" :loading="isLoading" />
                     <IveButton @click="saveData()" class="filled__blue w-fit text-xs" :label="$t('save')" :loading="isLoading" />
@@ -130,7 +130,7 @@
             <!-- <div v-else /> -->
         </div>
 
-        <div class="card-container h-5/6 overflow-auto">
+        <div class="card-container h-5/6 sm:h-5/6 overflow-auto">
             <div v-for="(group, index) in props.newGroups" :key="index" v-if="isEditing" class="card">
                 <div class="card-title text-xs">
                     <p class="stationId">{{ $t('station') }} {{ group.stazione }}</p>
@@ -321,7 +321,7 @@ const props = defineProps({
     loadData: Function
 })
 
-const emit = defineEmits(['reset'])
+const emit = defineEmits(['reset', 'isEditing'])
 const dataStore = useDataStore()
 const { postControlIsLoading } = storeToRefs(useDataStore())
 
@@ -363,6 +363,11 @@ const postGroupData = ref({
     command: 'GROUPCONFIG',
     payload: {}
 })
+
+function toggleEdit() {
+    isEditing.value = !isEditing.value
+    emit('isEditing', isEditing.value)
+}
 
 function editName(station) {
     isEditingName.value = true
@@ -442,30 +447,16 @@ function startDrag(event, cellType, stazione, id, rowId, serial) {
         event.dataTransfer.effectAllowed = "move"
     }
 
-    switch (cellType) {
-        case 'ev':
-            if (!showEvList.value) { // list not opened yet
-                showList('ev')
-                openedListProgrammaticaly.value = true
-            }
-            break;
-        case 'pump':
-            if (!showPumpList.value) {
-                showList('pump')
-                openedListProgrammaticaly.value = true
-            }
-            break;
-        case 'master':
-            if (!showMasterList.value) {
-                showList('master')
-                openedListProgrammaticaly.value = true
-            }
-            break;
-        default:
-            break;
-    }
-
     draggedCell.value = { id, rowId, stazione, cellType, serial }
+
+    if (!isMobileDevice()) {
+        openedListProgrammaticaly.value = true
+        showList(cellType)
+    }
+}
+
+function isMobileDevice() {
+    return window.matchMedia("(max-width: 640px)").matches;
 }
 
 function onMobileMove(event) {
@@ -650,7 +641,7 @@ function confirmReset() {
 
 async function reset() {
     shouldReset.value = false
-    isEditing.value = false
+    toggleEdit()
     isLoading.value = true
 
     emit('reset')
@@ -660,7 +651,7 @@ async function reset() {
 }
 
 async function saveData() {
-    isEditing.value = false
+    toggleEdit()
     isLoading.value = true
     postData.value.payload = {}
         props.rawData.forEach((valve) => {

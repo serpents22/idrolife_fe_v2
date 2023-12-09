@@ -25,7 +25,9 @@
           :unassignedEvs="unassignedEvs"
           :newGroups="newGroups"
           :loadData="loadData"
-          @reset="onReset()" />
+          @reset="onReset()"
+          @isEditing="flag => isEditing = flag"
+        />
 
         <Accordion v-if="mode == 'accordion'"
           :id="props.id"
@@ -55,6 +57,7 @@ const props = defineProps({
 })
 
 const mode = ref('dragdrop') // dragdrop, accordion
+const isEditing = ref(false)
 
 //asynchronus component
 const deviceCard = defineAsyncComponent(
