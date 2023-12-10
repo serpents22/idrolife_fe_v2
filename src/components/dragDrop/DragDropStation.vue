@@ -681,7 +681,7 @@ function moveCellToList(currentCellType) {
 
 // id is used to calculate the address of the new row
 function addRowToExistingGroup(stationId, group, id) {
-    const item = {...getDataById}
+    const item = {...getDataById(id)}
     item.stazione = stationId
     item.group = group
 
@@ -690,7 +690,7 @@ function addRowToExistingGroup(stationId, group, id) {
 }
 
 function addRowToNewGroup(group, id) {
-    const item = getDataById
+    const item = getDataById(id)
     item.group = group.title
     item.stazione = group.stazione
 
