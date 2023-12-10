@@ -129,7 +129,7 @@
         </div>
     </div>
 
-    <div class="flex flex-col space-y-4 h-[60vh] md:h-full" :class="{'h-[85vh]': isEditing}">
+    <div class="flex flex-col space-y-4 h-[60vh] md:h-full">
 
         <!-- header row, edit button -->
         <div class="flex flex-col gap-4 lg:flex-row space-x-4 justify-between">
@@ -836,7 +836,7 @@ function addGroup() {
 
 .modalListContainer {
     @apply 
-    fixed p-4 z-10 bottom-0 w-full h-[250px]
+    fixed p-4 z-10 bottom-0 w-full h-[200px]
     md:right-0 md:w-1/5 md:h-full md:bottom-auto
 }
 
@@ -859,7 +859,7 @@ function addGroup() {
 }
 
 .modalListBody {
-    @apply p-2 mt-2 grid grid-cols-2 auto-rows-min gap-x-1 gap-y-3 overflow-auto max-h-[85%] transition-all duration-200 ease-in-out
+    @apply p-2 mt-2 grid grid-cols-3 md:grid-cols-2 auto-rows-min gap-x-1 gap-y-3 overflow-auto max-h-[85%] transition-all duration-200 ease-in-out
     flex-grow;
 }
 

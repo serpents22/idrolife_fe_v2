@@ -13,7 +13,7 @@
       :class="{canDrop, cannotDrop}"
       :data-cell-type="cell"
       :data-row="JSON.stringify(item)"
-      :options="{ animation: 150 }"
+      v-bind="dragOptions"
     >
       <template #item="{element}">
         <span class="itemCell" :class="{canDrop, cannotDrop}" >
@@ -62,6 +62,7 @@
   })
 
   const emit = defineEmits(['start-drag', 'mobile-move', 'mobile-end', 'drop', 'end-drag'])
+
   const value = computed(() => {
     if (props.itemIndexAsValue) {
       return props.item.index
@@ -72,6 +73,13 @@
   const canDrag = computed(() => props.isEditing)
   const canDrop = computed(() => props.item.stazione > 0 && props.draggedCellType == props.cell)
   const cannotDrop = computed(() => props.item.stazione > 0 && ![props.cell, undefined].includes(props.draggedCellType))
+  const dragOptions = computed(() => {
+    return {
+        scrollSensitive: 200,
+        forceFallback: false,
+        fallbackTolerance: 1,        
+    }
+})
 
   const startDrag = event => {
     const { cell, item: { stazione, id } } = props
