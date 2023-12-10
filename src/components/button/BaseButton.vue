@@ -43,8 +43,16 @@ button {
   transition-colors duration-300 border-solid border-2 border-[#FFEE58]
 }
 
+.filled.green {
+  @apply bg-green-400 border-green-400
+}
+
 .filled:hover {
   @apply bg-[#FFEE58]/70 
+}
+
+.filled:hover.green {
+  @apply bg-green-300
 }
 
 .filled__blue {
