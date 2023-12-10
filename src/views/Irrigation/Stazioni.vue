@@ -12,13 +12,10 @@
       <IdroTitle class="hidden md:flex" :title="title" />
 
       <div class="main mt-4">
-        <!-- <IveButton class="filled__blue mb-2" @click="mode = mode == 'dragdrop' ? 'accordion' : 'dragdrop'" :label="'Change mode'" /> -->
         <DragDropStation 
-          v-if="mode == 'dragdrop'" 
-          :id="props.id" 
-          :deviceCode="deviceCode" 
-          :data="dataByStation" 
-          :rawData="tableData"
+          :deviceCode="deviceCode"
+          :groups="dataByStation" 
+          :rawData="rawData"
           :pumpList="pumpList" 
           :masterList="mvList" 
           :availableGroup="availableGroup"
@@ -26,38 +23,22 @@
           :newGroups="newGroups"
           :loadData="loadData"
           @reset="onReset()"
-          @isEditing="flag => isEditing = flag"
         />
-
-        <Accordion v-if="mode == 'accordion'"
-          :id="props.id"
-          :deviceCode="deviceCode"
-          :data="groupedTableData"
-          :solenoidList="solenoidList"
-          :pumpList="pumpList"
-          :masterList="mvList"  />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import Accordion from '@/components/Accordion.vue';
 import DragDropStation from '@/components/dragDrop/DragDropStation.vue'
-import IveButton from '@/components/button/BaseButton.vue'
 import { useDevicesStore } from '@/stores/DevicesStore'
 import { useDataStore } from '@/stores/DataStore';
-import { storeToRefs } from 'pinia'
 import { defineAsyncComponent, computed, onMounted, ref } from '@vue/runtime-core'
-
 
 //props
 const props = defineProps({
   id: String
 })
-
-const mode = ref('dragdrop') // dragdrop, accordion
-const isEditing = ref(false)
 
 //asynchronus component
 const deviceCard = defineAsyncComponent(
@@ -66,8 +47,6 @@ const deviceCard = defineAsyncComponent(
 //state
 const devicesStore = useDevicesStore()
 const dataStore = useDataStore()
-const { postControlIsLoading } = storeToRefs(useDataStore())
-const { isLoading } = storeToRefs(useDevicesStore())
 const newData = computed(() => {
   return [devicesStore.deviceData]
 })
@@ -98,7 +77,7 @@ const grConfigParams = ref({
   device_code: null
 })
 
-const tableData = ref([])
+const rawData = ref([])
 const deviceCode = ref()
 const groupedTableData = ref([])
 const pumpList = ref([])
@@ -107,14 +86,14 @@ const newGroups = ref([])
 
 const dataByStation = computed(() => {
   // group the tableData by stazione
-  return tableData.value.reduce((r, a) => {
+  return rawData.value.reduce((r, a) => {
     r[a.stazione] = [...r[a.stazione] || [], a];
     return r;
   }, {});
 })
 
 const usedGroups = computed(() => {
-  const set = new Set(tableData.value.map(x => x.group))
+  const set = new Set(rawData.value.map(x => x.group))
   return [...set]
 })
 
@@ -139,7 +118,7 @@ const availableGroup = computed(() => {
 })
 
 const unassignedEvs = computed(() => {
-  return tableData.value.filter(x => x.stazione == 0)
+  return rawData.value.filter(x => x.stazione == 0)
 })
 
 function onReset() {
@@ -147,7 +126,7 @@ function onReset() {
 }
 
 function fillTableData() {
-  tableData.value = []
+  rawData.value = []
   pumpList.value = []
   mvList.value = []
   let evIndex = 2000
@@ -171,7 +150,7 @@ function fillTableData() {
           group: dataStore.groupData === undefined ? 'errore gruppo' : dataStore.groupData["S" + groupRegister]
         }
 
-        tableData.value.push(mainDataObj)
+        rawData.value.push(mainDataObj)
 
         i++
       }
@@ -218,7 +197,7 @@ function fillTableData() {
 }
 
 function groupingTableData() {
-  groupedTableData.value = tableData.value.reduce((r, a) => {
+  groupedTableData.value = rawData.value.reduce((r, a) => {
     r[a.stazione] = [...r[a.stazione] || [], a];
     return r;
   }, {});

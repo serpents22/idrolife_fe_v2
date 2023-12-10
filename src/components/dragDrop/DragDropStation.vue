@@ -164,7 +164,7 @@
                     </div>
                     <div v-if="editedNameStation == group.stazione" class="flex flex-row gap-1 justify-center items-center w-2/3">
                         <input type="text" class="border p-1 text-xs w-full" v-model="group.title">
-                        <IveButton @click="saveName(group.stazione, group.title)" class="filled__blue !text-xs h-[24px] w-[fit-content]" :label="$t('save')" :loading="postControlIsLoading"/>
+                        <IveButton @click="saveName(group.stazione, group.title)" class="filled__blue !text-xs h-[24px] w-[fit-content]" :label="$t('save')" :loading="isLoading"/>
                     </div>
                 </div>
 
@@ -181,8 +181,6 @@
                         <tbody>
                             <!-- empty row placeholder for index and ev cell -->
                             <tr
-                                @dragenter.prevent @dragover.prevent
-                                @drop="addRowToNewGroup(group, draggedCell.id)"
                                 :class="{
                                         'invisible': !draggedCell || draggedCellType != 'ev' || draggedStazione == group.stazione
                                     }" >
@@ -191,18 +189,31 @@
                                     :class="{
                                         '!h-0': !draggedCell || draggedCellType != 'ev' || draggedStazione == group.stazione
                                     }" />
-                                <td 
+
+                                <draggable
+                                    :list="[]"
+                                    group="ev"
+                                    :itemKey="String(index)"
+                                    tag="td" 
                                     class="itemCell transition-height duration-200 ease-in-out canDrop" 
                                     :class="{
                                         '!h-0': !draggedCell || draggedCellType != 'ev' || draggedStazione == group.stazione
-                                    }" />
+                                    }"
+                                    data-cell-type="ev"
+                                    data-action="addRowToNewGroup"
+                                    :data-new-group="JSON.stringify(group)"
+                                >
+                                    <template #item="{element}">
+                                        {{ element }}
+                                    </template>
+                                </draggable>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div v-for="(tData, index) in data" 
+            <div v-for="(tData, index) in groups" 
                 :key="index" 
                 v-show="tData.length > 0 && tData[0].stazione != 0" 
                 class="card"
@@ -215,7 +226,7 @@
                     </div>
                     <div v-if="editedNameStation == tData[0].stazione" class="flex flex-row gap-1 justify-center items-center w-2/3">
                         <input type="text" class="border p-1 text-xs w-full" v-model="tData[0].group">
-                        <IveButton @click="saveName(tData[0].stazione, tData[0].group, tData)" class="filled__blue !text-xs h-[24px] w-[fit-content]" :label="$t('save')" :loading="postControlIsLoading"/>
+                        <IveButton @click="saveName(tData[0].stazione, tData[0].group, tData)" class="filled__blue !text-xs h-[24px] w-[fit-content]" :label="$t('save')" :loading="isLoading"/>
                     </div>
                 </div>
 
@@ -320,27 +331,28 @@
 import { ref } from '@vue/reactivity';
 import IveButton from '@/components/button/BaseButton.vue';
 import { useDataStore } from '@/stores/DataStore';
-import { storeToRefs } from 'pinia'
-import { computed } from 'vue';
+import { computed, toRef } from 'vue';
 import DragDropCell from '@/components/dragDrop/DragDropCell.vue';
 import draggable from 'vuedraggable'
 
 const props = defineProps({
-    id: String,
+    deviceCode: String,
     pumpList: null,
     masterList: null,
-    data: null,
-    deviceCode: null,
-    rawData: null,
+    groups: null,
+    rawData: {
+        type: Array,
+        required: true
+    },
     unassignedEvs: null,
     availableGroup: null,
     newGroups: null,
     loadData: Function
 })
 
-const emit = defineEmits(['reset', 'isEditing'])
+const emit = defineEmits(['reset'])
 const dataStore = useDataStore()
-const { postControlIsLoading } = storeToRefs(useDataStore())
+const dataRef = toRef(props, 'rawData')
 
 const isLoading = ref(false)
 const isEditing = ref(false)
@@ -370,6 +382,7 @@ const openedListProgrammaticaly = ref(false)
 const currentCellType = ref(null)
 const currentRowData = ref(null)
 const newRow = ref(null)
+const newGroup = ref(null)
 const dragAction = ref(null)
 
 const postData = ref({
@@ -382,9 +395,16 @@ const postGroupData = ref({
     payload: {}
 })
 
+function getDataById(id) {
+    return dataRef.value.find(x => x.id == id)
+}
+
+function getDataIndexById(id) {
+    return dataRef.value.findIndex(x => x.id == id)
+}
+
 function toggleEdit() {
     isEditing.value = !isEditing.value
-    emit('isEditing', isEditing.value)
 }
 
 function editName(station) {
@@ -415,7 +435,7 @@ function getFormattedItemCell(type, id) {
     var item
     switch (type) {
         case 'ev':
-            item = props.rawData.find(x => x.id == id)
+            item = getDataById(id)
             return item ? `${item.id}: ${item.ev}` : 'OFF'
         case 'pump':
             item = props.pumpList.find(x => x.index == id)
@@ -503,6 +523,12 @@ function onMobileMove(event) {
     // adding new row to existing group
     newRow.value = JSON.parse(to.getAttribute('data-new'))
 
+    // adding new row to new group
+    if (action == 'addRowToNewGroup') {
+        newGroup.value = JSON.parse(to.getAttribute('data-new-group'))
+        dragAction.value = 'addRowToNewGroup'
+    }
+
     // moving cell to list
     if (action  == 'moveCellToList') {
         dragAction.value = 'moveCellToList'
@@ -514,7 +540,6 @@ function onMobileMove(event) {
 function onMobileEnd() {
     // stopped on new row
     if (newRow.value) {
-        console.log('stopped on new row', newRow.value)
         addRowToExistingGroup(newRow.value.stazione, newRow.value.group, draggedCell.value.id)
         endDrag()
         return
@@ -522,8 +547,11 @@ function onMobileEnd() {
 
     // stopped on list
     if (dragAction.value == 'moveCellToList') {
-        console.log('stopped on list', currentCellType.value)
         moveCellToList(currentCellType.value)
+        endDrag()
+        return
+    } else if (dragAction.value == 'addRowToNewGroup') {
+        addRowToNewGroup(newGroup.value, draggedCell.value.id)
         endDrag()
         return
     }
@@ -539,6 +567,7 @@ function onMobileEnd() {
 
 function endDrag() {
     dragAction.value = null
+    newGroup.value = null
     newRow.value = null
     draggedCell.value = null
     currentCellType.value = null
@@ -568,7 +597,7 @@ function onDrop(currentCellType, currentStazione, currentItem) {
     let isEvCell = currentCellType == 'ev'
 
     let tempCurrentItem = { ...currentItem }
-    let draggedItem = { ...props.rawData.find(x => x.id == draggedRowId) }
+    let draggedItem = { ...getDataById(draggedRowId) }
 
     if (currentStazione == 0) {
         return
@@ -585,8 +614,8 @@ function onDrop(currentCellType, currentStazione, currentItem) {
         return
     }
 
-    let currentItemIndex = props.rawData.findIndex(x => x.id == currentItem.id)
-    let draggedItemIndex = props.rawData.findIndex(x => x.id == draggedItem.id)
+    let currentItemIndex = getDataIndexById(currentItem.id)
+    let draggedItemIndex = getDataIndexById(draggedItem.id)
 
     // set current cell ev value to dragged item ev value
     if (isEvCell) {
@@ -626,7 +655,6 @@ function moveCellToList(currentCellType) {
     let draggedCellType = draggedCell.value.cellType
     let draggedStazione = draggedCell.value.stazione
     let draggedRowId = draggedCell.value.rowId
-    console.log('moveCellToList', currentCellType, draggedCellType, draggedStazione, draggedRowId)
 
     // cancel if moving from list to list
     if (draggedStazione == 0) {
@@ -647,26 +675,26 @@ function moveCellToList(currentCellType) {
         draggedItem[cellKey] = 0
     }
 
-    const index = props.rawData.findIndex(x => x.id == draggedRowId)
+    const index = getDataIndexById(draggedRowId)
     props.rawData[index] = draggedItem
 }
 
 // id is used to calculate the address of the new row
 function addRowToExistingGroup(stationId, group, id) {
-    const item = {...props.rawData.find(x => x.id == id)}
+    const item = {...getDataById}
     item.stazione = stationId
     item.group = group
 
-    const index = props.rawData.findIndex(x => x.id == id)
+    const index = getDataIndexById(id)
     props.rawData[index] = item
 }
 
 function addRowToNewGroup(group, id) {
-    const item = props.rawData.find(x => x.id == id)
+    const item = getDataById
     item.group = group.title
     item.stazione = group.stazione
 
-    const index = props.rawData.findIndex(x => x.id == id)
+    const index = getDataIndexById(id)
     props.rawData[index] = item
 
     const groupIndex = props.newGroups.findIndex(x => x.address == group.address)
@@ -701,7 +729,6 @@ async function saveData() {
         postData.value.payload['S' + (2002 + ((localId - 1) * 6))] = localStation
         postData.value.payload['S' + (2003 + ((localId - 1) * 6))] = valve.pompa
         postData.value.payload['S' + (2004 + ((localId - 1) * 6))] = valve.masterv
-        // postData.value.payload['S' + (2005 + ((localId - 1) * 6))] = 0
     })
 
     const error = await dataStore.postControl(props.deviceCode, postData.value) // this return error object if error
@@ -712,6 +739,8 @@ async function saveData() {
         isError.value = true
     } else {
         await props.loadData()
+        await props.loadData() // fetch twice to get latest data
+
         modalMessage.value = 'Data saved successfully'
         isError.value = false
     }
