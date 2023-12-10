@@ -62,7 +62,6 @@
   })
 
   const emit = defineEmits(['start-drag', 'mobile-move', 'mobile-end', 'drop', 'end-drag'])
-
   const value = computed(() => {
     if (props.itemIndexAsValue) {
       return props.item.index
@@ -79,7 +78,7 @@
         forceFallback: false,
         fallbackTolerance: 1,        
     }
-})
+  })
 
   const startDrag = event => {
     const { cell, item: { stazione, id } } = props
