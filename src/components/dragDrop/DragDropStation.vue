@@ -133,7 +133,7 @@
 
         <!-- header row, edit button -->
         <div class="flex flex-col gap-4 lg:flex-row space-x-4 justify-between">
-            <div class="bg-white flex flex-row justify-between items-center space-x-4 rounded px-4 py-2 w-full">
+            <div class="bg-white flex flex-row justify-between items-center space-x-4 rounded px-4 py-2 w-full shadow-card">
                 <h2 class="text-sm">{{ $t('stationsManagement') }}</h2>
 
                 <IveButton v-if="!isEditing" @click="toggleEdit()" class="filled__blue w-fit text-xs" :label="$t('edit')" :loading="isLoading" />
@@ -773,11 +773,11 @@ function addGroup() {
 
 <style scoped>
 .card-container {
-    @apply grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4;
+    @apply grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 p-2;
 }
 
 .card {
-    @apply p-3 bg-white rounded-lg shadow-lg;
+    @apply p-3 bg-white rounded-lg shadow-card;
 }
 
 .card.disabled {
@@ -799,7 +799,7 @@ function addGroup() {
 
 ::v-deep(.itemCell) {
     @apply
-    w-[80px]
+    w-[75px]
     h-[40px]
     text-xs
     justify-center
@@ -814,7 +814,7 @@ function addGroup() {
 }
 
 ::v-deep(.itemCell > span) {
-    @apply flex flex-col justify-center items-center h-full;
+    @apply flex flex-col justify-center items-center h-full w-full;
 }
 
 ::v-deep(.canDrop) {
