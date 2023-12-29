@@ -139,8 +139,8 @@
       <div class="button-bar">
         <div class="w-50">
           <div class="search-bar">
-            <select v-model="evGroups[0].station" name="Gruppi" class="dropdown w-30" @change="updateSelectedGroup($event)" >
-              <option selected v-for="groupObj in evGroups" :value="groupObj.station">
+            <select v-model="selectedGroup" name="Gruppi" class="dropdown w-30">
+              <option v-for="(groupObj, index) in evGroups" :value="index">
                 {{ groupObj.group }}
               </option>
             </select>
@@ -781,11 +781,6 @@ const { t } = useI18n();
         //console.error("Stazione non trovata per lo step: ", step);
       }
     }
-  }
-
-  function updateSelectedGroup(e){
-    //console.log(e.currentTarget.selectedIndex);
-    selectedGroup=Number(e.target.value);
   }
 
   //NB optionValue è il numero programma
