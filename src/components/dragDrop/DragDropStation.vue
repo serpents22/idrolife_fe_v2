@@ -513,7 +513,6 @@ function onMobileMove(event) {
 
     // cell type must be the same
     if (fromCellType != toCellType) {
-        console.log('cell type must be the same', fromCellType, toCellType)
         return false; // cancel move
     }
 
@@ -523,15 +522,13 @@ function onMobileMove(event) {
     // adding new row to existing group
     newRow.value = JSON.parse(to.getAttribute('data-new'))
 
-    // adding new row to new group
-    if (action == 'addRowToNewGroup') {
+    if (action == 'addRowToNewGroup') { // adding new row to new group
         newGroup.value = JSON.parse(to.getAttribute('data-new-group'))
         dragAction.value = 'addRowToNewGroup'
-    }
-
-    // moving cell to list
-    if (action  == 'moveCellToList') {
+    } else if (action  == 'moveCellToList') { // moving cell to list
         dragAction.value = 'moveCellToList'
+    } else {
+        dragAction.value = null;
     }
 
     return false; // disable sort
@@ -586,6 +583,7 @@ function endDrag() {
 }
 
 function onDrop(currentCellType, currentStazione, currentItem) {
+    console.log('ondrop', currentItem)
     let draggedId = draggedCell.value.id
     let draggedCellType = draggedCell.value.cellType
     let draggedStazione = draggedCell.value.stazione
