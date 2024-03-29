@@ -41,6 +41,7 @@
                             :getFormattedItemCell="getFormattedItemCell"
                             :getCellKey="getCellKey"
                             :draggedCellType="draggedCellType"
+                            dataAction="moveCellToListOnTopOfCell"
                             @start-drag="startDrag"
                             @mobile-move="onMobileMove"
                             @mobile-end="onMobileEnd"
@@ -80,6 +81,7 @@
                             :getCellKey="getCellKey"
                             :draggedCellType="draggedCellType"
                             :itemIndexAsValue="true"
+                            dataAction="moveCellToListOnTopOfCell"
                             @start-drag="startDrag"
                             @mobile-move="onMobileMove"
                             @mobile-end="onMobileEnd"
@@ -119,6 +121,7 @@
                             :getCellKey="getCellKey"
                             :draggedCellType="draggedCellType"
                             :itemIndexAsValue="true"
+                            dataAction="moveCellToListOnTopOfCell"
                             @start-drag="startDrag"
                             @mobile-move="onMobileMove"
                             @mobile-end="onMobileEnd"
@@ -527,6 +530,8 @@ function onMobileMove(event) {
         dragAction.value = 'addRowToNewGroup'
     } else if (action  == 'moveCellToList') { // moving cell to list
         dragAction.value = 'moveCellToList'
+    } else if (action == 'moveCellToListOnTopOfCell') {
+        dragAction.value = 'moveCellToListOnTopOfCell'
     } else {
         dragAction.value = null;
     }
@@ -544,6 +549,10 @@ function onMobileEnd() {
 
     // stopped on list
     if (dragAction.value == 'moveCellToList') {
+        moveCellToList(currentCellType.value)
+        endDrag()
+        return
+    } else if (dragAction.value == 'moveCellToListOnTopOfCell') {
         moveCellToList(currentCellType.value)
         endDrag()
         return
