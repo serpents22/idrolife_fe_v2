@@ -30,10 +30,10 @@
               <span class="flex w-full gap-2 items-center">
                 
                 <select name="stationNumber" class="select-option" v-model="satData.stazione">
-                  <option value="0" selected>0</option>
-                  <option v-for="station in stationData" :value="station.stazione">{{ station.stazione }}</option>
+                  <!-- <option value="0" selected>0</option> -->
+                  <option v-for="station in stazioneList" :value="station">{{ station }}</option>
                 </select>
-                <p>{{ groupData[satData.stazione-1] }}</p>
+                <p>{{ groupData[satData-1] }}</p>
               </span>
             </div>
             <div class="field-wrapper flex-col sm:flex-row ">
@@ -255,7 +255,7 @@ import toggle from '@/components/button/Toggle.vue'
       }
       evIndex += 6
     }
-    console.log(stationData.value)
+    console.log('station',stationData.value)
   }
 
   const groupData = ref([])
@@ -279,8 +279,9 @@ import toggle from '@/components/button/Toggle.vue'
     grConfigParams.value.device_code = deviceStore.deviceData.code 
     evConfigParams.value.device_code = deviceStore.deviceData.code
     title.value = 'Idrosat:' + deviceStore.deviceData.name
-    await dataStore.getLastEvConfig(evConfigParams.value) 
-    fillStationData()
+    await fillStazioneList()
+    // await dataStore.getLastEvConfig(evConfigParams.value) 
+    // fillStationData()
     await dataStore.getLastGroupData(grConfigParams.value) 
     fillGroupData()
     await dataStore.getLastSatConfig(satConfigParams.value)
@@ -307,6 +308,46 @@ import toggle from '@/components/button/Toggle.vue'
    dataStore.postControl(satConfigParams.value.device_code,postData.value)
   }
 
+  ////new update
+  const stazioneList = ref([])
+  
+  async function fillStazioneList() {
+    stazioneList.value = []
+    const tmpStazioneList = ref([])
+    const groupedStazioneList = ref([])
+    let EVCONFIG_START_ADDRESS = 2000
+    await dataStore.getLastEvConfig(evConfigParams.value)
+    let index = 1
+    console.log('count', dataStore.evConfigLength)
+    for (let i = 0; i < dataStore.evConfigLength / 5; i++) {
+      if (dataStore.evConfig.hasOwnProperty('S' + EVCONFIG_START_ADDRESS)) {
+        if (dataStore.evConfig['S' + EVCONFIG_START_ADDRESS] !== "FFFFFF") {
+          // console.log('S'+EVCONFIG_START_ADDRESS)
+          // console.log(index)
+          let mainDataObj = {
+            id: String(index++),
+            ev: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + EVCONFIG_START_ADDRESS], 
+            stazione: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (EVCONFIG_START_ADDRESS+2)], 
+            pompa: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (EVCONFIG_START_ADDRESS+3)], 
+            masterv: dataStore.evConfig === undefined ? undefined : dataStore.evConfig['S' + (EVCONFIG_START_ADDRESS+4)], 
+          }
+
+          console.log("appending", mainDataObj)
+          tmpStazioneList.value.push(mainDataObj)
+        }
+      } 
+      EVCONFIG_START_ADDRESS += 6
+    }
+    // console.log('station list', tmpStazioneList.value)
+    
+    groupedStazioneList.value = tmpStazioneList.value.reduce((r, a) => {
+      r[a.stazione] = [...r[a.stazione] || [], a];
+    return r;
+    }, {});
+    console.log('station list', groupedStazioneList.value)
+    stazioneList.value = Object.keys(groupedStazioneList.value)
+    console.log(stazioneList.value)
+  }
 
 </script>
 
