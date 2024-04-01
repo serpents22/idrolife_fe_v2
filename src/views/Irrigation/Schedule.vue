@@ -37,16 +37,6 @@
       </div>
       <div class="row">
         <div class="sm-icon-card" v-if="devicesStore.deviceData.role !== 'user'">
-          <router-link  :to="{ name: 'DurataStazione' }" >
-            <img src="@/assets/durata_stazioni.png">
-          </router-link>
-          <p>{{ $t('stationTimes') }}</p>
-        </div>
-        <div class="sm-icon-card opacity-40" v-else>
-          <img src="@/assets/durata_stazioni.png" >
-          <p>{{ $t('stationTimes') }}</p>
-        </div>
-        <div class="sm-icon-card" v-if="devicesStore.deviceData.role !== 'user'">
           <router-link  :to="{ name: 'GestisciSensori' }" >
             <img src="@/assets/gestisci_sensori.png">
           </router-link>

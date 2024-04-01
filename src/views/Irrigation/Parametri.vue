@@ -18,7 +18,7 @@
       </div>
       <div class="main">
         <form @submit.prevent="onSubmit" class="table-container">
-          <h1 class="flex mb-2 font-bold">{{  $t('generalParameter')  }}</h1>
+          <h1 class="flex mb-2 font-bold">{{ $t('generalParameter') }}</h1>
           <table>
             <thead>
               <tr>
@@ -233,14 +233,11 @@
           </div>
         </form>
 
-        <ScheduleStart
-          v-if="deviceStore.deviceData.code"
-          :device_code="deviceStore.deviceData.code"
-          :base_reg="base_reg"
-          :programNumber="programNumber"
-          :id="id"
-          class="mt-10"
-        />
+        <ScheduleStart v-if="deviceStore.deviceData.code" :device_code="deviceStore.deviceData.code"
+          :base_reg="base_reg" :programNumber="programNumber" :id="id" class="mt-10" />
+
+        <StationDuration v-if="deviceStore.deviceData.code" :device_code="deviceStore.deviceData.code"
+          :base_reg="base_reg" :programNumber="programNumber" :id="id" class="mt-10" />
       </div>
     </div>
   </div>
@@ -254,6 +251,7 @@ import { defineAsyncComponent, computed, onMounted, ref } from '@vue/runtime-cor
 import MyButton from '@/components/button/BaseButton.vue'
 import { useI18n } from 'vue-i18n'
 import ScheduleStart from '@/components/generalParameter/ScheduleStart.vue'
+import StationDuration from '@/components/generalParameter/StationDuration.vue'
 
 const { t } = useI18n()
 //props

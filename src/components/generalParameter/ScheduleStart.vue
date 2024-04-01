@@ -299,7 +299,6 @@ async function fillSatData() {
     progConfig = (await dataAPI.getLast(progConfigParams.value)).data.data
 
     let programRegister = "S" + (base_reg + 50)
-    console.log('start checking register at', programRegister, 'satStart', satStart)
     let tmpOreMin0 = satStart === undefined ? undefined : satStart[programRegister].split('.')
 
     programRegister = "S" + (base_reg + 52);
@@ -329,9 +328,7 @@ async function fillSatData() {
     satData.value.min6 = tmpOreMin6 === undefined ? 0 : tmpOreMin6[1]
     satData.value.isAuto4 = tmpOreMin6 === undefined ? false : Boolean(Number(tmpOreMin6[2]))
 
-    console.log('checking program', props.programNumber)
     endProgramMode = programConfig[endProgramRegister]
-    console.log('endProgramMode', endProgramMode, 'endProgramRegister', endProgramRegister)
 
     if (endProgramMode == 0) {
 
