@@ -1,5 +1,6 @@
 <template>
     <form @submit.prevent="onSubmit" class="table-container">
+        <h1 class="flex mb-2 font-bold">{{  $t('scheduleStart')  }}</h1>
         <table style="margin-bottom:1rem">
             <thead>
                 <tr>

@@ -18,6 +18,7 @@
       </div>
       <div class="main">
         <form @submit.prevent="onSubmit" class="table-container">
+          <h1 class="flex mb-2 font-bold">{{  $t('generalParameter')  }}</h1>
           <table>
             <thead>
               <tr>
