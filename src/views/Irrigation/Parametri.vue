@@ -590,7 +590,7 @@ td {
 }
 
 .parametri-container {
-  @apply relative flex flex-col px-[16px] md:px-[200px] lg:px-[260px] xl:px-[320px] 2xl:px-[360px]
+  @apply relative flex flex-col px-[16px] md:px-[200px] lg:px-[260px] xl:px-[320px] 2xl:px-[360px] h-[480px] sm:h-full overflow-x-scroll
 }
 
 .main {
@@ -603,7 +603,7 @@ td {
 
 
 .content {
-  @apply flex flex-col justify-center gap-2 w-full sm:gap-4 sm:my-[20px]
+  @apply flex flex-col justify-center gap-2 w-full sm:gap-4 sm:my-[20px] 
 }
 
 .header {
