@@ -280,6 +280,8 @@
     "emergencyKey": "Tasto emergenza",
     "noAlarm": "Nessun Allarme",
     "flushing": "Acqua dopo",
+    "choiceOfTimeMode": "Scelta modalità tempo",
     "prewash": "Acqua prima",
     "edit": "Modifica"
+    
 }
