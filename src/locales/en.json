@@ -237,6 +237,7 @@
     "notActive": "Not Active",
     "idSerial": "ID Serial",
     "fwVersion": "Firmware Version",
+    "espVersion": "ESP32 Version",
     "hardwareVersion": "Hardware Version",
     "pressure": "Pressure",
     "programs": "Programs",
