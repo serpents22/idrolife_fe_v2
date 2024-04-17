@@ -33,7 +33,7 @@
                   <!-- <option value="0" selected>0</option> -->
                   <option v-for="station in stazioneList" :value="station">{{ station }}</option>
                 </select>
-                <p>{{ groupData[satData-1] }}</p>
+                <p>{{ groupData[satData.stazione-1] }}</p>
               </span>
             </div>
             <div class="field-wrapper flex-col sm:flex-row ">
