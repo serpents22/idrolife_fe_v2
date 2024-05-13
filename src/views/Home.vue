@@ -14,7 +14,16 @@
         <div class="w-fit m-auto sm:ml-10">
           <Tab :tabs="tabs" @clicked= "chageLanguage" />
         </div>
-        <h2 class="col-span-2 text-[8px] sm:text-base">Idrobit srl - Via Giuseppe Garibaldi, 85, 00012 Villanova di Guidonia - © Idrobit srl 2023</h2>
+        <div class="col-span-2">
+          <h2 class="text-[8px] sm:text-base">Idrobit srl - Via Giuseppe Garibaldi, 85, 00012 Villanova di Guidonia - © Idrobit srl 2023</h2>
+          <div class="flex gap-4 justify-center items-center">
+            <h2 class="text-[8px] sm:text-base">Design By</h2>
+            <div class="flex gap-2 items-center">
+              <img class="w-6" src="../assets/101logo.png" alt="" srcset="">
+              <h2 class="text-[8px] sm:text-base font-semibold">101 Team</h2>
+            </div>
+          </div>
+        </div>
         <a :href="privacyPolicy" target="_blank" class="col-span-1 text-[8px] sm:text-base">Privacy Policy</a>
       </footer>
   </div>
