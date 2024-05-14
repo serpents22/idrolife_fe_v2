@@ -11,8 +11,8 @@ export default {
   updatePlanning(id,data) {
     return apiClient.put(`planning/${id}`, data)
   },
-  getPlanning(id) {
-    return apiClient.get(`planning/${id}`)
+  getPlanning(id, params) {
+    return apiClient.get(`planning/${id}`, {params} )
   },
   deletePlanning(id) {
     return apiClient.delete(`planning/${id}`)

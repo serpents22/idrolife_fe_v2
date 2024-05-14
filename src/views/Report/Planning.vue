@@ -4,7 +4,8 @@
     @close="closeNotification" />
   <NewSchedule :isOpen="isShowNewSchedule" @close="createPlanFinish" title="Create Planning" :startDate="startDate"
     :deviceCode="devicesStore.deviceData.code" />
-  <ScheduleDetail :isOpen="isShowDetail" @close="detailClosed" title="Planning Detail" :id="planningId" />
+  <ScheduleDetail :isOpen="isShowDetail" @close="detailClosed" title="Planning Detail" :id="planningId"
+    :deviceCode="devicesStore.deviceData.code" :event="event" />
   <div class="planning-container">
     <sidebar :noSocial="true" :backOn="true" />
     <div class="device-container">
@@ -73,8 +74,8 @@ const newData = computed(() => {
 
 
 onMounted(async () => {
-  fetchEventsAndUpdateCalendar()
   await devicesStore.loadDevice(props.id)
+  fetchEventsAndUpdateCalendar()
   title.value = 'Idrosat:' + devicesStore.deviceData.name
   // const containerEl = document.getElementById('external-events');
   // new Draggable(containerEl, {
@@ -100,12 +101,12 @@ const calendarOptions = {
     start: 'dayGridMonth,timeGridWeek,timeGridDay',
     center: 'title',
   },
-  editable: true,
+  // editable: true,
   dayMaxEvents: true,
   //events
-  eventDrop: handleEventDrop,
-  eventResize: handleEventResize,
-  dateClick: handleDateClick,
+  // eventDrop: handleEventDrop,
+  // eventResize: handleEventResize,
+  // dateClick: handleDateClick,
   eventClick: handleEventClick
 }
 
@@ -167,10 +168,27 @@ function createPlanFinish() {
 
 const isShowDetail = ref(false)
 const planningId = ref('')
+const event = ref(
+  { start: null, end: null , programName: null }
+)
 
 function handleEventClick(arg) {
   isShowDetail.value = true
   planningId.value = arg.event.id
+  
+  const startDate = new Date(arg.event.start)
+  const startYear = startDate.getFullYear()
+  const startMonth = String(startDate.getMonth() + 1).padStart(2, '0')
+  const startDay = String(startDate.getDate()).padStart(2, '0')
+  event.value.start = `${startYear}-${startMonth}-${startDay}`
+
+  const endDate = new Date(arg.event.end || arg.event.start)
+  const endYear = endDate.getFullYear();
+  const endMonth = String(endDate.getMonth() + 1).padStart(2, '0')
+  const endDay = String(endDate.getDate()).padStart(2, '0')
+  event.value.end = `${endYear}-${endMonth}-${endDay}`
+  console.log(arg.event.start, arg.event.end)
+  event.value.programName = arg.event.extendedProps.programName
 }
 
 function detailClosed() {

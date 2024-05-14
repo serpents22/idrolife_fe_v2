@@ -9,33 +9,32 @@
             <div class="modal-content">
               <h1 class="title">{{ title }}</h1>
               <div class="flex flex-col gap-4 items-start mb-6">
+                <div class="flex flex-col text-left text-white">
+                  <p class="font-semibold">Program Name</p>
+                  <p>{{ props.event.programName }}</p>
+                </div>
                 <div class="grid grid-cols-2 w-full">
                   <div class="flex flex-col text-left text-white">
                     <p class="font-semibold">Start Date</p>
-                    <p>{{ planning.start }}</p>
+                    <p>{{ props.event.start }}</p>
                   </div>
-                  <div class="flex flex-col text-left text-white">
-                    <p class="font-semibold">Start Time</p>
-                    <p>{{ planning.startHour }}</p>
-                  </div>
-                </div>
-                <div class="grid grid-cols-2 w-full">
                   <div class="flex flex-col text-left text-white">
                     <p class="font-semibold">End Date</p>
-                    <p>{{ planning.end }}</p>
-                  </div>
-                  <div class="flex flex-col text-left text-white">
-                    <p class="font-semibold">End Time</p>
-                    <p>{{ planning.endHour }}</p>
+                    <p>{{ props.event.end }}</p>
                   </div>
                 </div>
-                <div class="flex flex-col text-left text-white" >
+                <div class="flex flex-col text-left text-white">
                   <p class="font-semibold">Stations Active</p>
-                  <p v-for="station in planning.stations">{{ station.groupName }}</p>
+                  <div v-if="planningStore.getPlanningLoading" class="mt-2 max-w-sm animate-pulse">
+                    <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                  </div>
+                  <p v-if="planning.isStationEmpty && !planningStore.getPlanningLoading">No Station</p>
+                  <p v-if="!planningStore.getPlanningLoading" v-for="station in planning.stations">{{ station.groupName
+                    }}</p>
                 </div>
               </div>
-              <BaseButton type="submit" class="filled__red" :label="deleteLabel" :loading="deletePlanningLoading"
-                @click="deletePlanning" />
+              <!-- <BaseButton type="submit" class="filled__red" :label="deleteLabel" :loading="deletePlanningLoading"
+                @click="deletePlanning" /> -->
             </div>
           </div>
         </transition>
@@ -49,7 +48,7 @@
 import BaseButton from '@/components/button/BaseButton.vue'
 import { useDeviceManagement } from '@/stores/DeviceManagementStore'
 import { storeToRefs } from 'pinia'
-import { ref, onMounted, onBeforeUpdate } from 'vue'
+import { ref, onMounted, onBeforeUpdate, watch } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
 import { usePlanningStore } from '@/stores/planning/PlanningStore'
@@ -64,12 +63,17 @@ const props = defineProps({
   isOpen: Boolean,
   title: String,
   id: String,
+  deviceCode: String,
+  event: Object,
 })
 
-onBeforeUpdate(async () => {
-  await planningStore.getPlanning(props.id)
-})
 
+watch(() => props.isOpen, () => {
+  if (props.isOpen) {
+  planningStore.planning = []
+  planningStore.getPlanning(props.id, { deviceCode: props.deviceCode })
+  }
+})
 
 const modalActive = ref(false)
 const cancelLabel = ref(t('cancel'))
