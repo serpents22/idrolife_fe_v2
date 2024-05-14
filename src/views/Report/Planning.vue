@@ -10,7 +10,7 @@
     <div class="device-container">
       <deviceCard :small="true" :content="newData" />
       <div class="xs-icon-card">
-        <img src="@/assets/report_allarmi.png">
+        <img src="@/assets/report_planning.png">
         <p>{{ $t('alarms') }}</p>
       </div>
     </div>
