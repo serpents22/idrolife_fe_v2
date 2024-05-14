@@ -107,7 +107,8 @@ const calendarOptions = {
   // eventDrop: handleEventDrop,
   // eventResize: handleEventResize,
   // dateClick: handleDateClick,
-  eventClick: handleEventClick
+  eventClick: handleEventClick,
+
 }
 
 async function fetchEventsAndUpdateCalendar() {
@@ -169,13 +170,13 @@ function createPlanFinish() {
 const isShowDetail = ref(false)
 const planningId = ref('')
 const event = ref(
-  { start: null, end: null , programName: null }
+  { start: null, end: null, programName: null }
 )
 
 function handleEventClick(arg) {
   isShowDetail.value = true
   planningId.value = arg.event.id
-  
+
   const startDate = new Date(arg.event.start)
   const startYear = startDate.getFullYear()
   const startMonth = String(startDate.getMonth() + 1).padStart(2, '0')
@@ -241,8 +242,7 @@ function detailClosed() {
   @apply cursor-pointer bg-blue-400 text-white font-semibold px-4 py-2 rounded text-xs
 }
 
-.fc-toolbar-title {
-  color: #007bff !important;
-  font-size: 10px !important;
+.fc {
+  @apply text-[8px] sm:text-xs lg:text-base
 }
 </style>
