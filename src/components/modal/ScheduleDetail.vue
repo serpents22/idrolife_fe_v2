@@ -151,7 +151,7 @@ function cancelForm() {
 
 
 .modal {
-  @apply bg-[#ABADAF]/20 backdrop-blur-sm w-full h-full fixed top-0 left-0 px-8 py-10 overflow-x-hidden overflow-y-auto z-40 justify-center items-center flex
+  @apply bg-[#ABADAF]/20 backdrop-blur-sm w-full h-full fixed top-0 left-0 px-8 py-10 overflow-x-hidden overflow-y-auto z-[999999] justify-center items-center flex
 }
 
 .modal-inner {
