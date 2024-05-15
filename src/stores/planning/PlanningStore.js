@@ -61,37 +61,16 @@ export const usePlanningStore = defineStore('planningStore', {
           date.map(({ start, end }) => ({ program, start, end }))
         )
         this.plannings = transformedPlannings.map((data) => {
-          const startDate = new Date(data.start)
-          const startYear = startDate.getFullYear();
-          const startMonth = String(startDate.getMonth() + 1).padStart(2, '0');
-          const startDay = String(startDate.getDate()).padStart(2, '0');
-          const start = `${startYear}-${startMonth}-${startDay}`;
-          // Get the local time components
-          const startHours = String(startDate.getHours()).padStart(2, '0');
-          const startMinutes = String(startDate.getMinutes()).padStart(2, '0');
-          const startSeconds = String(startDate.getSeconds()).padStart(2, '0');
-          const startHour = `${startHours}:${startMinutes}:${startSeconds}`;
-
-
-          const endDate = new Date(data.end)
-          const endYear = endDate.getFullYear();
-          const endMonth = String(endDate.getMonth() + 1).padStart(2, '0');
-          const endDay = String(endDate.getDate()).padStart(2, '0');
-          const end = `${endYear}-${endMonth}-${endDay}`;
-          // Get the local time components
-          const endHours = String(endDate.getHours()).padStart(2, '0');
-          const endMinutes = String(endDate.getMinutes()).padStart(2, '0');
-          const endSeconds = String(endDate.getSeconds()).padStart(2, '0');
-          const endHour = `${endHours}:${endMinutes}:${endSeconds}`;
-
+          const start = data.start
+          const end = data.end
           const programName = 'Program ' + data.program.replace(/^\D+/g, '')
           const id = data.program.replace(/^\D+/g, '')
           return {
-            start, end, programName, startHour, endHour, id
+            start, end, programName, id
           }
         })
-        console.log(res.data.data.plannings)
-        console.log(this.plannings)
+        // console.log(res.data.data.plannings)
+        // console.log(this.plannings)
         this.getPlanningsLoading = false
         this.getPlanningsStatus.message = 'Planning Fetched'
         this.getPlanningsStatus.code = res.data.status
