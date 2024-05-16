@@ -740,7 +740,7 @@
       { title: t('soilSensor') + ' 26', value: '26'}, { title: t('soilSensor') + ' 27', value: '27'}, { title: t('soilSensor') + ' 28', value: '28'}, { title: t('soilSensor') + ' 29', value: '29'}, { title: t('soilSensor') + ' 30', value: '30'},
     ]
     const livellosensoraUmiditaOptions = [
-    { title: '0', value: '0'},{ title: '1', value: '1'}, { title: '2', value: '2'}, { title: '3', value: '3'}, { title: '4', value: '4'}
+     { title: '1', value: '1'}, { title: '2', value: '2'}, { title: '3', value: '3'}, { title: '4', value: '4'}
     ]
   
     // const impulsiPortarte = ref()
