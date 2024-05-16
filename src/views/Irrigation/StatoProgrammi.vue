@@ -134,13 +134,11 @@ async function checkActiveStations() {
   const activeStationsArray = activeStations.split(",").map(Number)
   activeStationsList.value = Array.from({ length: MAX_PROGRAM_NUMBER }, (_, index) => {
     const numberToCheck = index + 1 // Numbers are from 1 to 30
-    console.log(numberToCheck)
     return activeStationsArray.includes(numberToCheck);
   })
-  console.log(activeStationsList.value)
 }
 
-async function fillAzioneTempoData() {
+async function checkStationData() {
   stazioneAzioneTempoList.value = []
   let azioneStartAddress = 40000
   await dataStore.getLastSatStat(satStatParams.value)
@@ -187,7 +185,6 @@ async function fillAzioneTempoData() {
 
 function fillSatData() {
   satData.value = []
-
   for (let i = 0; i < MAX_PROGRAM_NUMBER; i++) {
     let newObj = {
       programma: String(i + 1),
@@ -198,12 +195,11 @@ function fillSatData() {
     }
     satData.value.push(newObj)
   }
-  // console.log('satdata', satData.value)
 }
 
 async function getLastData() {
   await checkActiveStations()
-  await fillAzioneTempoData()
+  await checkStationData()
   fillSatData()
 }
 
