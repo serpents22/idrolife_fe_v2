@@ -1,13 +1,13 @@
 <template>
   <div class="home-container">
     <div class="header">
-      <img src="@/assets/logo.png" id="logo">
+      <div class="logo-container"></div>
       <span>
         <h1>{{$t('welcomeText')}}</h1>
       </span>
     </div>
-    <router-link class="menu" :to="{name: 'LoginForm'}">
-      <img src="../assets/Accedi.png">
+    <router-link class="menu bg-login-icon" :to="{name: 'LoginForm'}">
+      <div class="menu-image"></div>
       <p>{{$t('login')}}</p>
     </router-link>
       <footer class="grid grid-cols-1 sm:grid-cols-4 items-center justify-center mb-2">
@@ -19,7 +19,7 @@
           <div class="flex gap-4 justify-center items-center">
             <h2 class="text-[8px] sm:text-base">Design By</h2>
             <div class="flex gap-2 items-center">
-              <img class="w-6" src="../assets/101logo.png" alt="" srcset="">
+              <div class="logo-101"></div>
               <h2 class="text-[8px] sm:text-base font-semibold">101 Team</h2>
             </div>
           </div>
@@ -127,9 +127,5 @@ span h2 {
 .menu img {
   @apply w-64
 }
-/* 
-.tab-wrapper{
-  @apply
-    absolute left-[80px] bottom-[20px] w-fit z-10
-} */
+
 </style>

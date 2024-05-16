@@ -94,19 +94,14 @@ input[type=number] {
   background: linear-gradient(45.06deg, #010AD1 -8.2%, #1BF728 108.15%) padding-box,
               linear-gradient(to right, #1BF728, #010AD1) border-box;
   border: 3px solid transparent;
-  @apply flex flex-col justify-center px-2
-  transition-all ease-in-out delay-150 hover:-translate-y-2 
+  @apply flex flex-col justify-center 
+  transition-all hover:-translate-y-2 
   items-center
   w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 
   rounded-[40px] md:rounded-[50px] lg:rounded-[60px]
+  p-6
 }
 
-.icon-card img {
-  @apply 
-  px-8 
-  object-cover
-
-}
 
 .icon-card p {
   @apply 
