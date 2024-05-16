@@ -255,6 +255,10 @@ let evConfig = null
 let satConfig = null
 let evStation = null
 
+defineExpose({
+    refreshData
+})
+
 watch(() => props.device_code, async (newDeviceCode) => {
     setDeviceCode(newDeviceCode)
 })
@@ -262,6 +266,11 @@ watch(() => props.device_code, async (newDeviceCode) => {
 watch(() => [props.programNumber, props.base_reg], ([newProgNum, newBaseReg], _) => {
     onOptionChanged(newProgNum, newBaseReg)
 })
+
+function refreshData() {
+    const { programNumber, base_reg } = props;
+    onOptionChanged(programNumber, base_reg)
+}
 
 function setDeviceCode(deviceCode) {
     satConfigParams.value.device_code = deviceCode
@@ -287,6 +296,7 @@ function moveOnSelect(event, currentPos) {
 }
 
 function getProgramInfo(programNumber, base_reg) {
+    console.log('refreshing getProgramInfo')
     let programEnabledRegister = 'S' + (base_reg);
     let programNameRegister = "S" + (base_reg + 4);
     let programEnabled = dataStore.satConfig === undefined ? '0' : dataStore.satConfig[programEnabledRegister]

@@ -250,10 +250,10 @@
         </form>
 
         <ScheduleStart v-if="deviceStore.deviceData.code" :device_code="deviceStore.deviceData.code"
-          :base_reg="base_reg" :programNumber="programNumber" :id="id" class="mt-10" />
+          :base_reg="base_reg" :programNumber="programNumber" :id="id" class="mt-10" ref="scheduleStartRef" />
 
         <StationDuration v-if="deviceStore.deviceData.code" :device_code="deviceStore.deviceData.code"
-          :base_reg="base_reg" :programNumber="programNumber" :id="id" class="mt-10" />
+          :base_reg="base_reg" :programNumber="programNumber" :id="id" class="mt-10" ref="stationDurationRef" />
       </div>
     </div>
   </div>
@@ -439,6 +439,8 @@ const postSatStatData = ref({
 })
 
 const loadingData = ref(false)
+const scheduleStartRef = ref(null)
+const stationDurationRef = ref(null)
 
 onMounted(async () => {
   loadingData.value = true
@@ -458,6 +460,18 @@ onMounted(async () => {
   loadingData.value = false
 
 })
+
+function refreshStationDuration() {
+  if (stationDurationRef.value) {
+    stationDurationRef.value.refreshData()
+  }
+}
+
+function refreshScheduleStart() {
+  if (scheduleStartRef.value) {
+    scheduleStartRef.value.refreshData()
+  }
+}
 
 function onSubmit() {
   console.log(satData.value)
@@ -523,6 +537,14 @@ function onSubmit() {
 
   dataStore.postControl(satStatParams.value.device_code, postSatStatData.value)
 
+  changeOption({
+    target: {
+      value: optionValue.value
+    }
+  }).then(() => {
+    refreshScheduleStart()
+    refreshStationDuration()
+  })
 }
 
 

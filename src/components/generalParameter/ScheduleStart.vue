@@ -266,6 +266,10 @@ let satStart = null
 let progConfig = null
 const loadingData = ref(false)
 
+defineExpose({
+    refreshData
+})
+
 onMounted(() => {
     loadingData.value = true
     endProgramRegister = "S" + Number(props.base_reg + 3)
@@ -284,6 +288,10 @@ watch(() => props.device_code, async (newDeviceCode) => {
 watch(() => [props.programNumber, props.base_reg], ([newProgNum, newBaseReg], _) => {
     onOptionChanged(newProgNum, newBaseReg)
 })
+
+function refreshData() {
+    onOptionChanged(props.programNumber, props.base_reg)
+}
 
 function setDeviceCode(deviceCode) {
     programConfigParams.value.device_code = deviceCode
