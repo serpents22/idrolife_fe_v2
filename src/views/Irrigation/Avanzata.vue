@@ -91,7 +91,7 @@
                   <input 
                     :disabled="icodData.I1004 === undefined" 
                     v-model="icodData.I1004" type="number" >
-                  <p>Sec</p>
+                  <p>ms</p>
                 </span>
               </td>
             </tr>
@@ -117,7 +117,7 @@
                   <input 
                     :disabled="icodData.I1006 === undefined"
                     v-model="icodData.I1006" type="number" >
-                  <p>sec</p>
+                  <p>ms</p>
                 </span>
               </td>
             </tr>
