@@ -66,13 +66,13 @@
                 <div class="field-wrapper">
                   <div class="field">
                     <span>
-                      <label for="umidita-bassa">{{ $t('low') }} <sup>o</sup>C</label>
+                      <label for="umidita-bassa">{{ $t('low') }} %</label>
                     </span>
                     <input v-model="umiditaBassa" type="number" id="umidita-bassa" disabled>
                   </div>
                   <div class="field">
                     <span>
-                      <label for="umidita-bassa">{{ $t('high') }} <sup>o</sup>C</label>
+                      <label for="umidita-bassa">{{ $t('high') }} %</label>
                     </span>
                     <input v-model="umiditaAlta" type="number" id="umidita-bassa" disabled>
                   </div>
@@ -118,7 +118,7 @@
                 <div class="field-wrapper">
                   <div class="field">
                     <span>
-                      <label for="water-budget">{{ $t('low') }} <sup>o</sup>C</label>
+                      <label for="water-budget">{{ $t('low') }} %</label>
                     </span>
                     <input 
                       v-model="satData.S7" 
@@ -579,7 +579,7 @@
     const umiditaMax = 100
     const waterBudget = ref(20)
     const waterBudgetMin = 0
-    const waterBudgetMax = 100
+    const waterBudgetMax = 250
     const optionValue = ref(1)
   
     function fillSatData() {
