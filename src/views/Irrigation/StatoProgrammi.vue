@@ -126,7 +126,8 @@ const stazioneAzioneTempoList = ref([])
 const loading = ref(true)
 let MAX_PROGRAM_NUMBER = 30
 
-async function checkActiveStations() {
+async function checkStationStatus() {
+  //check active station list
   activeStationsList.value = []
   let activeStations
   await dataStore.getLastSatStat(satStatParams.value)
@@ -136,12 +137,10 @@ async function checkActiveStations() {
     const numberToCheck = index + 1 // Numbers are from 1 to 30
     return activeStationsArray.includes(numberToCheck);
   })
-}
 
-async function checkStationData() {
+  //check station data
   stazioneAzioneTempoList.value = []
   let azioneStartAddress = 40000
-  await dataStore.getLastSatStat(satStatParams.value)
 
   for (let i = 0; i < MAX_PROGRAM_NUMBER; i++) {
     let stationData = dataStore.satStat['S' + (azioneStartAddress + i)] === undefined ? undefined : dataStore.satStat['S' + (azioneStartAddress + i)].split(',')
@@ -198,28 +197,28 @@ function fillSatData() {
 }
 
 async function getLastData() {
-  await checkActiveStations()
-  await checkStationData()
+  await checkStationStatus()
   fillSatData()
 }
 
 
-let getLastDataInterval = null
+const delay = (time) => new Promise((resolve) => setTimeout(resolve, time))
+const whileState = ref(true)
 
-onBeforeMount(async () => {
+onMounted(async () => {
   await deviceStore.loadDevice(props.id)
   satStatParams.value.device_code = deviceStore.deviceData.code
   title.value = 'Idrosat:' + deviceStore.deviceData.name
-  await getLastData()
   loading.value = false
-})
-
-onMounted(() => {
-  getLastDataInterval = setInterval(getLastData, 5000)
+  while (whileState.value) {
+    getLastData()
+    console.log('repeat')
+    await delay(5000)
+  }
 })
 
 onUnmounted(() => {
-  clearInterval(getLastDataInterval)
+  whileState.value = false
 })
 
 
