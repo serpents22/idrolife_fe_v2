@@ -141,7 +141,7 @@
     "ecCommand": "Komanda Ventila",
     "pumpDelay": "Kašnjenje Gašenja Pumpe",
     "flowAlarmDelay": "Kašnjenje Alarma Protoka",
-    "stationDelay": "Razmak Između Sektora",
+    "stationDelay": "Kašnjenje između MV i Ev",
     "solarIrradiation": "Solarno Zračenje",
     "windSensor": "Senzor Vetra",
     "ritardi": "Kašnjenja",

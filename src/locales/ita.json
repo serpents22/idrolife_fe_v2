@@ -141,7 +141,7 @@
     "ecCommand": "Comando Valvola",
     "pumpDelay": "Ritardo Disattivazione Pompa",
     "flowAlarmDelay": "Ritardo Allarme Flusso",
-    "stationDelay": "Ritardo Tra Stazioni",
+    "stationDelay": "Ritardo tra MV e EV",
     "solarIrradiation": "Radiazione Solare",
     "windSensor": "Sensore Vento",
     "ritardi": "Ritardi",

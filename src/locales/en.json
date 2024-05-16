@@ -141,7 +141,7 @@
     "ecCommand": "EC Command",
     "pumpDelay": "Pump Deactivation Delay",
     "flowAlarmDelay": "Flow Alarm Delay",
-    "stationDelay": "Delay between Station",
+    "stationDelay": "Delay between MS and EV",
     "solarIrradiation": "Solar Irradiation",
     "windSensor": "Wind Sensors",
     "ritardi": "Delay",
