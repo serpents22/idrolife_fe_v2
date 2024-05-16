@@ -121,25 +121,26 @@ const satStatParams = ref({
 
 
 const satData = ref([])
+const activeProgramsList = ref([])
 const activeStationsList = ref([])
-const stazioneAzioneTempoList = ref([])
 const loading = ref(true)
 let MAX_PROGRAM_NUMBER = 30
 
-async function checkStationStatus() {
-  //check active station list
-  activeStationsList.value = []
-  let activeStations
+async function checkProgramsStatus() {
+  //check active programs list
+  activeProgramsList.value = []
+  let activePrograms
   await dataStore.getLastSatStat(satStatParams.value)
-  activeStations = dataStore.satStat === undefined ? 0 : dataStore.satStat.S16
-  const activeStationsArray = activeStations.split(",").map(Number)
-  activeStationsList.value = Array.from({ length: MAX_PROGRAM_NUMBER }, (_, index) => {
+  activePrograms = dataStore.satStat === undefined ? 0 : dataStore.satStat.S16
+  const activeProgramsArray = activePrograms.split(",").map(Number)
+
+  activeProgramsList.value = Array.from({ length: MAX_PROGRAM_NUMBER }, (_, index) => {
     const numberToCheck = index + 1 // Numbers are from 1 to 30
-    return activeStationsArray.includes(numberToCheck);
+    return activeProgramsArray.includes(numberToCheck);
   })
 
   //check station data
-  stazioneAzioneTempoList.value = []
+  activeStationsList.value = []
   let azioneStartAddress = 40000
 
   for (let i = 0; i < MAX_PROGRAM_NUMBER; i++) {
@@ -178,7 +179,7 @@ async function checkStationStatus() {
       azione: action,
       tempo: remainingTime
     }
-    stazioneAzioneTempoList.value.push(newObj)
+    activeStationsList.value.push(newObj)
   }
 }
 
@@ -187,17 +188,17 @@ function fillSatData() {
   for (let i = 0; i < MAX_PROGRAM_NUMBER; i++) {
     let newObj = {
       programma: String(i + 1),
-      stato: activeStationsList.value[i],
-      azione: stazioneAzioneTempoList.value[i].azione,
-      stazione: stazioneAzioneTempoList.value[i].stazione,
-      tempo: stazioneAzioneTempoList.value[i].tempo
+      stato: activeProgramsList.value[i],
+      azione: activeStationsList.value[i].azione,
+      stazione: activeStationsList.value[i].stazione,
+      tempo: activeStationsList.value[i].tempo
     }
     satData.value.push(newObj)
   }
 }
 
 async function getLastData() {
-  await checkStationStatus()
+  await checkProgramsStatus()
   fillSatData()
 }
 
