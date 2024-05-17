@@ -48,12 +48,12 @@
                     </th>
                 </tr>
             </thead>
-            <tr v-if="rowsData.length == [] && !loadingData">
+            <tr v-if="rowsData.length == [] && !isLoading">
                 <td colspan="9" class="w-full">
                     No Station
                 </td>
             </tr>
-            <tr v-if="loadingData">
+            <tr v-if="isLoading">
                 <td colspan="9" class="w-full">
                     <div class="flex justify-center">
                         <svg aria-hidden="true"
@@ -69,7 +69,7 @@
                     </div>
                 </td>
             </tr>
-            <tr v-for="(tData, index) in rowsData" :key="index">
+            <tr v-if="!isLoading" v-for="(tData, index) in rowsData" :key="index">
 
                 <td name="Sposta" class="w-10">
                     <div class="mp-div">
@@ -152,12 +152,12 @@
                             {{ groupObj.group }}
                         </option>
                     </select>
-                    <button type="button" class="filled_green mp-button mlw-30" @click="addStep()">{{ $t('addGroup')
+                    <button :disabled="isLoading" type="button" class="filled_green mp-button mlw-30" @click="addStep()">{{ $t('addGroup')
                         }}</button>
                 </div>
             </div>
             <div class="button-wrapper no-margin">
-                <MyButton type="submit" class="filled" :label="$t('save')" :loading="postControlIsLoading" />
+                <MyButton type="submit" class="filled" :label="$t('save')" :loading="isLoading" />
             </div>
         </div>
     </form>
@@ -189,15 +189,18 @@ const props = defineProps({
     id: String,
     programNumber: Number,
     base_reg: Number,
-    device_code: String
+    device_code: String,
+    parentIsLoading: Boolean
 })
 
 //state
 const dataStore = useDataStore()
 const { postControlIsLoading } = storeToRefs(useDataStore())
-const loadingData = ref(false)
+const localIsLoading = ref(false)
 //refactoring evStation from S10200
 let startEvStation = computed(() => (props.programNumber * 1000) + 10200);
+
+const isLoading = computed(() => localIsLoading.value || props.parentIsLoading || postControlIsLoading.value)
 
 const evStationValue = computed(() => {
     return Object.keys(evStation).
@@ -239,12 +242,6 @@ const grConfigParams = ref({
     device_code: null
 })
 
-const satConfigParams = ref({
-    fields: 'S10000,S10001,S10004,S10006',
-    measurement: 'SATPRGCONFIG1',
-    device_code: null
-})
-
 const evStationParams = ref({
     fields: [...Array(196)].map((_, index) => `S${10100 + index}`).join(','), //MV imposta il settaggio per il singolo programma index va da 1 a 30
     measurement: 'SATPRGTIMES1',
@@ -252,7 +249,6 @@ const evStationParams = ref({
 })
 
 let evConfig = null
-let satConfig = null
 let evStation = null
 
 defineExpose({
@@ -273,7 +269,6 @@ function refreshData() {
 }
 
 function setDeviceCode(deviceCode) {
-    satConfigParams.value.device_code = deviceCode
     evConfigParams.value.device_code = deviceCode
     evStationParams.value.device_code = deviceCode
     grConfigParams.value.device_code = deviceCode
@@ -296,7 +291,6 @@ function moveOnSelect(event, currentPos) {
 }
 
 function getProgramInfo(programNumber, base_reg) {
-    console.log('refreshing getProgramInfo')
     let programEnabledRegister = 'S' + (base_reg);
     let programNameRegister = "S" + (base_reg + 4);
     let programEnabled = dataStore.satConfig === undefined ? '0' : dataStore.satConfig[programEnabledRegister]
@@ -473,10 +467,13 @@ function groupingTableData() {
 }
 
 onMounted(async () => {
-    loadingData.value = true
+    localIsLoading.value = true
     setDeviceCode(props.device_code)
-    await dataStore.getLastGroupData(grConfigParams.value) //MV popolo le configurazioni dei gruppi
-    await onOptionChanged(props.programNumber, props.base_reg)
+
+    await Promise.all([
+        dataStore.getLastGroupData(grConfigParams.value),
+        onOptionChanged(props.programNumber, props.base_reg)
+    ])
 
     //Rimuovo i doppioni eventuali dalla lista di gruppi e stazioni
     var TmpEvGroups = [];
@@ -484,14 +481,12 @@ onMounted(async () => {
 
     evGroups = TmpEvGroups;
     TmpEvGroups = [];
-    loadingData.value = false
+    localIsLoading.value = false
 })
 
 
 
 function swapStep(oldIndex, newIndex) {
-    console.log("Old Index: ", oldIndex, "New Index: ", newIndex, "MaxRows: ", maxRows);
-
     var newPosition = newIndex;
     var oldPosition = oldIndex;
 
@@ -525,7 +520,6 @@ function swapStep(oldIndex, newIndex) {
 }
 
 function moveStep(index, direction) {
-    console.log("Index: ", index, "Direction: ", direction, "MaxRows: ", maxRows);
     //Muovo sopra
     if (direction == 0 && index == 0) {
         //non fare nulla
@@ -613,7 +607,6 @@ function addStep() {
 
 function removeProgramStep(step) {
     if (lastStep < 0) return;
-    console.log("Rimuovi: ", step);
     //if (rowsData.value.length > 1 && (step>=0 && step<rowsData.value.length))
     //{
     swapGroups.splice(step, 1)
@@ -775,31 +768,24 @@ function addRow(refresh = false) {
 //NB optionValue è il numero programma
 async function onOptionChanged(programNumber, base_reg) {
     rowsData.value = []
-    loadingData.value = true
-    console.log('option changed', 'start from', startStationTime.value)
-
-    satConfigParams.value.fields = String(
-        'S' + ((programNumber * 1000) + 10000) + ',' +
-        'S' + ((programNumber * 1000) + 10001) + ',' +
-        'S' + ((programNumber * 1000) + 10004) + ',' +
-        'S' + ((programNumber * 1000) + 10006))
+    localIsLoading.value = true
 
     evStationParams.value.fields = [...Array(196)].map((_, index) => `S${startStationTime.value + index}`).join(',');
-
-    satConfigParams.value.measurement = String('SATPRGCONFIG' + (programNumber + 1))
     evStationParams.value.measurement = String('SATPRGTIMES' + (programNumber + 1))
 
-    evConfig = (await dataAPI.getLast(evConfigParams.value)).data.data
-    satConfig = (await dataAPI.getLast(satConfigParams.value)).data.data
-    evStation = (await dataAPI.getLast(evStationParams.value)).data.data
-    console.log('evStation', evStation)
+    const promises = await Promise.all([
+        dataAPI.getLast(evConfigParams.value),
+        dataAPI.getLast(evStationParams.value)
+    ])
+
+    evConfig = promises[0]?.data?.data
+    evStation = promises[1]?.data?.data
 
     getProgramInfo(programNumber, base_reg)
     fillEvConfigData()
     groupingTableData()
     addRow(true)
-    console.log('rows data ', rowsData.value)
-    loadingData.value = false
+    localIsLoading.value = false
 
 }
 
