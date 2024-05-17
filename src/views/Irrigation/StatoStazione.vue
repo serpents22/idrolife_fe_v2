@@ -15,10 +15,10 @@
           <table>
             <thead>
               <tr>
-                <th>
+                <th class="text-center">
                   <span>{{ $t('station') }}</span>
                 </th>
-                <th>
+                <th class="text-center">
                   <span>{{ $t('status') }}</span>
                 </th>
                 <th>
@@ -57,12 +57,14 @@
                   <p>{{ tData.stazione }}</p>
                 </td>
                 <td>
-                  <Indicator :status="tData.stato" />
+                  <div class="w-full flex justify-center">
+                    <Indicator :status="tData.stato" />
+                  </div>
                 </td>
-                <td>
+                <td class="text-left">
                   <p>{{ tData.azione }}</p>
                 </td>
-                <td>
+                <td class="text-left">
                   <p>{{ tData.tempo }}</p>
                 </td>
               </tr>
@@ -114,7 +116,7 @@ const satStatParams = ref({
 
 const satData = ref([])
 const availableStationsList = ref([])
-const statoList = ref([])
+const activeStationsList = ref([])
 const loading = ref(true)
 
 async function checkStationStatus() {
@@ -150,7 +152,7 @@ async function checkStationStatus() {
   availableStationsList.value = Object.keys(groupedAvailabeStationsList.value)
 
   //check station data
-  statoList.value = []
+  activeStationsList.value = []
   let activeStation
   let activeStationFirstAddress = 40100
 
@@ -179,47 +181,50 @@ async function checkStationStatus() {
       azione: tmpAzione,
       tempo: tmpTempo
     }
-    statoList.value.push(newObj)
+    activeStationsList.value.push(newObj)
   }
+  console.log(activeStationsList.value)
 }
 
 function fillSatData() {
-  satData.value = []
+  let tmpSatData = []
   for (let i = 0; i < availableStationsList.value.length; i++) {
     let newObj = {
       stazione: availableStationsList.value[i],
-      stato: statoList.value[i].stato,
-      azione: statoList.value[i].azione,
-      tempo: statoList.value[i].tempo
+      stato: activeStationsList.value[i].stato,
+      azione: activeStationsList.value[i].azione,
+      tempo: activeStationsList.value[i].tempo
     }
-    satData.value.push(newObj)
+    tmpSatData.push(newObj)
   }
+  satData.value = tmpSatData
 }
 
 async function getLastData() {
-  console.log('fetching new data')
   await checkStationStatus()
   fillSatData()
 }
 
-let getLastDataInterval = null
+
+const delay = (time) => new Promise((resolve) => setTimeout(resolve, time))
+const whileState = ref(true)
 
 
-onBeforeMount(async () => {
+onMounted(async () => {
   await devicesStore.loadDevice(props.id)
   evConfigParams.value.device_code = devicesStore.deviceData.code
   satStatParams.value.device_code = devicesStore.deviceData.code
   title.value = 'Idrosat:' + devicesStore.deviceData.name
   await getLastData()
   loading.value = false
-})
-
-onMounted(() => {
-  getLastDataInterval = setInterval(getLastData, 5000)
+  while (whileState.value) {
+    getLastData()
+    await delay(5000)
+  }
 })
 
 onUnmounted(() => {
-  clearInterval(getLastDataInterval)
+  whileState.value = false
 })
 
 
@@ -268,7 +273,7 @@ input[type=text], input[type=password], input[type=number] {
 }
 
 .table-container td {
-  @apply py-[10px] px-[10px] bg-[#DDE8FA]/60 backdrop-blur-lg
+  @apply py-[10px] px-[10px] bg-[#DDE8FA]/60 backdrop-blur-lg text-center
 }
 
 .table-container th, td {
