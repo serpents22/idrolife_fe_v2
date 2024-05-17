@@ -2,7 +2,7 @@
   <div class="parametri-container">
     <sidebar :noSocial="true" :backOn="true" />
     <div class="device-container">
-      <!-- <deviceCard :small=true :content="newData" /> -->
+      <deviceCard :small=true :content="newData" />
       <div class="xs-icon-card">
         <img src="@/assets/parametri_generali.png">
         <p>{{ $t('generalParameter') }}</p>
@@ -245,7 +245,7 @@
             </tbody>
           </table>
           <div class="button-wrapper">
-            <MyButton type="submit" class="filled" :label="$t('save')" :loading="postControlIsLoading" />
+            <MyButton type="submit" class="filled" :label="$t('save')" :loading="isLoading" />
           </div>
         </form>
 
@@ -294,7 +294,7 @@ const deviceCard = defineAsyncComponent(
 const deviceStore = useDevicesStore()
 const dataStore = useDataStore()
 const { postControlIsLoading } = storeToRefs(useDataStore())
-const { isLoading } = storeToRefs(useDevicesStore())
+const { isLoading: deviceIsLoading } = storeToRefs(useDevicesStore())
 const newData = computed(() => {
   return [deviceStore.deviceData]
 })
@@ -458,6 +458,7 @@ const postSatStatData = ref({
 const loadingData = ref(false)
 const scheduleStartRef = ref(null)
 const stationDurationRef = ref(null)
+const isLoading = computed(() => loadingData.value || deviceIsLoading.value || postControlIsLoading.value)
 
 onMounted(async () => {
   loadingData.value = true

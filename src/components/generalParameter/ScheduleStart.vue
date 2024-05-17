@@ -12,7 +12,7 @@
                     </th>
                     <th class="w-40">
                         <label v-if="endProgramMode == 1">{{ $t('cycles') }}</label>
-                        <label v-if="endProgramMode == 0">{{ $t('endTime') }}</label>
+                        <label v-else-if="endProgramMode == 0">{{ $t('endTime') }}</label>
                     </th>
                 </tr>
             </thead>
@@ -62,7 +62,7 @@
                             <label>{{ $t('cycles') }}</label>
                         </div>
                     </td>
-                    <td name="OrarioFine1" v-if="endProgramMode == 0" :disabled="satData.isAuto1 === false">
+                    <td name="OrarioFine1" v-else-if="endProgramMode == 0" :disabled="satData.isAuto1 === false">
                         <div class="mp-flex">
                             <div class="flex gap-2 items-center td-gap">
                                 <input v-model="satData.Time1H" class="w-30" :disabled="satData.isAuto1 === false"
@@ -76,6 +76,7 @@
                             </div>
                         </div>
                     </td>
+                    <td v-else />
                 </tr>
                 <tr name="riga2" class="w-full">
                     <td>
@@ -105,7 +106,7 @@
                             <label>{{ $t('cycles') }}</label>
                         </div>
                     </td>
-                    <td name="OrarioFine3" v-if="endProgramMode == 0">
+                    <td name="OrarioFine3" v-else-if="endProgramMode == 0">
                         <div class="mp-flex">
                             <div class="flex gap-2 items-center td-gap">
                                 <input v-model="satData.Time3H" class="w-30" :disabled="satData.isAuto2 === false"
@@ -119,6 +120,7 @@
                             </div>
                         </div>
                     </td>
+                    <td v-else />
                 </tr>
                 <tr name="riga3" class="w-full">
                     <td>
@@ -148,7 +150,7 @@
                             <label>{{ $t('cycles') }}</label>
                         </div>
                     </td>
-                    <td name="OrarioFine5" v-if="endProgramMode == 0">
+                    <td name="OrarioFine5" v-else-if="endProgramMode == 0">
                         <div class="mp-flex">
                             <div class="flex gap-2 items-center td-gap">
                                 <input v-model="satData.Time5H" class="w-30" :disabled="satData.isAuto3 === false"
@@ -162,6 +164,7 @@
                             </div>
                         </div>
                     </td>
+                    <td v-else />
                 </tr>
                 <tr name="riga4" class="w-full">
                     <td>
@@ -191,7 +194,7 @@
                             <label>{{ $t('cycles') }}</label>
                         </div>
                     </td>
-                    <td name="OrarioFine7" v-if="endProgramMode == 0">
+                    <td name="OrarioFine7" v-else-if="endProgramMode == 0">
                         <div class="mp-flex">
                             <div class="flex gap-2 items-center td-gap">
                                 <input v-model="satData.Time7H" class="w-30" :disabled="satData.isAuto4 === false"
@@ -205,11 +208,12 @@
                             </div>
                         </div>
                     </td>
+                    <td v-else />
                 </tr>
             </tbody>
         </table>
         <div class="button-wrapper">
-            <MyButton type="submit" class="filled" :label="$t('save')" :loading="postControlIsLoading" />
+            <MyButton type="submit" class="filled" :label="$t('save')" :loading="isLoading" />
         </div>
     </form>
 </template>
@@ -217,7 +221,7 @@
 <script setup>
 import { useDataStore } from '@/stores/DataStore'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref } from '@vue/runtime-core'
+import { computed, ref } from '@vue/runtime-core'
 import MyButton from '@/components/button/BaseButton.vue'
 
 const dataStore = useDataStore()
@@ -239,25 +243,22 @@ const postSatConData = ref({
     payload: {}
 })
 
-const endProgramRegister = computed(() => "S" + (base_reg + 3))
-const endProgramMode = computed(() => props.programConfig[endProgramRegister])
-const nameRegister = computed(() => "S" + (base_reg.value + 4))
+const endProgramRegister = computed(() => "S" + (props.base_reg + 3))
+const endProgramMode = computed(() => props.programConfig[endProgramRegister.value])
+const nameRegister = computed(() => "S" + (props.base_reg + 4))
 
 const localIsLoading = ref(false)
-const isLoading = computed(() => localIsLoading.value || props.parentIsLoading)
+const isLoading = computed(() => localIsLoading.value || props.parentIsLoading || postControlIsLoading.value)
 
 const satData = computed(() => {
     let tempSatData = {}
     const { base_reg, programStart, programConfig } = props
 
-    console.log('satData', base_reg, programStart, programConfig)
-
-    if (programStart.value === undefined || programConfig.value === undefined) {
+    if (programStart === undefined || programConfig === undefined) {
         return tempSatData
     }
 
     let programRegister = "S" + (base_reg + 50)
-    console.log('tmpOreMin0', programStart, programRegister, programStart[programRegister])
     let tmpOreMin0 = programStart === undefined ? undefined : programStart[programRegister].split('.')
 
     programRegister = "S" + (base_reg + 52);
@@ -269,7 +270,7 @@ const satData = computed(() => {
     programRegister = "S" + (base_reg + 56);
     let tmpOreMin6 = programStart === undefined ? undefined : programStart[programRegister].split('.')
 
-    tempSatData.programName = programConfig[nameRegister]
+    tempSatData.programName = programConfig[nameRegister.value]
 
     tempSatData.ore0 = tmpOreMin0 === undefined ? 0 : tmpOreMin0[0]
     tempSatData.min0 = tmpOreMin0 === undefined ? 0 : tmpOreMin0[1]
