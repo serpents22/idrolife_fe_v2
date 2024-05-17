@@ -77,7 +77,7 @@ export const useDevicesStore = defineStore('impianto', () => {
     } 
   }
 
-  const loadDevice = async (id, withMeteo = true, withSatStat = true) => {
+  const loadDevice = async (id) => {
     isLoading.value = true
     try {
       const res = await devicesApi.getDevice(id)
@@ -93,18 +93,16 @@ export const useDevicesStore = defineStore('impianto', () => {
         device_code: deviceData.value.code
       }) 
       
-      if (withMeteo)  {
-        await dataStore.getLastMeteoStat(params.value)
-        deviceData.value.pressione = dataStore.satStat === undefined ? '-' : dataStore.meteoStat.M33
-      }
+      await Promise.all([
+        dataStore.getLastMeteoStat(params.value),
+        dataStore.getLastSatStat(satParams.value)
+      ])
 
-      if (withSatStat) {
-        await dataStore.getLastSatStat(satParams.value)
-        deviceData.value.prog = dataStore.satStat === undefined ? '-' : dataStore.satStat.S16
-        deviceData.value.station = dataStore.satStat === undefined ? '-' : dataStore.satStat.S18
-        deviceData.value.contatore = dataStore.satStat === undefined ? '-' : dataStore.satStat.S4
-        deviceData.value.portarta = dataStore.satStat === undefined ? '-' : dataStore.satStat.S4
-      }
+      deviceData.value.pressione = dataStore.satStat === undefined ? '-' : dataStore.meteoStat.M33
+      deviceData.value.prog = dataStore.satStat === undefined ? '-' : dataStore.satStat.S16
+      deviceData.value.station = dataStore.satStat === undefined ? '-' : dataStore.satStat.S18
+      deviceData.value.contatore = dataStore.satStat === undefined ? '-' : dataStore.satStat.S4
+      deviceData.value.portarta = dataStore.satStat === undefined ? '-' : dataStore.satStat.S4
 
       // let tmpS24 = dataStore.satStat === undefined ? undefined : dataStore.satStat.S24
       // let splitS24, tmpProg, tmpStat

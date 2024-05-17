@@ -262,8 +262,16 @@
           :parentIsLoading="loadingData"
         />
 
-        <!-- <StationDuration v-if="deviceStore.deviceData.code" :device_code="deviceStore.deviceData.code"
-          :base_reg="base_reg" :programNumber="programNumber" :id="id" class="mt-10" ref="stationDurationRef" /> -->
+        <StationDuration
+          v-if="deviceStore.deviceData.code"
+          :device_code="deviceStore.deviceData.code"
+          :base_reg="base_reg"
+          :programNumber="programNumber"
+          :id="id"
+          class="mt-10"
+          ref="stationDurationRef" 
+          :parentIsLoading="loadingData"
+        />
       </div>
     </div>
   </div>
@@ -463,7 +471,7 @@ const isLoading = computed(() => loadingData.value || deviceIsLoading.value || p
 onMounted(async () => {
   loadingData.value = true
   
-  await deviceStore.loadDevice(props.id, false, false)
+  await deviceStore.loadDevice(props.id)
   
   satConfigParams.value.device_code = deviceStore.deviceData.code
   satStatParams.value.device_code = deviceStore.deviceData.code
