@@ -1,11 +1,8 @@
-import axios from "axios";
 import apiClient from "./API";
 
-
-
 export default {
-  getLast(params) {
-    return apiClient.get('data/last',{ params })
+  getLast(params, signal = null) {
+    return apiClient.get('data/last',{ params }, { signal })
   },
 
   getHistory(params) {

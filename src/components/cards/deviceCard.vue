@@ -59,6 +59,7 @@ import { useDevicesStore } from '@/stores/DevicesStore'
 import Indicator from '@/components/Indicator.vue'
 import { useDataStore } from '@/stores/DataStore'
 import { ref } from '@vue/runtime-core'
+import axios from 'axios'
 
 export default {
   components: {
@@ -79,7 +80,8 @@ export default {
     this.dataInterval = setInterval(async () => {
       this.content.forEach(async (device, index) => {
         this.meteoStatParams.device_code = device.code
-        await this.dataStore.getLastMeteoStat(this.meteoStatParams)
+        this.meteoController.abort()
+        await this.dataStore.getLastMeteoStat(this.meteoStatParams, this.meteoController.signal)
         if (this.dataStore.meteoStat !== undefined) { 
           this.content[index].systemPressure = this.dataStore.meteoStat.M33
         } else {
@@ -91,7 +93,19 @@ export default {
     this.dataInterval2 = setInterval(async () => {
       this.content.forEach(async (device, index) => {
         this.satStatParams.device_code = device.code
-        await this.dataStore.getLastSatStat(this.satStatParams)
+
+        this.satStatController.abort()
+        
+        try {
+          await this.dataStore.getLastSatStat(this.satStatParams, this.satStatController.signal)
+        } catch (error) {
+          if (axios.isCancel(error)) {
+            console.log('Request was cancelled');
+          } else {
+            console.error('Request failed', error);
+          }
+        }
+
         if (this.dataStore.satStat !== undefined) {
           let timeNow = new Date(Date.now())
           this.S8 = new Date((this.dataStore.satStat.S8 ) * 1000)
@@ -138,9 +152,13 @@ export default {
     })
     let dataInterval = null
     let dataInterval2 = null
+    let meteoController = new AbortController()
+    let satStatController = new AbortController()
     let S8
 
     return {
+      meteoController,
+      satStatController,
       devicesStore,
       dataStore,
       satStatParams,
