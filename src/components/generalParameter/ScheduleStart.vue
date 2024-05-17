@@ -259,16 +259,16 @@ const satData = computed(() => {
     }
 
     let programRegister = "S" + (base_reg + 50)
-    let tmpOreMin0 = programStart === undefined ? undefined : programStart[programRegister].split('.')
+    let tmpOreMin0 = programStart === undefined ? undefined : programStart[programRegister]?.split('.')
 
     programRegister = "S" + (base_reg + 52);
-    let tmpOreMin2 = programStart === undefined ? undefined : programStart[programRegister].split('.')
+    let tmpOreMin2 = programStart === undefined ? undefined : programStart[programRegister]?.split('.')
 
     programRegister = "S" + (base_reg + 54);
-    let tmpOreMin4 = programStart === undefined ? undefined : programStart[programRegister].split('.')
+    let tmpOreMin4 = programStart === undefined ? undefined : programStart[programRegister]?.split('.')
 
     programRegister = "S" + (base_reg + 56);
-    let tmpOreMin6 = programStart === undefined ? undefined : programStart[programRegister].split('.')
+    let tmpOreMin6 = programStart === undefined ? undefined : programStart[programRegister]?.split('.')
 
     tempSatData.programName = programConfig[nameRegister.value]
 
@@ -290,24 +290,24 @@ const satData = computed(() => {
 
     if (endProgramMode.value == 0) {
         programRegister = "S" + (base_reg + 51);
-        var timeValue = programStart === undefined ? '0.00' : String(programStart[programRegister]).split('.')
-        tempSatData.Time1H = timeValue[0]
-        tempSatData.Time1M = timeValue[1]
+        var timeValue = programStart === undefined ? '0.00' : String(programStart[programRegister])?.split('.')
+        tempSatData.Time1H = timeValue?.length > 0 ? timeValue[0] : null
+        tempSatData.Time1M = timeValue?.length > 1 ? timeValue[1] : null
 
         programRegister = "S" + (base_reg + 53);
-        timeValue = programStart === undefined ? '0.00' : programStart[programRegister].split('.')
-        tempSatData.Time3H = timeValue[0]
-        tempSatData.Time3M = timeValue[1]
+        timeValue = programStart === undefined ? '0.00' : programStart[programRegister]?.split('.')
+        tempSatData.Time3H = timeValue?.length > 0 ? timeValue[0] : null
+        tempSatData.Time3M = timeValue?.length > 1 ? timeValue[1] : null
 
         programRegister = "S" + (base_reg + 55);
-        timeValue = programStart === undefined ? '0.00' : programStart[programRegister].split('.')
-        tempSatData.Time5H = timeValue[0]
-        tempSatData.Time5M = timeValue[1]
+        timeValue = programStart === undefined ? '0.00' : programStart[programRegister]?.split('.')
+        tempSatData.Time5H = timeValue?.length > 0 ? timeValue[0] : null
+        tempSatData.Time5M = timeValue?.length > 1 ? timeValue[1] : null
 
         programRegister = "S" + (base_reg + 57);
-        timeValue = programStart === undefined ? '0.00' : programStart[programRegister].split('.')
-        tempSatData.Time7H = timeValue[0]
-        tempSatData.Time7M = timeValue[1]
+        timeValue = programStart === undefined ? '0.00' : programStart[programRegister]?.split('.')
+        tempSatData.Time7H = timeValue?.length > 0 ? timeValue[0] : null
+        tempSatData.Time7M = timeValue?.length > 1 ? timeValue[1] : null
     } else {
         //Lavora a cicli
         programRegister = "S" + (base_reg + 51);
