@@ -17,7 +17,7 @@
                 </tr>
             </thead>
 
-            <tr v-if="loadingData">
+            <tr v-if="isLoading">
                 <td colspan="3" class="w-full">
                     <div class="flex justify-center">
                         <svg aria-hidden="true"
@@ -33,7 +33,7 @@
                     </div>
                 </td>
             </tr>
-            <tbody v-if="!loadingData">
+            <tbody v-if="!isLoading">
                 <tr name="Riga1" class="w-full">
                     <td name="Attivo">
                         <div class="flex gap-2 items-center">
@@ -219,7 +219,6 @@ import { useDataStore } from '@/stores/DataStore'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from '@vue/runtime-core'
 import MyButton from '@/components/button/BaseButton.vue'
-import { watch } from 'vue'
 
 const dataStore = useDataStore()
 const { postControlIsLoading } = storeToRefs(useDataStore())
@@ -231,7 +230,8 @@ const props = defineProps({
     base_reg: Number,
     device_code: String,
     programConfig: Object,
-    programStart: Object
+    programStart: Object,
+    parentIsLoading: Boolean
 })
 
 const postSatConData = ref({
@@ -239,11 +239,12 @@ const postSatConData = ref({
     payload: {}
 })
 
-let endProgramMode = 0
-let endProgramRegister = computed(() => "S" + (base_reg + 3))
+const endProgramRegister = computed(() => "S" + (base_reg + 3))
+const endProgramMode = computed(() => props.programConfig[endProgramRegister])
 const nameRegister = computed(() => "S" + (base_reg.value + 4))
 
-const loadingData = ref(false)
+const localIsLoading = ref(false)
+const isLoading = computed(() => localIsLoading.value || props.parentIsLoading)
 
 const satData = computed(() => {
     let tempSatData = {}
@@ -286,9 +287,7 @@ const satData = computed(() => {
     tempSatData.min6 = tmpOreMin6 === undefined ? 0 : tmpOreMin6[1]
     tempSatData.isAuto4 = tmpOreMin6 === undefined ? false : Boolean(Number(tmpOreMin6[2]))
 
-    endProgramMode = programConfig[endProgramRegister]
-
-    if (endProgramMode == 0) {
+    if (endProgramMode.value == 0) {
         programRegister = "S" + (base_reg + 51);
         var timeValue = programStart === undefined ? '0.00' : String(programStart[programRegister]).split('.')
         tempSatData.Time1H = timeValue[0]
@@ -337,12 +336,12 @@ function refreshData() {
 function onSubmit() {
     const { programNumber } = props
     
-    loadingData.value = true
+    localIsLoading.value = true
 
     postSatConData.value.payload = {}
     postSatConData.value.command = String('SATPRGSTARTS' + (programNumber + 1))
 
-    if (endProgramMode == 0) {
+    if (endProgramMode.value == 0) {
         satData.value.S1 = String(satData.value.Time1H) + "." + String(satData.value.Time1M)
         satData.value.S3 = String(satData.value.Time3H) + "." + String(satData.value.Time3M)
         satData.value.S5 = String(satData.value.Time5H) + "." + String(satData.value.Time5M)
@@ -363,7 +362,7 @@ function onSubmit() {
 
     dataStore.postControl(props.device_code, postSatConData.value)
 
-    loadingData.value = false
+    localIsLoading.value = false
 }
 
 </script>

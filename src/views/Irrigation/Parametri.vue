@@ -259,6 +259,7 @@
           ref="scheduleStartRef" 
           :programConfig="dataStore.satConfig"
           :programStart="programStart"
+          :parentIsLoading="loadingData"
         />
 
         <!-- <StationDuration v-if="deviceStore.deviceData.code" :device_code="deviceStore.deviceData.code"
