@@ -2,7 +2,7 @@
   <div class="parametri-container">
     <sidebar :noSocial="true" :backOn="true" />
     <div class="device-container">
-      <deviceCard :small=true :content="newData" />
+      <!-- <deviceCard :small=true :content="newData" /> -->
       <div class="xs-icon-card">
         <img src="@/assets/parametri_generali.png">
         <p>{{ $t('generalParameter') }}</p>
@@ -249,11 +249,20 @@
           </div>
         </form>
 
-        <ScheduleStart v-if="deviceStore.deviceData.code" :device_code="deviceStore.deviceData.code"
-          :base_reg="base_reg" :programNumber="programNumber" :id="id" class="mt-10" ref="scheduleStartRef" />
+        <ScheduleStart 
+          v-if="deviceStore.deviceData.code" 
+          :device_code="deviceStore.deviceData.code"
+          :base_reg="base_reg" 
+          :programNumber="programNumber" 
+          :id="id" 
+          class="mt-10" 
+          ref="scheduleStartRef" 
+          :programConfig="dataStore.satConfig"
+          :programStart="programStart"
+        />
 
-        <StationDuration v-if="deviceStore.deviceData.code" :device_code="deviceStore.deviceData.code"
-          :base_reg="base_reg" :programNumber="programNumber" :id="id" class="mt-10" ref="stationDurationRef" />
+        <!-- <StationDuration v-if="deviceStore.deviceData.code" :device_code="deviceStore.deviceData.code"
+          :base_reg="base_reg" :programNumber="programNumber" :id="id" class="mt-10" ref="stationDurationRef" /> -->
       </div>
     </div>
   </div>
@@ -268,6 +277,7 @@ import MyButton from '@/components/button/BaseButton.vue'
 import { useI18n } from 'vue-i18n'
 import ScheduleStart from '@/components/generalParameter/ScheduleStart.vue'
 import StationDuration from '@/components/generalParameter/StationDuration.vue'
+import dataAPI from '@/services/dataAPI'
 
 const { t } = useI18n()
 //props
@@ -304,8 +314,14 @@ const satStatParams = ref({
   measurement: 'SATSTAT',
   device_code: null
 })
-const satData = ref({})
 
+const programStartParams = ref({
+  fields: 'S10050,S10051,S10052,S10053,S10054,S10055,S10056,S10057',
+  measurement: 'SATPRGSTARTS1',
+  device_code: null
+})
+
+let programStart = ref({})
 
 //----Definizione Globali----
 let programNumber = 0;
@@ -444,13 +460,16 @@ const stationDurationRef = ref(null)
 
 onMounted(async () => {
   loadingData.value = true
-  await deviceStore.loadDevice(props.id)
+  
+  await deviceStore.loadDevice(props.id, false, false)
+  
   satConfigParams.value.device_code = deviceStore.deviceData.code
   satStatParams.value.device_code = deviceStore.deviceData.code
+  programStartParams.value.device_code = deviceStore.deviceData.code
+  
   title.value = 'Idrosat:' + deviceStore.deviceData.name
-  await dataStore.getLastSatStat(satStatParams.value)
 
-  await dataStore.getLastSatConfig(satConfigParams.value)
+  await getData()
 
   for (var x = 0; x < 14; x++) {
     biWeekCalendar.push({ 'day': daysName[x], 'status': 0 })
@@ -458,7 +477,6 @@ onMounted(async () => {
 
   fillSatData()
   loadingData.value = false
-
 })
 
 function refreshStationDuration() {
@@ -474,7 +492,6 @@ function refreshScheduleStart() {
 }
 
 function onSubmit() {
-  console.log(satData.value)
   postSatConData.value.payload = {}
 
   postSatConData.value.command = String('SATPRGCONFIG' + (programNumber + 1))
@@ -529,11 +546,9 @@ function onSubmit() {
   postSatConData.value.payload[miniFertRegister] = String(programData.value.miniFert)
   postSatConData.value.payload[remainingDaysRegister] = String(programData.value.remainingDays)
 
-  console.log(postSatConData.value.payload)
   dataStore.postControl(satConfigParams.value.device_code, postSatConData.value)
 
   postSatStatData.value.payload.S71 = String(programData.value.currentWeek)
-  console.log(postSatStatData.value.payload)
 
   dataStore.postControl(satStatParams.value.device_code, postSatStatData.value)
 
@@ -547,7 +562,15 @@ function onSubmit() {
   })
 }
 
+async function getData() {
+  const promises = await Promise.all([
+    dataAPI.getLast(programStartParams.value), // programStart
+    dataStore.getLastSatConfig(satConfigParams.value),
+    dataStore.getLastSatStat(satStatParams.value),
+  ])
 
+  programStart.value = promises[0]?.data?.data
+}
 
 async function changeOption(e) {
   loadingData.value = true
@@ -559,6 +582,9 @@ async function changeOption(e) {
   dataStore.postControl(satStatParams.value.device_code, postSatConCommand.value)
 
   base_reg = (10000 + (programNumber * 1000))
+
+  satConfigParams.value.measurement = String('SATPRGCONFIG' + e.target.value)
+  programStartParams.value.measurement = String('SATPRGSTARTS' + e.target.value)
 
   satConfigParams.value.fields = String(
     'S' + base_reg + ',' +
@@ -573,15 +599,22 @@ async function changeOption(e) {
     'S' + (base_reg + 19) + ',' +
     'S' + (base_reg + 21) + ',')
 
-  satConfigParams.value.measurement = String('SATPRGCONFIG' + e.target.value)
-  await dataStore.getLastSatConfig(satConfigParams.value)
-  await dataStore.getLastSatStat(satStatParams.value)
+  programStartParams.value.fields = String(
+    'S' + (base_reg + 50) + ',' +
+    'S' + (base_reg + 51) + ',' +
+    'S' + (base_reg + 52) + ',' +
+    'S' + (base_reg + 53) + ',' +
+    'S' + (base_reg + 54) + ',' +
+    'S' + (base_reg + 55) + ',' +
+    'S' + (base_reg + 56) + ',' +
+    'S' + (base_reg + 57) + ','
+  )
+ 
+  await getData()
 
   fillSatData()
   loadingData.value = false
-
 }
-
 
 let daysName = [t('monday'), t('tuesday'), t('wednesday'), t('thursday'), t('friday'), t('saturday'), t('sunday'), t('monday'), t('tuesday'), t('wednesday'), t('thursday'), t('friday'), t('saturday'), t('sunday')]
 ///Inizializzo la matrice per il rendering

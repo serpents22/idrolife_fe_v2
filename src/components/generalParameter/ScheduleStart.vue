@@ -220,7 +220,6 @@ import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from '@vue/runtime-core'
 import MyButton from '@/components/button/BaseButton.vue'
 import { watch } from 'vue'
-import dataAPI from '@/services/dataAPI'
 
 const dataStore = useDataStore()
 const { postControlIsLoading } = storeToRefs(useDataStore())
@@ -230,25 +229,9 @@ const props = defineProps({
     id: String,
     programNumber: Number,
     base_reg: Number,
-    device_code: String
-})
-
-const satConfigParams = ref({
-    fields: 'S10050,S10051,S10052,S10053,S10054,S10055,S10056,S10057',
-    measurement: 'SATPRGSTARTS1',
-    device_code: props.device_code
-})
-
-const programConfigParams = ref({
-    fields: 'S10002,S10003',
-    measurement: 'SATPRGCONFIG1',
-    device_code: props.device_code
-})
-
-const progConfigParams = ref({
-    fields: 'S10004',
-    measurement: 'SATPRGCONFIG1',
-    device_code: props.device_code
+    device_code: String,
+    programConfig: Object,
+    programStart: Object
 })
 
 const postSatConData = ref({
@@ -256,155 +239,106 @@ const postSatConData = ref({
     payload: {}
 })
 
-const satData = ref({})
 let endProgramMode = 0
-let endProgramRegister = null
+let endProgramRegister = computed(() => "S" + (base_reg + 3))
 const nameRegister = computed(() => "S" + (base_reg.value + 4))
 
-let programConfig = null
-let satStart = null
-let progConfig = null
 const loadingData = ref(false)
+
+const satData = computed(() => {
+    let tempSatData = {}
+    const { base_reg, programStart, programConfig } = props
+
+    console.log('satData', base_reg, programStart, programConfig)
+
+    if (programStart.value === undefined || programConfig.value === undefined) {
+        return tempSatData
+    }
+
+    let programRegister = "S" + (base_reg + 50)
+    console.log('tmpOreMin0', programStart, programRegister, programStart[programRegister])
+    let tmpOreMin0 = programStart === undefined ? undefined : programStart[programRegister].split('.')
+
+    programRegister = "S" + (base_reg + 52);
+    let tmpOreMin2 = programStart === undefined ? undefined : programStart[programRegister].split('.')
+
+    programRegister = "S" + (base_reg + 54);
+    let tmpOreMin4 = programStart === undefined ? undefined : programStart[programRegister].split('.')
+
+    programRegister = "S" + (base_reg + 56);
+    let tmpOreMin6 = programStart === undefined ? undefined : programStart[programRegister].split('.')
+
+    tempSatData.programName = programConfig[nameRegister]
+
+    tempSatData.ore0 = tmpOreMin0 === undefined ? 0 : tmpOreMin0[0]
+    tempSatData.min0 = tmpOreMin0 === undefined ? 0 : tmpOreMin0[1]
+    tempSatData.isAuto1 = tmpOreMin0 === undefined ? false : Boolean(Number(tmpOreMin0[2]))
+
+    tempSatData.ore2 = tmpOreMin2 === undefined ? 0 : tmpOreMin2[0]
+    tempSatData.min2 = tmpOreMin2 === undefined ? 0 : tmpOreMin2[1]
+    tempSatData.isAuto2 = tmpOreMin2 === undefined ? false : Boolean(Number(tmpOreMin2[2]))
+
+    tempSatData.ore4 = tmpOreMin4 === undefined ? 0 : tmpOreMin4[0]
+    tempSatData.min4 = tmpOreMin4 === undefined ? 0 : tmpOreMin4[1]
+    tempSatData.isAuto3 = tmpOreMin4 === undefined ? false : Boolean(Number(tmpOreMin4[2]))
+
+    tempSatData.ore6 = tmpOreMin6 === undefined ? 0 : tmpOreMin6[0]
+    tempSatData.min6 = tmpOreMin6 === undefined ? 0 : tmpOreMin6[1]
+    tempSatData.isAuto4 = tmpOreMin6 === undefined ? false : Boolean(Number(tmpOreMin6[2]))
+
+    endProgramMode = programConfig[endProgramRegister]
+
+    if (endProgramMode == 0) {
+        programRegister = "S" + (base_reg + 51);
+        var timeValue = programStart === undefined ? '0.00' : String(programStart[programRegister]).split('.')
+        tempSatData.Time1H = timeValue[0]
+        tempSatData.Time1M = timeValue[1]
+
+        programRegister = "S" + (base_reg + 53);
+        timeValue = programStart === undefined ? '0.00' : programStart[programRegister].split('.')
+        tempSatData.Time3H = timeValue[0]
+        tempSatData.Time3M = timeValue[1]
+
+        programRegister = "S" + (base_reg + 55);
+        timeValue = programStart === undefined ? '0.00' : programStart[programRegister].split('.')
+        tempSatData.Time5H = timeValue[0]
+        tempSatData.Time5M = timeValue[1]
+
+        programRegister = "S" + (base_reg + 57);
+        timeValue = programStart === undefined ? '0.00' : programStart[programRegister].split('.')
+        tempSatData.Time7H = timeValue[0]
+        tempSatData.Time7M = timeValue[1]
+    } else {
+        //Lavora a cicli
+        programRegister = "S" + (base_reg + 51);
+        tempSatData.S1 = programStart === undefined ? 0 : programStart[programRegister]
+
+        programRegister = "S" + (base_reg + 53);
+        tempSatData.S3 = programStart === undefined ? 0 : programStart[programRegister]
+
+        programRegister = "S" + (base_reg + 55);
+        tempSatData.S5 = programStart === undefined ? 0 : programStart[programRegister]
+
+        programRegister = "S" + (base_reg + 57);
+        tempSatData.S7 = programStart === undefined ? 0 : programStart[programRegister]
+    }
+
+    return tempSatData
+})
 
 defineExpose({
     refreshData
 })
 
-onMounted(() => {
-    loadingData.value = true
-    endProgramRegister = "S" + Number(props.base_reg + 3)
-
-    if (props.device_code) {
-        setDeviceCode(props.device_code)
-        onOptionChanged(props.programNumber, props.base_reg)
-    }
-    loadingData.value = false
-})
-
-watch(() => props.device_code, async (newDeviceCode) => {
-    setDeviceCode(newDeviceCode)
-})
-
-watch(() => [props.programNumber, props.base_reg], ([newProgNum, newBaseReg], _) => {
-    onOptionChanged(newProgNum, newBaseReg)
-})
-
 function refreshData() {
-    onOptionChanged(props.programNumber, props.base_reg)
-}
-
-function setDeviceCode(deviceCode) {
-    programConfigParams.value.device_code = deviceCode
-    satConfigParams.value.device_code = deviceCode
-    progConfigParams.value.device_code = deviceCode
-}
-
-function onOptionChanged(programNumber, base_reg) {
-    loadingData.value = true
-    console.log('chandeg')
-    let startReg = 50
-    satConfigParams.value.fields = String(
-        'S' + (base_reg + startReg++) + ',' +
-        'S' + (base_reg + startReg++) + ',' +
-        'S' + (base_reg + startReg++) + ',' +
-        'S' + (base_reg + startReg++) + ',' +
-        'S' + (base_reg + startReg++) + ',' +
-        'S' + (base_reg + startReg++) + ',' +
-        'S' + (base_reg + startReg++) + ',' +
-        'S' + (base_reg + startReg++)
-    )
-
-    progConfigParams.value.fields = String(
-        'S' + (base_reg + 4))
-
-    satConfigParams.value.measurement = String('SATPRGSTARTS' + (programNumber + 1))
-    progConfigParams.value.measurement = String('SATPRGCONFIG' + (programNumber + 1))
-
-    fillSatData()
-    loadingData.value = false
-
-}
-
-async function fillSatData() {
-    const { base_reg } = props
-
-    programConfig = (await dataAPI.getLast(programConfigParams.value)).data.data
-    satStart = (await dataAPI.getLast(satConfigParams.value)).data.data
-    progConfig = (await dataAPI.getLast(progConfigParams.value)).data.data
-
-    let programRegister = "S" + (base_reg + 50)
-    console.log('satstart', satStart)
-    let tmpOreMin0 = satStart === undefined ? undefined : satStart[programRegister].split('.')
-
-    programRegister = "S" + (base_reg + 52);
-    let tmpOreMin2 = satStart === undefined ? undefined : satStart[programRegister].split('.')
-
-    programRegister = "S" + (base_reg + 54);
-    let tmpOreMin4 = satStart === undefined ? undefined : satStart[programRegister].split('.')
-
-    programRegister = "S" + (base_reg + 56);
-    let tmpOreMin6 = satStart === undefined ? undefined : satStart[programRegister].split('.')
-
-    satData.value.programName = progConfig[nameRegister]
-
-    satData.value.ore0 = tmpOreMin0 === undefined ? 0 : tmpOreMin0[0]
-    satData.value.min0 = tmpOreMin0 === undefined ? 0 : tmpOreMin0[1]
-    satData.value.isAuto1 = tmpOreMin0 === undefined ? false : Boolean(Number(tmpOreMin0[2]))
-
-    satData.value.ore2 = tmpOreMin2 === undefined ? 0 : tmpOreMin2[0]
-    satData.value.min2 = tmpOreMin2 === undefined ? 0 : tmpOreMin2[1]
-    satData.value.isAuto2 = tmpOreMin2 === undefined ? false : Boolean(Number(tmpOreMin2[2]))
-
-    satData.value.ore4 = tmpOreMin4 === undefined ? 0 : tmpOreMin4[0]
-    satData.value.min4 = tmpOreMin4 === undefined ? 0 : tmpOreMin4[1]
-    satData.value.isAuto3 = tmpOreMin4 === undefined ? false : Boolean(Number(tmpOreMin4[2]))
-
-    satData.value.ore6 = tmpOreMin6 === undefined ? 0 : tmpOreMin6[0]
-    satData.value.min6 = tmpOreMin6 === undefined ? 0 : tmpOreMin6[1]
-    satData.value.isAuto4 = tmpOreMin6 === undefined ? false : Boolean(Number(tmpOreMin6[2]))
-
-    endProgramMode = programConfig[endProgramRegister]
-
-    if (endProgramMode == 0) {
-
-        programRegister = "S" + (base_reg + 51);
-        var timeValue = satStart === undefined ? '0.00' : String(satStart[programRegister]).split('.')
-        satData.value.Time1H = timeValue[0]
-        satData.value.Time1M = timeValue[1]
-
-        programRegister = "S" + (base_reg + 53);
-        timeValue = satStart === undefined ? '0.00' : satStart[programRegister].split('.')
-        satData.value.Time3H = timeValue[0]
-        satData.value.Time3M = timeValue[1]
-
-        programRegister = "S" + (base_reg + 55);
-        timeValue = satStart === undefined ? '0.00' : satStart[programRegister].split('.')
-        satData.value.Time5H = timeValue[0]
-        satData.value.Time5M = timeValue[1]
-
-        programRegister = "S" + (base_reg + 57);
-        timeValue = satStart === undefined ? '0.00' : satStart[programRegister].split('.')
-        satData.value.Time7H = timeValue[0]
-        satData.value.Time7M = timeValue[1]
-
-    } else {
-        //Lavora a cicli
-        programRegister = "S" + (base_reg + 51);
-        satData.value.S1 = satStart === undefined ? 0 : satStart[programRegister]
-
-        programRegister = "S" + (base_reg + 53);
-        satData.value.S3 = satStart === undefined ? 0 : satStart[programRegister]
-
-        programRegister = "S" + (base_reg + 55);
-        satData.value.S5 = satStart === undefined ? 0 : satStart[programRegister]
-
-        programRegister = "S" + (base_reg + 57);
-        satData.value.S7 = satStart === undefined ? 0 : satStart[programRegister]
-    }
+    
 }
 
 function onSubmit() {
     const { programNumber } = props
+    
+    loadingData.value = true
+
     postSatConData.value.payload = {}
     postSatConData.value.command = String('SATPRGSTARTS' + (programNumber + 1))
 
@@ -428,6 +362,8 @@ function onSubmit() {
     postSatConData.value.payload['S' + ((programNumber * 1000) + 10057)] = String(satData.value.S7)
 
     dataStore.postControl(props.device_code, postSatConData.value)
+
+    loadingData.value = false
 }
 
 </script>
