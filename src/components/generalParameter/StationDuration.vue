@@ -190,7 +190,8 @@ const props = defineProps({
     programNumber: Number,
     base_reg: Number,
     device_code: String,
-    parentIsLoading: Boolean
+    parentIsLoading: Boolean,
+    programConfig: Object
 })
 
 //state
@@ -259,7 +260,7 @@ watch(() => props.device_code, async (newDeviceCode) => {
     setDeviceCode(newDeviceCode)
 })
 
-watch(() => [props.programNumber, props.base_reg], ([newProgNum, newBaseReg], _) => {
+watch(() => [props.programNumber, props.base_reg, props.programConfig], ([newProgNum, newBaseReg], _) => {
     onOptionChanged(newProgNum, newBaseReg)
 })
 
@@ -291,9 +292,11 @@ function moveOnSelect(event, currentPos) {
 }
 
 function getProgramInfo(programNumber, base_reg) {
+    const { programConfig } = props;
+
     let programEnabledRegister = 'S' + (base_reg);
     let programNameRegister = "S" + (base_reg + 4);
-    let programEnabled = dataStore.satConfig === undefined ? '0' : dataStore.satConfig[programEnabledRegister]
+    let programEnabled = programConfig === undefined ? '0' : programConfig[programEnabledRegister]
 
     if (programEnabled == 0) {
         programEnabledString = "ON"
@@ -303,15 +306,19 @@ function getProgramInfo(programNumber, base_reg) {
 
     //MV leggo il nome del programma. 
     programName = "P." + String(programNumber + 1).padStart("2", '0');
-    if (dataStore.satConfig !== undefined) {
-        programName = dataStore.satConfig[programNameRegister]
+    if (programConfig !== undefined) {
+        programName = programConfig[programNameRegister]
     }
 
     workModeRegister = 'S' + (base_reg + 6);
     timeModeRegister = 'S' + (base_reg + 1);
 
-    timeMode = dataStore.satConfig === undefined ? '0' : dataStore.satConfig[timeModeRegister]
-    workMode = dataStore.satConfig === undefined ? '1' : dataStore.satConfig[workModeRegister]
+    timeMode = programConfig === undefined ? '0' : programConfig[timeModeRegister]
+    workMode = programConfig === undefined ? '1' : programConfig[workModeRegister]
+
+    console.log("satConfig", programConfig)
+    console.log("workModeRegister: ", workModeRegister, "timeModeRegister: ", timeModeRegister)
+    console.log("workMode: ", workMode, "timeMode: ", timeMode)
 
     if (workMode === '0') {//Lavora a volume
         evFlowMode = 0
@@ -378,7 +385,7 @@ function fillEvConfigData() {
                         let tmpMinSec = undefined;
 
                         if (evStation !== undefined) {
-                            tmpMinSec = evStation[timeRegister].split('.')
+                            tmpMinSec = evStation[timeRegister]?.split('.')
                         }
 
                         flowMode.min = 0;
@@ -397,7 +404,7 @@ function fillEvConfigData() {
                         let tmpOreMin = undefined;
 
                         if (evStation !== undefined) {
-                            tmpOreMin = evStation[timeRegister].split('.')
+                            tmpOreMin = evStation[timeRegister]?.split('.')
                         }
 
                         if (tmpOreMin === undefined) {
@@ -415,7 +422,7 @@ function fillEvConfigData() {
                 let tmpStatus = undefined;
 
                 if (evStation !== undefined) {
-                    tmpStatus = evStation[orderRegister].split(',')
+                    tmpStatus = evStation[orderRegister]?.split(',')
                 }
                 //////////////
 
@@ -684,7 +691,7 @@ function getFlowValueByStep(step) {
             let tmpMinSec = undefined;
 
             if (evStationTime !== undefined) {
-                tmpMinSec = evStationTime.value[Object.keys(evStationTime.value)[step]].split('.')
+                tmpMinSec = evStationTime.value[Object.keys(evStationTime.value)[step]]?.split('.')
             }
 
             flowObject.min = 0;
@@ -705,7 +712,7 @@ function getFlowValueByStep(step) {
             let tmpOreMin = undefined;
 
             if (evStationTime !== undefined) {
-                tmpOreMin = evStationTime.value[Object.keys(evStationTime.value)[step]].split('.')
+                tmpOreMin = evStationTime.value[Object.keys(evStationTime.value)[step]]?.split('.')
             }
 
             if (tmpOreMin === undefined) {
@@ -746,7 +753,7 @@ function addRow(refresh = false) {
                 gruppiEv: getEvGroupsByStationId(stationId, Object.values(groupedTableData._rawValue)), //Restituisce i gruppi di elettrovalvole per stazione
                 stationID: stationId,
                 //selected_station: stationId, 
-                station_status: evStationValue.value[Object.keys(evStationValue.value)[step]].split(',')[1] * 1 ? 'ON' : 'OFF',
+                station_status: evStationValue.value[Object.keys(evStationValue.value)[step]]?.split(',')[1] * 1 ? 'ON' : 'OFF',
                 grpName: tmpGrpName,
                 volume: flowMode.volume,
                 ore: flowMode.ore,

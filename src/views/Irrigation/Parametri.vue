@@ -256,7 +256,6 @@
           :programNumber="programNumber" 
           :id="id" 
           class="mt-10" 
-          ref="scheduleStartRef" 
           :programConfig="dataStore.satConfig"
           :programStart="programStart"
           :parentIsLoading="loadingData"
@@ -271,6 +270,7 @@
           class="mt-10"
           ref="stationDurationRef" 
           :parentIsLoading="loadingData"
+          :programConfig="dataStore.satConfig"
         />
       </div>
     </div>
@@ -464,7 +464,6 @@ const postSatStatData = ref({
 })
 
 const loadingData = ref(false)
-const scheduleStartRef = ref(null)
 const stationDurationRef = ref(null)
 const isLoading = computed(() => loadingData.value || deviceIsLoading.value || postControlIsLoading.value)
 
@@ -491,13 +490,8 @@ onMounted(async () => {
 
 function refreshStationDuration() {
   if (stationDurationRef.value) {
+    console.log("refreshStationDuration")
     stationDurationRef.value.refreshData()
-  }
-}
-
-function refreshScheduleStart() {
-  if (scheduleStartRef.value) {
-    scheduleStartRef.value.refreshData()
   }
 }
 
@@ -566,9 +560,6 @@ function onSubmit() {
     target: {
       value: optionValue.value
     }
-  }).then(() => {
-    refreshScheduleStart()
-    refreshStationDuration()
   })
 }
 
@@ -578,6 +569,8 @@ async function getData() {
     dataStore.getLastSatConfig(satConfigParams.value),
     dataStore.getLastSatStat(satStatParams.value),
   ])
+
+  console.log("satConfig getData", dataStore.satConfig)
 
   programStart.value = promises[0]?.data?.data
 }
@@ -623,6 +616,9 @@ async function changeOption(e) {
   await getData()
 
   fillSatData()
+
+  // refreshStationDuration()
+
   loadingData.value = false
 }
 
