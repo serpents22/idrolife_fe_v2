@@ -98,7 +98,7 @@ const calendarOptions = {
   initialView: 'dayGridMonth',
   events: [],
   headerToolbar: {
-    start: 'dayGridMonth,timeGridWeek,timeGridDay',
+    start: 'dayGridMonth,dayGridWeek,timeGridDay',
     center: 'title',
   },
   // editable: true,
