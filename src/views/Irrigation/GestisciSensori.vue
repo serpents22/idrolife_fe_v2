@@ -118,7 +118,7 @@
                 <div class="field-wrapper">
                   <div class="field">
                     <span>
-                      <label for="water-budget">{{ $t('low') }} %</label>
+                      <label for="water-budget">%</label>
                     </span>
                     <input 
                       v-model="satData.S7" 
