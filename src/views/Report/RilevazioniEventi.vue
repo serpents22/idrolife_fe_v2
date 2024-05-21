@@ -127,18 +127,20 @@ const {t} = useI18n()
   let tmpFirstYear = String(firstDay.getFullYear())
   let tmpFirstMonth = String((firstDay.getMonth()+1))
   let tmpFirstDay = String(firstDay.getDate())
-  while (tmpFirstDay.length < MINIMUM_DIGIT) {
-    tmpFirstDay = '0' + tmpFirstDay
-  }
+
+  tmpFirstDay = tmpFirstDay.padStart(MINIMUM_DIGIT,"0")
+  tmpFirstMonth = tmpFirstMonth.padStart(MINIMUM_DIGIT,"0")
+
   const startDate = ref(String(tmpFirstYear + '-' + tmpFirstMonth + '-' + tmpFirstDay))
 
   let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0)
   let tmpLastYear = String(lastDay.getFullYear())
   let tmpLastMonth = String((lastDay.getMonth()+1))
   let tmpLastDay = String(lastDay.getDate())
-  while (tmpLastDay.length < MINIMUM_DIGIT) {
-    tmpLastDay = '0' + tmpLastDay
-  }
+
+  tmpLastDay = tmpLastDay.padStart(MINIMUM_DIGIT,"0")
+  tmpLastMonth = tmpLastMonth.padStart(MINIMUM_DIGIT,"0")
+
   const endDate = ref(String(tmpLastYear + '-' + tmpLastMonth + '-' + tmpLastDay))
   const fileName = ref(String(startDate.value + '_' + endDate.value) + '_Rilevazoni_Eventi.csv')
 
@@ -174,7 +176,7 @@ const {t} = useI18n()
     console.log(dataStore.historicalData)
     formatedhistoricalEventi.value = []
     let tmphistoricalEventi
-    var chartData = []
+    var chartData = [] 
 
     if (dataStore.historicalData !== undefined) {
       dataStore.historicalData.map((data, index) => {
@@ -189,7 +191,7 @@ const {t} = useI18n()
           pioggia: (tmphistoricalEventi[6] + ' mm/m²')
         }
         let newObj2 = {
-            date: toInteger(tmphistoricalEventi[0])*1000,
+            date: new Date(toInteger(tmphistoricalEventi[0])*1000).toLocaleString(),
             temperature: toInteger(tmphistoricalEventi[1]),
             pioggia: toInteger(tmphistoricalEventi[6]),
             radiazioneSolare: toInteger(tmphistoricalEventi[3]),
@@ -223,7 +225,7 @@ const {t} = useI18n()
     }
     chart.updateSeries(options.series)
     console.log('chart-data',chartData)
-    console.log(formatedhistoricalEventi.value)
+    console.log('table-data', formatedhistoricalEventi.value)
   }
     
   async function getHistoryData() {

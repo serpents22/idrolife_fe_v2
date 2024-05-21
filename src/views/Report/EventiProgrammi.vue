@@ -166,18 +166,21 @@ let firstDay = new Date(date.getFullYear(), date.getMonth(), 1)
 let tmpFirstYear = String(firstDay.getFullYear())
 let tmpFirstMonth = String((firstDay.getMonth() + 1))
 let tmpFirstDay = String(firstDay.getDate())
-while (tmpFirstDay.length < MINIMUM_DIGIT) {
-  tmpFirstDay = '0' + tmpFirstDay
-}
+
+tmpFirstDay = tmpFirstDay.padStart(MINIMUM_DIGIT, "0")
+tmpFirstMonth = tmpFirstMonth.padStart(MINIMUM_DIGIT, "0")
+
 const startDate = ref(String(tmpFirstYear + '-' + tmpFirstMonth + '-' + tmpFirstDay))
 
 let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0)
 let tmpLastYear = String(lastDay.getFullYear())
 let tmpLastMonth = String((lastDay.getMonth() + 1))
 let tmpLastDay = String(lastDay.getDate())
-while (tmpLastDay.length < MINIMUM_DIGIT) {
-  tmpLastDay = '0' + tmpLastDay
-}
+
+tmpLastDay = tmpLastDay.padStart(MINIMUM_DIGIT, "0")
+tmpLastMonth = tmpLastMonth.padStart(MINIMUM_DIGIT, "0")
+
+
 const endDate = ref(String(tmpLastYear + '-' + tmpLastMonth + '-' + tmpLastDay))
 const fileName = ref(String(startDate.value + '_' + endDate.value) + '_Eventi_Programmi.csv')
 
@@ -212,7 +215,7 @@ const historicalEventiParams = ref({
 
 function fillTableData() {
   console.log(dataStore.historicalData)
-  
+
   const recordMap = new Map();
 
   dataStore.historicalData.forEach(record => {
@@ -229,7 +232,7 @@ function fillTableData() {
   // Extract the merged records from the map
   const mergedData = Array.from(recordMap.values());
 
-  console.log('merged data',mergedData);
+  console.log('merged data', mergedData);
 
   formatedhistoricalEventi.value = []
   let tmphistoricalEventi, tmpPompaStatus, tmpMasterStatus, tmpRestOfContatore
