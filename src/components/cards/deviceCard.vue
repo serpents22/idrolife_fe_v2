@@ -24,7 +24,7 @@
               <h2>{{$t('idSerial')}}</h2>
               <p>{{ impianto.code }}</p>
             </span>
-            <span class="flex flex-row justify-between">
+            <span class="flex flex-row justify-between gap-1">
               <h2>Last Heard</h2>
               <p>{{ impianto.device_time }}</p>
             </span>
@@ -215,7 +215,6 @@ export default {
     md:px-[20px] md:py-[10px]
     xl:px-[30px] xl:py-[10px]
     2xl:px-[40px] 2xl:py-[10px]
-    w-[120px] h-[150px]
     sm:w-[150px] sm:h-[190px] 
     md:w-[150px] md:h-[210px] 
     lg:w-[240px] lg:h-[300px] 

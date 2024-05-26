@@ -147,10 +147,7 @@ input[type=number] {
   border: 2px solid transparent;
   @apply flex flex-col justify-center 
   items-center
-  w-[50px] h-[50px] 
-  sm:w-[60px] sm:h-[60px] 
-  md:w-[70px] md:h-[70px] 
-  lg:w-[80px] lg:h-[80px] 
+  w-[80px] h-[80px]
   xl:w-[100px] xl:h-[100px]
   2xl:w-[130px] 2xl:h-[130px]
   transition-all ease-in-out duration-200 hover:scale-110
@@ -160,6 +157,8 @@ input[type=number] {
   @apply 
   px-2 sm:px-3 md:px-4 lg:px-6
   object-contain
+  w-12 h-12
+  sm:w-full sm:h-full
 }
 
 .xs-icon-card p {
