@@ -40,11 +40,11 @@
             <p>{{ impianto.portarta }}</p>
           </span>
           <div class="grid grid-cols-2">
-            <span class="flex gap-2">
+            <span class="flex flex-col">
               <h2>{{ $t('activeProg') }}</h2>
               <p>{{ impianto.prog }}</p>
             </span>
-            <span class="flex gap-2">
+            <span class="flex flex-col">
               <h2>{{ $t('activeSt') }}</h2>
               <p>{{ impianto.station }}</p>
             </span>
