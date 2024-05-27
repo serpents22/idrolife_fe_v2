@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-wrapper" v-if="showMenu">
+  <div class="nav-wrapper sm-device" v-if="showMenu">
     <div class="xs-icon-card add" @click="addClick" v-show="!noAdd">
       <img src="@/assets/aggiungiimpianto.png">
       <p>{{ $t('createPlant') }}</p>
@@ -17,9 +17,24 @@
     </div>
   </div>
 
-  <div class="nav-wrapper" v-else @click="showMenu = true">
+  <div class="nav-wrapper sm-device" v-else @click="showMenu = true">
     <div class="xs-icon-card">
       <p>Plant Menu</p>
+    </div>
+  </div>
+
+  <div class="nav-wrapper md-device">
+    <div class="xs-icon-card add" @click="addClick" v-show="!noAdd">
+      <img src="@/assets/aggiungiimpianto.png">
+      <p>{{ $t('createPlant') }}</p>
+    </div>
+    <div class="xs-icon-card edit" @click="editClick" v-show="!noAdd">
+      <img src="@/assets/modificaimpianto.png">
+      <p>{{ $t('editPlant') }}</p>
+    </div>
+    <div class="xs-icon-card delete" @click="deleteClick" v-show="!noAdd">
+      <img src="@/assets/eliminaimpianto.png">
+      <p>{{ $t('deletePlant') }}</p>
     </div>
   </div>
 </template>
@@ -59,5 +74,13 @@ const deleteClick = () => {
 
 .nav-wrapper div {
   @apply items-center justify-center flex cursor-pointer transition-all ease-in-out duration-200 hover:scale-110
+}
+
+.sm-device {
+  @apply md:hidden
+}
+
+.md-device {
+  @apply hidden md:flex
 }
 </style>

@@ -191,7 +191,7 @@ export default {
 }
 
 .small {
-  @apply flex flex-col justify-between px-[10px] py-[6px] sm:px-[20px] sm:py-[8px] md:px-[20px] md:py-[10px] xl:px-[30px] xl:py-[10px] 2xl:px-[40px] 2xl:py-[10px] w-[120px] h-[150px] sm:w-[150px] sm:h-[190px] md:w-[150px] md:h-[210px] lg:w-[240px] lg:h-[300px] xl:w-[280px] xl:h-[360px] 2xl:w-[320px] 2xl:h-[380px] rounded-[20px] sm:rounded-[30px] md:rounded-[30px] lg:rounded-[50px] xl:rounded-[60px] transition-transform duration-200 ease-in-out transform
+  @apply flex flex-col justify-between px-[10px] py-[6px] sm:px-[20px] sm:py-[8px] md:px-[20px] md:py-[10px] xl:px-[30px] xl:py-[10px] 2xl:px-[40px] 2xl:py-[10px] w-[160px] sm:w-[150px] sm:h-[190px] md:w-[150px] md:h-[210px] lg:w-[240px] lg:h-[300px] xl:w-[280px] xl:h-[360px] 2xl:w-[320px] 2xl:h-[380px] rounded-[20px] sm:rounded-[30px] md:rounded-[30px] lg:rounded-[50px] xl:rounded-[60px] transition-transform duration-200 ease-in-out transform
 }
 
 .small .images {

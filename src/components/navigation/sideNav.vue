@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-wrapper">
+  <div class="nav-wrapper sm-device">
     <div class="xs-icon-card cursor-pointer" v-show="isAlarm" @click="emits('alarmList')">
       <img src="@/assets/icon/warning-icon.png" class="cursor-pointer">
       <p>{{ $t('alarms') }}</p>
@@ -37,6 +37,37 @@
     <div v-else class="xs-icon-card" @click="showMenu = true">
       <p>App Menu</p>
     </div>
+  </div>
+
+  <div class="nav-wrapper md-device">
+    <div class="xs-icon-card cursor-pointer" v-show="isAlarm" @click="emits('alarmList')">
+      <img src="@/assets/icon/warning-icon.png" class="cursor-pointer">
+      <p>{{ $t('alarms') }}</p>
+    </div>
+    <div class="xs-icon-card" v-show="noSocial">
+        <router-link :to="{ name: 'Dashboard' }"><img src="@/assets/whatsapp.png"></router-link>
+        <p>{{ $t('supportChat') }}</p>
+      </div>
+      <div class="xs-icon-card" v-show="!noSocial">
+        <router-link :to="{ name: 'Dashboard' }"><img src="@/assets/apple.png"></router-link>
+        <p>{{ $t('downloadIosApp') }}</p>
+      </div>
+      <div class="xs-icon-card" v-show="!noSocial">
+        <router-link :to="{ name: 'Dashboard' }"><img src="@/assets/android.png"></router-link>
+        <p>{{ $t('downloadAndroidApp') }}</p>
+      </div>
+      <div class="xs-icon-card" v-show="backOn" @click="goBack">
+        <img src="@/assets/Indietro.png" class="cursor-pointer">
+        <p>{{ $t('backwards') }}</p>
+      </div>
+      <div class="xs-icon-card" v-show="logout" @click="signOut">
+        <router-link :to="{ name: 'Dashboard' }"><img src="@/assets/logout.png"></router-link>
+        <p>{{ $t('logout') }}</p>
+      </div>
+      <div class="xs-icon-card">
+        <router-link :to="{ name: 'Dashboard' }"><img src="@/assets/home.png"></router-link>
+        <p>{{ $t('home') }}</p>
+      </div>
   </div>
 </template>
 
@@ -76,6 +107,14 @@ const goBack = () => {
 
 .hidden-menu {
   @apply flex flex-col gap-2 
+}
+
+.sm-device {
+  @apply md:hidden
+}
+
+.md-device {
+  @apply hidden md:flex
 }
 
 /* .nav-wrapper img {
