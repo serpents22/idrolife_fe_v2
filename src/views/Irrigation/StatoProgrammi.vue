@@ -227,7 +227,7 @@ onUnmounted(() => {
 
 <style scoped>
 .stato-programmi-container {
-  @apply relative flex flex-col px-[16px] md:px-[200px] lg:px-[260px] xl:px-[320px] 2xl:px-[360px]
+  @apply relative flex flex-col px-[16px] md:px-[200px] lg:px-[260px] xl:px-[320px] 2xl:px-[360px] 
 }
 
 .main {
@@ -254,7 +254,7 @@ input[type=text], input[type=password], input[type=number] {
 
 /* Table Style */
 .table-container {
-  @apply w-full relative h-[300px] sm:h-full overflow-auto sm:overflow-visible
+  @apply w-full relative h-[390px] sm:h-full overflow-auto sm:overflow-visible
 }
 
 .table-container table {

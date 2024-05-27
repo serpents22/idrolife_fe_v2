@@ -273,7 +273,7 @@ onUnmounted(() => {
 
 <style scoped>
 .stato-idrosat-container {
-  @apply relative flex flex-col px-[16px] md:px-[200px] lg:px-[260px] xl:px-[320px] 2xl:px-[360px] h-[400px] sm:h-full overflow-scroll sm:overflow-auto
+  @apply relative flex flex-col px-[16px] md:px-[200px] lg:px-[260px] xl:px-[320px] 2xl:px-[360px] h-[500px] sm:h-full overflow-scroll sm:overflow-auto
 }
 
 
