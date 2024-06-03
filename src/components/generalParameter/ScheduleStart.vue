@@ -38,7 +38,7 @@
                     <td name="Attivo">
                         <div class="flex gap-2 items-center">
                             <label>1</label>
-                            <input v-model="satData.isAuto1" type="checkbox" name="auto-1">
+                            <input @change ="onSubmit" v-model="satData.isAuto1" type="checkbox" name="auto-1">
                         </div>
                     </td>
                     <td name="Orario Inizio">
@@ -82,7 +82,7 @@
                     <td>
                         <div class="flex gap-2 items-center">
                             <p>2</p>
-                            <input v-model="satData.isAuto2" type="checkbox" name="auto-2">
+                            <input @change ="onSubmit" v-model="satData.isAuto2" type="checkbox" name="auto-2">
                         </div>
                     </td>
                     <td>
@@ -126,7 +126,7 @@
                     <td>
                         <div class="flex gap-2 items-center">
                             <p>3</p>
-                            <input v-model="satData.isAuto3" type="checkbox" name="auto-3">
+                            <input @change ="onSubmit" v-model="satData.isAuto3" type="checkbox" name="auto-3">
                         </div>
                     </td>
                     <td>
@@ -170,7 +170,7 @@
                     <td>
                         <div class="flex gap-2 items-center">
                             <p>4</p>
-                            <input v-model="satData.isAuto4" type="checkbox" name="auto-4">
+                            <input @change ="onSubmit" v-model="satData.isAuto4" type="checkbox" name="auto-4">
                         </div>
                     </td>
                     <td>
@@ -221,7 +221,7 @@
 <script setup>
 import { useDataStore } from '@/stores/DataStore'
 import { storeToRefs } from 'pinia'
-import { computed, ref } from '@vue/runtime-core'
+import { computed, ref, onMounted } from '@vue/runtime-core'
 import MyButton from '@/components/button/BaseButton.vue'
 
 const dataStore = useDataStore()
@@ -331,12 +331,12 @@ defineExpose({
 })
 
 function refreshData() {
-    
+
 }
 
 function onSubmit() {
     const { programNumber } = props
-    
+
     localIsLoading.value = true
 
     postSatConData.value.payload = {}
