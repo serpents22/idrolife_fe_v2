@@ -269,9 +269,9 @@ function fillTableData() {
         if (tmpMasterStatus.charAt(7) === '1') { masterStatus.value.push(true) } else { masterStatus.value.push(false) }
         // console.log(masterStatus.value)
       }
-      
+
       // if (data.hasOwnProperty('S85')) {
-        if (data.S86 !== undefined) {
+        if (data.S85 !== undefined) {
         console.log(data.S85)
         tmpRestOfContatore = data.S85.split(',')
       } else {
