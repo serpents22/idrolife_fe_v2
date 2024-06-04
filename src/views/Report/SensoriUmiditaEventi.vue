@@ -159,25 +159,28 @@ function fillTableData() {
 
   if (dataStore.historicalData !== undefined) {
     dataStore.historicalData.map((data) => {
-      tmphistoricalEventi = data.S87.split(',')
-      let newObj = {
-        date: new Date(toInteger(tmphistoricalEventi[0]) * 1000).toLocaleString(),
-        numeroSensori: tmphistoricalEventi[1],
-        rh1: String(tmphistoricalEventi[2] + ' %'),
-        rh2: String(tmphistoricalEventi[3] + ' %'),
-        rh3: String(tmphistoricalEventi[4] + ' %'),
-        rh4: String(tmphistoricalEventi[5] + ' %')
+      if (data.S87 !== undefined) {
+        tmphistoricalEventi = data.S87.split(',')
+        let newObj = {
+          date: new Date(toInteger(tmphistoricalEventi[0]) * 1000).toLocaleString(),
+          numeroSensori: tmphistoricalEventi[1],
+          rh1: String(tmphistoricalEventi[2] + ' %'),
+          rh2: String(tmphistoricalEventi[3] + ' %'),
+          rh3: String(tmphistoricalEventi[4] + ' %'),
+          rh4: String(tmphistoricalEventi[5] + ' %')
+        }
+        let newObj2 = {
+          date: toInteger(tmphistoricalEventi[0]) * 1000,
+          numeroSensori: toInteger(tmphistoricalEventi[1]),
+          rh1: toInteger(tmphistoricalEventi[2]),
+          rh2: toInteger(tmphistoricalEventi[3]),
+          rh3: toInteger(tmphistoricalEventi[4]),
+          rh4: toInteger(tmphistoricalEventi[5])
+        }
+        chartData.push(newObj2)
+        formatedhistoricalEventi.value.push(newObj)
       }
-      let newObj2 = {
-        date: toInteger(tmphistoricalEventi[0]) * 1000,
-        numeroSensori: toInteger(tmphistoricalEventi[1]),
-        rh1: toInteger(tmphistoricalEventi[2]),
-        rh2: toInteger(tmphistoricalEventi[3]),
-        rh3: toInteger(tmphistoricalEventi[4]),
-        rh4: toInteger(tmphistoricalEventi[5])
-      }
-      chartData.push(newObj2)
-      formatedhistoricalEventi.value.push(newObj)
+
     })
     options.series = []
     options.series.push({
