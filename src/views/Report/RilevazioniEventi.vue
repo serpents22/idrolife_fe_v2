@@ -33,7 +33,7 @@
               <img src="@/assets/loader/loader.gif" style="width: 100px; height: 80px;" />
             </template>
           </EasyDataTable>
-          <div id="chart" class="mt-6"></div>
+          <div id="chart" class="mt-6 bg-white px-2 py-4 rounded-sm"></div>
           <download-csv :class="{ 'restrictedAccess': devicesStore.deviceData.role == 'user' }"
             class="btn btn-default mt-6 justify-end flex" :data="formatedhistoricalEventi" :name="fileName">
             <div class="button-wrapper">
@@ -71,21 +71,29 @@ const deviceCard = defineAsyncComponent(
   () => import('@/components/cards/deviceCard.vue'),
 )
 
-//chart configuration
 var options = {
   chart: {
-    type: 'line',
+    height: 380,
+    width: "100%",
+    type: "line",
     zoom: {
       enabled: true
+    },
+    animations: {
+      initialAnimation: {
+        enabled: false
+      }
     }
+  },
+  stroke: {
+    width: 3,
+    curve: 'smooth'
   },
   series: [],
   xaxis: {
-    type: 'datetime',
-    // categories: [],
-    tickPlacement: 'on'
+    type: 'datetime'
   }
-}
+};
 
 //state
 const devicesStore = useDevicesStore()
@@ -169,7 +177,7 @@ function fillTableData() {
             pioggia: (tmphistoricalEventi[6] + ' mm/m²')
           }
           let newObj2 = {
-            date: new Date(toInteger(tmphistoricalEventi[0]) * 1000).toLocaleString(),
+            date: toInteger(tmphistoricalEventi[0] * 1000),
             temperature: toInteger(tmphistoricalEventi[1]),
             pioggia: toInteger(tmphistoricalEventi[6]),
             radiazioneSolare: toInteger(tmphistoricalEventi[3]),
@@ -202,7 +210,7 @@ function fillTableData() {
         data: chartData.map(obj => [obj.date, obj.velocitaVento])
       })
     }
-      chart.updateSeries(options.series)
+    chart.updateSeries(options.series)
     console.log('chart-data', chartData)
     console.log('table-data', formatedhistoricalEventi.value)
   } else {

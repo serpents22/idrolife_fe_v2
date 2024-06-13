@@ -33,13 +33,13 @@
               <img src="@/assets/loader/loader.gif" style="width: 100px; height: 80px;" />
             </template>
           </EasyDataTable>
+          <div id="chart" class="mt-6 bg-white px-2 py-4 rounded-sm"></div>
           <download-csv :class="{ 'restrictedAccess': devicesStore.deviceData.role == 'user' }"
             class="btn btn-default mt-6 justify-end flex" :data="formatedhistoricalEventi" :name="fileName">
             <div class="button-wrapper">
               <IveButton label="Export CSV" />
             </div>
           </download-csv>
-          <div id="chart" class="mt-20"></div>
         </div>
       </div>
     </div>
@@ -64,27 +64,30 @@ const { t } = useI18n()
 const props = defineProps({
   id: String
 })
+
 var options = {
   chart: {
-    type: 'line',
+    height: 380,
+    width: "100%",
+    type: "line",
     zoom: {
       enabled: true
+    },
+    animations: {
+      initialAnimation: {
+        enabled: false
+      }
     }
   },
-  // series: [
-  //     {
-  //       name: 'Series 1',
-  //       data: [
-  //       [1691028000000, 0],[1691031600000, 0],[1691035200000, 0],[1691038800000, 0]
-  //       ],
-  //     },],
+  stroke: {
+    width: 3,
+    curve: 'smooth'
+  },
   series: [],
   xaxis: {
-    type: 'datetime',
-    // categories: [],
-    tickPlacement: 'on'
+    type: 'datetime'
   }
-}
+};
 
 //asynchronus component
 const deviceCard = defineAsyncComponent(
