@@ -118,16 +118,20 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async evReportAuth(params) {
+      this.isLoading = true
+
       try {
         const res = await authAPI.evReportAuth(params)
         console.log(res)
         localStorage.setItem('auth', JSON.stringify({ report: true }))
         this.status.message = 'Success'
         this.status.isError = false
+        this.isLoading = false
         router.push({ name: 'EvReport' });
       } catch (err) {
         this.status.message = 'Password Missmatch'
         this.status.isError = true
+        this.isLoading = false
         console.error(err)
         return err
       }

@@ -38,7 +38,11 @@
                 fill="currentFill" />
             </svg>
           </div>
-          <canvas v-if="!isLoading" ref="evConsumptionChartCanvas" class="bg-white p-6 rounded-md mt-4 w-full"></canvas>
+          <div v-if="!isLoading && evReportIsEmpty" class="flex justify-center bg-white p-6 rounded-md mt-4 w-full">
+            <h1 class="font-semibold">NO DATA</h1>
+          </div>
+          <canvas v-if="!isLoading && !evReportIsEmpty" ref="evConsumptionChartCanvas"
+            class="bg-white p-6 rounded-md mt-4 w-full"></canvas>
           <div class="button-wrapper">
             <IveButton label="Export CSV" @click="downloadCSV" />
           </div>
@@ -258,7 +262,7 @@ const deviceCard = defineAsyncComponent(
 //state
 const devicesStore = useDevicesStore()
 const reportStore = useReportStore()
-const { isLoading, groupedDataDaily, groupedDataWeekly, groupedDataMonthly, evReport } = storeToRefs(useReportStore())
+const { isLoading, groupedDataDaily, groupedDataWeekly, groupedDataMonthly, evReport, evReportIsEmpty } = storeToRefs(useReportStore())
 const title = ref()
 
 //date filter init

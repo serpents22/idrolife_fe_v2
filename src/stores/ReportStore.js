@@ -6,6 +6,7 @@ import { ref } from 'vue'
 
 export const useReportStore = defineStore('report', {
   state: () => ({
+    evReportIsEmpty: ref(false),
     evReport: ref([]),
     groupedDataDaily: ref([]),
     groupedDataWeekly: ref([]),
@@ -36,6 +37,11 @@ export const useReportStore = defineStore('report', {
       this.isLoading = true
       try {
         const res = await reportApi.getEvReport(params)
+        if (res.data.data.ev.groupedDataDaily.length === 0) {
+          this.evReportIsEmpty = true
+        } else {
+          this.evReportIsEmpty = false
+        }
         this.evReport = res.data.data.ev
         this.groupedDataDaily = res.data.data.ev.groupedDataDaily
         this.groupedDataWeekly = res.data.data.ev.groupedDataWeekly
