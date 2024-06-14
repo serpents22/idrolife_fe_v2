@@ -50,60 +50,62 @@ import ReportEventi from '@/views/Report/EventiProgrammi.vue'
 import Planning from '@/views/Report/Planning.vue'
 import ReportRilevazioni from '@/views/Report/RilevazioniEventi.vue'
 import ReportUmidita from '@/views/Report/SensoriUmiditaEventi.vue'
+import EvReport from '@/views/Report/EvReport.vue'
 import MapView from '@/views/Map/MapGoogle.vue'
 import Webcam from '@/views/Webcam/Webcam.vue'
 
 
 const routes = [
-  { path: '/:lang', name: 'Home', component: Home, meta: { requiresAuth:false, title: 'Idrolife - Home' } },
-  { path: '/:lang/password-reset', name: 'ResetPassword', component: ResetPassword, meta: { requiresAuth:false } },
-  { path: '/:lang/login', name: 'LoginForm', component: LoginForm, meta: { requiresAuth:false } },
-  { path: '/:lang/register', name: 'RegisterForm', component: RegisterForm, meta: { freeAccess:true } },
-  { path: '/:lang/email-confirmation', name: 'EmailConfirmation', component: EmailConfirmation, meta: { freeAccess:true } },
-  { path: '/:lang/password-reset/change/:email', name: 'NewPassword', component: NewPassword, meta: { freeAccess:true } },
-  { path: '/:lang/password-reset/success', name: 'ResetPasswordConfirmation', component: ResetPasswordConfirmation, meta: { freeAccess:true } },
-  { path: '/:lang/dashboard', name: 'Dashboard', component: Dashboard, meta: { requiresAuth:true } },
-  { path: '/:lang/devices', name: 'DevicesList', component: DevicesList, meta: { requiresAuth:true } },
-  { path: '/:lang/manage-account', name: 'ManageAccount', component: ManageAccount, meta: { requiresAuth:true } },
-  { path: '/:lang/devices/add', name: 'AddDevice', component: AddDevice, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id', name: 'DeviceConfig', component: DeviceConfig, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/map', name: 'MapView', component: MapView, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/webcam', name: 'Webcam', component: Webcam, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/sensor', name: 'SensorView', component: SensorView, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/sensor/rh', name: 'RhView', component: RhView, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/report', name: 'ReportView', component: ReportView, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/report/alarm', name: 'ReportAlarm', component: ReportAlarm, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/report/eventi-programmi', name: 'ReportEventi', component: ReportEventi, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/report/rilevzioni-eventi', name: 'ReportRilevazioni', component: ReportRilevazioni, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/report/sensori-umidita', name: 'ReportUmidita', component: ReportUmidita, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/report/planning', name: 'Planning', component: Planning, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation', name: 'IrrigationView', component: IrrigationView, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration', name: 'IrrigationConfiguration', component: IrrigationConfiguration, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/flussi', name: 'Flussi', component: Flussi, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/orario', name: 'Orario', component: Orario, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/generali', name: 'Generali', component: Generali, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/evconfig', name: 'EVConfiguration', component: EVConfiguration, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/avanzata', name: 'Avanzata', component: Avanzata, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/stazioni', name: 'Stazioni', component: Stazioni, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule', name: 'IrrigationSchedule', component: IrrigationSchedule, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule/programma', name: 'Programma', component: Programma, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule/avvio', name: 'Avvio', component: Avvio, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule/parametri-generali', name: 'Parametri', component: Parametri, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule/durata-stazione', name: 'DurataStazione', component: DurataStazione, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule/gestisci-sensori', name: 'GestisciSensori', component: GestisciSensori, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/status', name: 'IrrigationStatus', component: IrrigationStatus, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/status/stato-programmi', name: 'StatoProgrammi', component: StatoProgrammi, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/status/stato-stazione', name: 'StatoStazione', component: StatoStazione, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/irrigation/status/stato-idrosat', name: 'StatoIdrosat', component: StatoIdrosat, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/ferrigation', name: 'FerrigationView', component: FerrigationView, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/ferrigation/configuration', name: 'FerrigationConfiguration', component: FerrigationConfiguration, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/ferrigation/configuration/contatore', name: 'Contatore', component: Contatore, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/ferrigation/configuration/aggitazione', name: 'Aggitazione', component: Aggitazione, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/ferrigation/program', name: 'FerrigationProgram', component: FerrigationProgram, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/ferrigation/program/parametri-fertirrigazione', name: 'FerrigationParametri', component: FerrigationParametri, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/ferrigation/program/impostazioni-ec', name: 'FerrigationImpostazioni', component: FerrigationImpostazioni, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/ferrigation/program/ricetta', name: 'FerrigationRicetta', component: FerrigationRicetta, props: true, meta: { requiresAuth:true } },
-  { path: '/:lang/dashboard/device-detail/:id/ferrigation/status', name: 'FerrigationStatus', component: FerrigationStatus, props: true, meta: { requiresAuth:true } },
+  { path: '/:lang', name: 'Home', component: Home, meta: { requiresAuth: false, title: 'Idrolife - Home' } },
+  { path: '/:lang/password-reset', name: 'ResetPassword', component: ResetPassword, meta: { requiresAuth: false } },
+  { path: '/:lang/login', name: 'LoginForm', component: LoginForm, meta: { requiresAuth: false } },
+  { path: '/:lang/register', name: 'RegisterForm', component: RegisterForm, meta: { freeAccess: true } },
+  { path: '/:lang/email-confirmation', name: 'EmailConfirmation', component: EmailConfirmation, meta: { freeAccess: true } },
+  { path: '/:lang/password-reset/change/:email', name: 'NewPassword', component: NewPassword, meta: { freeAccess: true } },
+  { path: '/:lang/password-reset/success', name: 'ResetPasswordConfirmation', component: ResetPasswordConfirmation, meta: { freeAccess: true } },
+  { path: '/:lang/dashboard', name: 'Dashboard', component: Dashboard, meta: { requiresAuth: true } },
+  { path: '/:lang/devices', name: 'DevicesList', component: DevicesList, meta: { requiresAuth: true } },
+  { path: '/:lang/manage-account', name: 'ManageAccount', component: ManageAccount, meta: { requiresAuth: true } },
+  { path: '/:lang/devices/add', name: 'AddDevice', component: AddDevice, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id', name: 'DeviceConfig', component: DeviceConfig, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/map', name: 'MapView', component: MapView, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/webcam', name: 'Webcam', component: Webcam, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/sensor', name: 'SensorView', component: SensorView, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/sensor/rh', name: 'RhView', component: RhView, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/report', name: 'ReportView', component: ReportView, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/report/alarm', name: 'ReportAlarm', component: ReportAlarm, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/report/eventi-programmi', name: 'ReportEventi', component: ReportEventi, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/report/rilevzioni-eventi', name: 'ReportRilevazioni', component: ReportRilevazioni, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/report/ev-report', name: 'EvReport', component: EvReport, props: true, meta: { requiresReportAuth: true, requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/report/sensori-umidita', name: 'ReportUmidita', component: ReportUmidita, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/report/planning', name: 'Planning', component: Planning, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation', name: 'IrrigationView', component: IrrigationView, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration', name: 'IrrigationConfiguration', component: IrrigationConfiguration, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/flussi', name: 'Flussi', component: Flussi, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/orario', name: 'Orario', component: Orario, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/generali', name: 'Generali', component: Generali, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/evconfig', name: 'EVConfiguration', component: EVConfiguration, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/avanzata', name: 'Avanzata', component: Avanzata, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/configuration/stazioni', name: 'Stazioni', component: Stazioni, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule', name: 'IrrigationSchedule', component: IrrigationSchedule, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule/programma', name: 'Programma', component: Programma, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule/avvio', name: 'Avvio', component: Avvio, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule/parametri-generali', name: 'Parametri', component: Parametri, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule/durata-stazione', name: 'DurataStazione', component: DurataStazione, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/schedule/gestisci-sensori', name: 'GestisciSensori', component: GestisciSensori, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/status', name: 'IrrigationStatus', component: IrrigationStatus, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/status/stato-programmi', name: 'StatoProgrammi', component: StatoProgrammi, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/status/stato-stazione', name: 'StatoStazione', component: StatoStazione, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/irrigation/status/stato-idrosat', name: 'StatoIdrosat', component: StatoIdrosat, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/ferrigation', name: 'FerrigationView', component: FerrigationView, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/ferrigation/configuration', name: 'FerrigationConfiguration', component: FerrigationConfiguration, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/ferrigation/configuration/contatore', name: 'Contatore', component: Contatore, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/ferrigation/configuration/aggitazione', name: 'Aggitazione', component: Aggitazione, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/ferrigation/program', name: 'FerrigationProgram', component: FerrigationProgram, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/ferrigation/program/parametri-fertirrigazione', name: 'FerrigationParametri', component: FerrigationParametri, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/ferrigation/program/impostazioni-ec', name: 'FerrigationImpostazioni', component: FerrigationImpostazioni, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/ferrigation/program/ricetta', name: 'FerrigationRicetta', component: FerrigationRicetta, props: true, meta: { requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/ferrigation/status', name: 'FerrigationStatus', component: FerrigationStatus, props: true, meta: { requiresAuth: true } },
   // { path: '/:catchALL(.*)', name: 'NotFound', component: NotFound },
   ,
   {
@@ -117,19 +119,32 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(async (to, from,  next) => {
+router.beforeEach(async (to, from, next) => {
   if (to.path === '/') {
-    next({name: 'Dashboard'})
+    next({ name: 'Dashboard' })
   } else {
     next();
   }
-  if (to.meta.requiresAuth && !localStorage.getItem('auth.token')){
-    next({ name: 'LoginForm'})
-  } else if (to.meta.requiresAuth && localStorage.getItem('auth.token') || to.meta.freeAccess){
+  if (to.meta.requiresAuth && !localStorage.getItem('auth.token')) {
+    next({ name: 'LoginForm' })
+  } else if (to.meta.requiresAuth && localStorage.getItem('auth.token') || to.meta.freeAccess) {
     next()
-  } else if (!to.meta.requiresAuth && localStorage.getItem('auth.token')){
-    next({name: 'Dashboard'})
+  } else if (!to.meta.requiresAuth && localStorage.getItem('auth.token')) {
+    next({ name: 'Dashboard' })
   } else next()
-  }) 
+})
 
+
+router.beforeEach((to, from, next) => {
+  const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+  if (to.matched.some(record => record.meta.requiresReportAuth)) {
+    if (auth.report) {
+      next();
+    } else {
+      next({ name: 'ReportView' });
+    }
+  } else {
+    next();
+  }
+});
 export default router

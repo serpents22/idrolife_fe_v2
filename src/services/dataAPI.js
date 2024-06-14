@@ -5,8 +5,8 @@ export default {
     return apiClient.get('data/last',{ params }, { signal })
   },
 
-  getHistory(params) {
-    return apiClient.get('data/history',{ params })
+  getHistory(params, signal = null) {
+    return apiClient.get('data/history',{ params }, { signal })
   },
 
   getAlarmState(params) {

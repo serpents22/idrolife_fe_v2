@@ -141,6 +141,34 @@ input[type=number] {
     cursor-default
 }
 
+.sm-icon-card__white {
+
+  @apply flex flex-col justify-center px-2
+  transition-all ease-in-out delay-150 hover:-translate-y-2 
+  items-center
+  w-[70px] h-[70px]
+  md:w-[90px] md:h-[90px]
+  lg:w-[100px] lg:h-[100px]
+  xl:w-[120px] xl:h-[120px]
+  2xl:w-[160px] 2xl:h-[160px]
+  rounded-[12px] md:rounded-[20px] lg:rounded-[30px]
+  bg-white border-2 box-border
+}
+
+.sm-icon-card__white img {
+  @apply 
+  px-1 md:px-4 lg:px-6
+  object-contain
+
+}
+.sm-icon-card__white p {
+  @apply 
+    text-[#353535] font-poppins 
+    font-medium text-[6px] sm:text-[8px] md:text-[10px] lg:text-[12px] xl:text-[14px]
+    break-words
+    cursor-default
+}
+
 .xs-icon-card {
   background: linear-gradient(45.06deg, #010AD1 -8.2%, #1BF728 108.15%) padding-box,
               linear-gradient(to right, #1BF728, #010AD1) border-box;
@@ -168,6 +196,33 @@ input[type=number] {
     break-words pointer-events-none
     px-2
 }
+
+.xs-icon-card__white {
+  @apply flex flex-col justify-center 
+  items-center
+  w-[80px] h-[80px]
+  xl:w-[100px] xl:h-[100px]
+  2xl:w-[130px] 2xl:h-[130px]
+  transition-all ease-in-out duration-200 hover:scale-110
+  rounded-[10px] sm:rounded-[15px] md:rounded-[20px] lg:rounded-[30px]
+  bg-white border-2
+}
+.xs-icon-card__white img {
+  @apply 
+  px-2 sm:px-3 md:px-4 lg:px-6
+  object-contain
+  w-12 h-12
+  sm:w-full sm:h-full
+}
+
+.xs-icon-card__white p {
+  @apply 
+    text-[#353535] 
+    font-poppins font-semibold text-[5px] sm:text-[6px] md:text-[8px] lg:text-[12px]
+    break-words pointer-events-none
+    px-2
+}
+
 
 
 .md-icon-card {

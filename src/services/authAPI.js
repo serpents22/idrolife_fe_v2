@@ -25,5 +25,7 @@ export default {
   newPassword(data,email,signature) {
     return apiClient.post(`reset-password/${email}?signature=${signature}`, data)
   },
-
+  evReportAuth(params) {
+    return apiClient.get('password/validate',{params})
+  }
 }

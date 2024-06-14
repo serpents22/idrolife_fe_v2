@@ -10,6 +10,7 @@ export const useAuthStore = defineStore('auth', {
     status: ref({
       message: null,
       code: null,
+      isError: false
     }),
     isLoading: ref(false)
   }),
@@ -71,7 +72,6 @@ export const useAuthStore = defineStore('auth', {
         console.error(err)
         return err
       }
-
     },
 
     async deleteAccount(data) {
@@ -117,6 +117,21 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    async evReportAuth(params) {
+      try {
+        const res = await authAPI.evReportAuth(params)
+        console.log(res)
+        localStorage.setItem('auth', JSON.stringify({ report: true }))
+        this.status.message = 'Success'
+        this.status.isError = false
+        router.push({ name: 'EvReport' });
+      } catch (err) {
+        this.status.message = 'Password Missmatch'
+        this.status.isError = true
+        console.error(err)
+        return err
+      }
+    },
   }
 
 })

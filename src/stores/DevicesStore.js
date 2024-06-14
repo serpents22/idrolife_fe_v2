@@ -81,6 +81,7 @@ export const useDevicesStore = defineStore('impianto', () => {
     isLoading.value = true
     try {
       const res = await devicesApi.getDevice(id)
+      console.log(res)
       deviceData.value = res.data.data.device
       const params = ref({
         fields: 'M33',
