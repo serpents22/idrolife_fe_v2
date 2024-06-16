@@ -76,7 +76,7 @@ const routes = [
   { path: '/:lang/dashboard/device-detail/:id/report/alarm', name: 'ReportAlarm', component: ReportAlarm, props: true, meta: { requiresAuth: true } },
   { path: '/:lang/dashboard/device-detail/:id/report/eventi-programmi', name: 'ReportEventi', component: ReportEventi, props: true, meta: { requiresAuth: true } },
   { path: '/:lang/dashboard/device-detail/:id/report/rilevzioni-eventi', name: 'ReportRilevazioni', component: ReportRilevazioni, props: true, meta: { requiresAuth: true } },
-  { path: '/:lang/dashboard/device-detail/:id/report/ev-report', name: 'EvReport', component: EvReport, props: true, meta: { requiresReportAuth: true, requiresAuth: true } },
+  { path: '/:lang/dashboard/device-detail/:id/report/ev-report', name: 'EvReport', component: EvReport, props: true, meta: { requiresAuth: true } },
   { path: '/:lang/dashboard/device-detail/:id/report/sensori-umidita', name: 'ReportUmidita', component: ReportUmidita, props: true, meta: { requiresAuth: true } },
   { path: '/:lang/dashboard/device-detail/:id/report/planning', name: 'Planning', component: Planning, props: true, meta: { requiresAuth: true } },
   { path: '/:lang/dashboard/device-detail/:id/irrigation', name: 'IrrigationView', component: IrrigationView, props: true, meta: { requiresAuth: true } },
@@ -135,16 +135,16 @@ router.beforeEach(async (to, from, next) => {
 })
 
 
-router.beforeEach((to, from, next) => {
-  const auth = JSON.parse(localStorage.getItem('auth') || '{}');
-  if (to.matched.some(record => record.meta.requiresReportAuth)) {
-    if (auth.report) {
-      next();
-    } else {
-      next({ name: 'ReportView' });
-    }
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+//   if (to.matched.some(record => record.meta.requiresReportAuth)) {
+//     if (auth.report) {
+//       next();
+//     } else {
+//       next({ name: 'ReportView' });
+//     }
+//   } else {
+//     next();
+//   }
+// });
 export default router

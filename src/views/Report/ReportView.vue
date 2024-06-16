@@ -25,9 +25,9 @@
           <router-link :to="{ name: 'ReportRilevazioni' }"><img src="@/assets/report_rilevazioni.png"></router-link>
           <p>{{ $t('eventReports') }}</p>
         </div>
-        <div class="sm-icon-card__white cursor-pointer" @click="toggleEvReportAuth()">
-          <img src="@/assets/ev_report.jpg">
-          <p>{{ $t('evReport') }}</p>
+        <div class="sm-icon-card__white">
+          <router-link :to="{ name: 'EvReport' }"><img src="@/assets/ev_report.jpg"></router-link>
+          <p>{{ $t('ev_report') }}</p>
         </div>
       </div>
       <div class="flex flex-col gap-12">

@@ -18,6 +18,11 @@ export const useReportStore = defineStore('report', {
       message: null,
       code: null,
     }),
+    evReportStatus: ref({
+      message: null,
+      code: null,
+      isError: false,
+    }),
   }),
   actions: {
     async loadReport() {
@@ -47,8 +52,12 @@ export const useReportStore = defineStore('report', {
         this.groupedDataWeekly = res.data.data.ev.groupedDataWeekly
         this.groupedDataMonthly = res.data.data.ev.groupedDataMonthly
         this.isLoading = false
+        this.evReportStatus.message = 'Data Fetched'
+        this.evReportStatus.isError = false
       } catch (err) {
         console.error(err)
+        this.evReportStatus.message = err.response.data.error
+        this.evReportStatus.isError = true
         this.isLoading = false
         return err
       }
