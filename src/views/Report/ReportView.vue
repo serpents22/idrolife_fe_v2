@@ -27,7 +27,7 @@
         </div>
         <div class="sm-icon-card__white">
           <router-link :to="{ name: 'EvReport' }"><img src="@/assets/ev_report.jpg"></router-link>
-          <p>{{ $t('ev_report') }}</p>
+          <p>{{ $t('evReport') }}</p>
         </div>
       </div>
       <div class="flex flex-col gap-12">
