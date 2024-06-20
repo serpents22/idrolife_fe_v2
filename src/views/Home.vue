@@ -1,4 +1,10 @@
 <template>
+  
+  <EvReportAds
+    :isOpen="isShowAds"
+    @close="toggleShowAds" 
+    title="Announcement"
+  />
   <div class="home-container">
     <div class="header">
       <div class="logo-container"></div>
@@ -35,13 +41,15 @@ import Tab from '@/components/tab/Tab.vue'
 import { onMounted, ref} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useLocaleStore } from '../stores/localization/LocaleStore'
+import EvReportAds from '@/components/modal/EvReportAds.vue'
 
 export default {
   name: 'Home',
   components: {
-    Tab
+    Tab, EvReportAds
   },
   setup() {
+    const isShowAds = ref(true)
     const privacyPolicy = process.env.VUE_APP_API_URL + 'resources/privacy-policy.pdf'
     const localeStore = useLocaleStore()
     const route = useRoute();
@@ -69,10 +77,13 @@ export default {
       })
 
       return {
-        tabs,route, router, localeStore, privacyPolicy
+        tabs,route, router, localeStore, privacyPolicy, isShowAds
       }
   },
   methods: {
+    toggleShowAds() {
+      this.isShowAds = !this.isShowAds
+    },
     chageLanguage(lang) {
       const newPath = `/${lang}`;
       this.router.push(newPath);
